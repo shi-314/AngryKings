@@ -1,7 +1,7 @@
-package com.prototype.johann_hofmann.connectMe;
+package com.angrykings.acitivities;
 
 import com.prototype.R;
-import com.prototype.johann_hofmann.connectMe.KingServerConnection.OnMessageHandler;
+import com.angrykings.acitivities.KingServerConnection.OnMessageHandler;
 
 import android.app.Activity;
 import android.content.Intent;

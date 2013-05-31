@@ -1,4 +1,4 @@
-package com.prototype.johann_hofmann.connectMe;
+package com.angrykings.acitivities;
 
 import android.util.Log;
 import de.tavendo.autobahn.WebSocketConnection;

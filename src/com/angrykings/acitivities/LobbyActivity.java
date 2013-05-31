@@ -1,4 +1,4 @@
-package com.prototype.johann_hofmann.connectMe;
+package com.angrykings.acitivities;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,9 +13,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.prototype.johann_hofmann.connectMe.KingServerConnection.OnMessageHandler;
-
-import com.prototype.PhysicsTest;
+import com.angrykings.acitivities.KingServerConnection.OnMessageHandler;
 
 public class LobbyActivity extends ListActivity {
 

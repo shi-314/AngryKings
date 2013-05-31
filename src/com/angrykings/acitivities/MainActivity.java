@@ -1,7 +1,8 @@
 package com.angrykings.acitivities;
 
+import com.angrykings.ServerConnection;
 import com.prototype.R;
-import com.angrykings.acitivities.KingServerConnection.OnMessageHandler;
+import com.angrykings.ServerConnection.OnMessageHandler;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -22,7 +23,7 @@ public class MainActivity extends Activity {
 		final Button nameSendButton = (Button) findViewById(R.id.button);
 		final EditText nameText = (EditText) findViewById(R.id.nameInput);
 
-		KingServerConnection.getInstance().setHandler(new OnMessageHandler() {
+		ServerConnection.getInstance().setHandler(new OnMessageHandler() {
 
 			@Override
 			public void onMessage(String payload) {
@@ -32,14 +33,14 @@ public class MainActivity extends Activity {
 				startActivity(intent);
 			}
 		});
-		KingServerConnection.getInstance().start();
+		ServerConnection.getInstance().start();
 		nameSendButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				KingServerConnection
+				ServerConnection
 						.getInstance()
-						.getmConnection()
+						.getConnection()
 						.sendTextMessage(
 								"{\"action\":\"name\",\"value\":\"" + nameText.getText().toString()
 										+ "\"}");

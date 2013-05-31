@@ -1,5 +1,6 @@
 package com.angrykings.acitivities;
 
+import com.angrykings.ServerConnection;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,7 +14,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.angrykings.acitivities.KingServerConnection.OnMessageHandler;
+import com.angrykings.ServerConnection.OnMessageHandler;
 
 public class LobbyActivity extends ListActivity {
 
@@ -46,7 +47,7 @@ public class LobbyActivity extends ListActivity {
 	private void displayLobby() {
 		updateLobby(users);
 		getListView().setTextFilterEnabled(true);
-		KingServerConnection.getInstance().setHandler(new OnMessageHandler() {
+		ServerConnection.getInstance().setHandler(new OnMessageHandler() {
 
 			@Override
 			public void onMessage(String payload) {
@@ -58,7 +59,7 @@ public class LobbyActivity extends ListActivity {
 								.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
 
 									public void onClick(DialogInterface dialog, int which) {
-										KingServerConnection.getInstance().getmConnection()
+										ServerConnection.getInstance().getConnection()
 												.sendTextMessage("{\"action\":\"accept\"}");
 										Intent intent = new Intent(LobbyActivity.this,
 												PhysicsTest.class);
@@ -69,7 +70,7 @@ public class LobbyActivity extends ListActivity {
 								}).setNegativeButton("Deny", new DialogInterface.OnClickListener() {
 
 									public void onClick(DialogInterface dialog, int which) {
-										KingServerConnection.getInstance().getmConnection()
+										ServerConnection.getInstance().getConnection()
 												.sendTextMessage("{\"action\":\"deny\"}");
 									}
 								}).show();
@@ -92,7 +93,7 @@ public class LobbyActivity extends ListActivity {
 		final AlertDialog dialog = new AlertDialog.Builder(this).setTitle("Please Wait")
 				.setMessage("Waiting for partner").show();
 
-		KingServerConnection.getInstance().setHandler(new OnMessageHandler() {
+		ServerConnection.getInstance().setHandler(new OnMessageHandler() {
 
 			@Override
 			public void onMessage(String payload) {
@@ -113,9 +114,9 @@ public class LobbyActivity extends ListActivity {
 			}
 		});
 
-		KingServerConnection
+		ServerConnection
 				.getInstance()
-				.getmConnection()
+				.getConnection()
 				.sendTextMessage(
 						"{\"action\":\"pair\",\"partner\":\""
 								+ getListView().getItemAtPosition(position) + "\"}");

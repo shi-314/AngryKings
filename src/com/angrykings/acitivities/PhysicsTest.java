@@ -3,7 +3,7 @@ package com.angrykings.acitivities;
 import android.os.Bundle;
 import android.os.Handler;
 import com.angrykings.Player;
-import com.angrykings.acitivities.KingServerConnection;
+import com.angrykings.ServerConnection;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.options.EngineOptions;
@@ -77,7 +77,9 @@ public class PhysicsTest extends BaseGameActivity implements IOnSceneTouchListen
 	public EngineOptions onCreateEngineOptions() {
 		Toast.makeText(this, "Touch me :D", Toast.LENGTH_SHORT).show();
 
-		final Camera camera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
+		Camera camera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
+
+		//camera.setRotation(45.0f);
 
 		return new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), camera);
 	}
@@ -130,26 +132,26 @@ public class PhysicsTest extends BaseGameActivity implements IOnSceneTouchListen
 
 		this.mScene.registerUpdateHandler(this.mPhysicsWorld);
 
-		KingServerConnection.getInstance().setHandler(new KingServerConnection.OnMessageHandler() {
-			@Override
-			public void onMessage(String payload) {
-				try{
-				JSONObject jObj = new JSONObject(payload);
-					if (jObj.getString("action").equals("turn")) {
-						Debug.d("message: "+payload);
-						if(mRound % 2 == 1) {
-							Body b = mPlayer2.fire(new Vector2(-45, -25));
-							mCannonballs.add(b);
-							mRound++;
-							Debug.d("round: "+mRound);
-						}
-					}
-				}catch (JSONException e) {
-
-				}
-
-			}
-		});
+//		ServerConnection.getInstance().setHandler(new ServerConnection.OnMessageHandler() {
+//			@Override
+//			public void onMessage(String payload) {
+//				try{
+//				JSONObject jObj = new JSONObject(payload);
+//					if (jObj.getString("action").equals("turn")) {
+//						Debug.d("message: "+payload);
+//						if(mRound % 2 == 1) {
+//							Body b = mPlayer2.fire(new Vector2(-45, -25));
+//							mCannonballs.add(b);
+//							mRound++;
+//							Debug.d("round: "+mRound);
+//						}
+//					}
+//				}catch (JSONException e) {
+//
+//				}
+//
+//			}
+//		});
 
 		this.mScene.registerUpdateHandler(new IUpdateHandler() {
 			@Override
@@ -165,7 +167,7 @@ public class PhysicsTest extends BaseGameActivity implements IOnSceneTouchListen
 				if(ready && mRound % 2 == 0){
 					if(!mTurnSent) {
 						mRound++;
-						KingServerConnection.getInstance().getmConnection().sendTextMessage("{\"action\":\"turn\"}");
+//						ServerConnection.getInstance().getConnection().sendTextMessage("{\"action\":\"turn\"}");
 						mTurnSent = true;
 					}
 				}

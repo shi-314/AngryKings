@@ -1,35 +1,35 @@
-package com.angrykings.acitivities;
+package com.angrykings;
 
 import android.util.Log;
 import de.tavendo.autobahn.WebSocketConnection;
 import de.tavendo.autobahn.WebSocketException;
 import de.tavendo.autobahn.WebSocketHandler;
 
-public class KingServerConnection {
+public class ServerConnection {
 
-	private static final String TAG = "com.johann_hofmann.connectMe";
+	private static final String TAG = "com.angrykings";
 
 	public static abstract class OnMessageHandler {
 		public abstract void onMessage(String payload);
 	}
 
-	private final WebSocketConnection mConnection = new WebSocketConnection();
-	private static KingServerConnection instance;
+	private final WebSocketConnection connection = new WebSocketConnection();
+	private static ServerConnection instance;
 	private OnMessageHandler handler;
 
-	private KingServerConnection() {
+	private ServerConnection() {
 
 	}
 
-	public static KingServerConnection getInstance() {
+	public static ServerConnection getInstance() {
 		if (instance == null) {
-			instance = new KingServerConnection();
+			instance = new ServerConnection();
 		}
 		return instance;
 	}
 
-	public WebSocketConnection getmConnection() {
-		return mConnection;
+	public WebSocketConnection getConnection() {
+		return connection;
 	}
 
 	public OnMessageHandler getHandler() {
@@ -44,7 +44,7 @@ public class KingServerConnection {
 		final String wsuri = "ws://spaeti.pavo.uberspace.de:61224";
 
 		try {
-			mConnection.connect(wsuri, new WebSocketHandler() {
+			connection.connect(wsuri, new WebSocketHandler() {
 
 				@Override
 				public void onOpen() {

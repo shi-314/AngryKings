@@ -18,18 +18,18 @@
 			android:theme="@style/AppTheme">
 
 		<!--
-		<activity android:name="com.angrykings.acitivities.MainActivity" android:label="@string/app_name">
+		<activity android:name="com.angrykings.activitiesMainActivity" android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
 
-		<activity android:name="com.angrykings.acitivities.LobbyActivity"></activity>
-		<activity android:name="com.angrykings.acitivities.PhysicsTest"></activity>
+		<activity android:name="com.angrykings.activitiesLobbyActivity"></activity>
+		<activity android:name="com.angrykings.activitiesPhysicsTest"></activity>
 		-->
 
-		<activity android:name="com.angrykings.acitivities.PhysicsTest" android:label="@string/app_name">
+		<activity android:name="com.angrykings.activities.PhysicsTest" android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER"/>

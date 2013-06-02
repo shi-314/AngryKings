@@ -1,4 +1,4 @@
-package com.angrykings.acitivities;
+package com.angrykings.activities;
 
 import com.angrykings.ServerConnection;
 import org.json.JSONException;

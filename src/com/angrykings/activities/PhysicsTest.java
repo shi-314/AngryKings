@@ -1,9 +1,8 @@
-package com.angrykings.acitivities;
+package com.angrykings.activities;
 
 import android.os.Bundle;
 import android.os.Handler;
 import com.angrykings.Player;
-import com.angrykings.ServerConnection;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.options.EngineOptions;
@@ -37,8 +36,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 

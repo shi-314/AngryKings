@@ -11,25 +11,45 @@
       </filter>
     </filters>
   </component>
+  <component name="AndroidDesignerProfile">
+    <option name="fullProfile">
+      <profile>
+        <option name="device" value="2.7in QVGA" />
+        <option name="deviceConfiguration" value="Portrait" />
+        <option name="targetHashString" value="android-17" />
+        <option name="theme" value="AppTheme" />
+      </profile>
+    </option>
+    <option name="selection" value="[Full]" />
+  </component>
+  <component name="AndroidLayoutPreviewToolWindow">
+    <option name="state">
+      <GlobalState>
+        <option name="theme" value="AppTheme" />
+      </GlobalState>
+    </option>
+  </component>
   <component name="AndroidLogFilters">
     <option name="TOOL_WINDOW_LOG_LEVEL" value="ERROR" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="AngryKings" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="275b1836-533f-4cb8-9cf5-d2b281740d87" name="Default" comment="">
-      <change type="MOVED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\src\com\angrykings\acitivities\LobbyActivity.java" afterPath="$PROJECT_DIR$/src/com/angrykings/activities/LobbyActivity.java" />
-      <change type="MOVED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\src\com\angrykings\acitivities\MainActivity.java" afterPath="$PROJECT_DIR$/src/com/angrykings/activities/MainActivity.java" />
-      <change type="MOVED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\src\com\angrykings\acitivities\PhysicsTest.java" afterPath="$PROJECT_DIR$/src/com/angrykings/activities/PhysicsTest.java" />
+    <list default="true" id="275b1836-533f-4cb8-9cf5-d2b281740d87" name="Default" comment="fixed typo">
+      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\gen\com\prototype\BuildConfig.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\gen\com\prototype\Manifest.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\gen\com\prototype\PhysicsPrototype\BuildConfig.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\gen\com\prototype\R.java" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidManifest.xml" afterPath="$PROJECT_DIR$/AndroidManifest.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/angrykings/activities/MainActivity.java" afterPath="$PROJECT_DIR$/src/com/angrykings/activities/MainActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="AngryKings.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/fragment.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1370201397322" ignored="false" />
+    <file path="/fragment.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1370203231680" ignored="false" />
     <file path="$APPLICATION_HOME_DIR$/plugins/android/lib/android.jar!/org/jetbrains/android/android.xsd" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1369247335056" ignored="false" />
     <file path="/MyActivity.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1368036531129" ignored="false" />
-    <file path="/Dummy.txt" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1370200984415" ignored="false" />
-    <file path="/AndroidManifest.xml" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1369998161869" ignored="false" />
+    <file path="/Dummy.txt" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1370202434153" ignored="false" />
+    <file path="/AndroidManifest.xml" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1370203477918" ignored="false" />
     <file path="$PROJECT_DIR$/gen/com/example/AngryKings/Manifest.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1368036179392" ignored="false" />
     <file path="/PhysicsPrototype.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1369247115198" ignored="false" />
     <file path="/PhysicsTest.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1369998467757" ignored="false" />
@@ -37,10 +57,8 @@
     <file path="/strings.xml" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1369349675460" ignored="false" />
     <file path="/MainActivity.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1369349142398" ignored="false" />
     <file path="/KingServerConnection.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1369348881276" ignored="false" />
-    <file path="$PROJECT_DIR$/gen/com/prototype/BuildConfig.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1369349577840" ignored="false" />
     <file path="/LobbyActivity.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1369376651943" ignored="false" />
-    <file path="/a.dummy" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1369997009434" ignored="false" />
-    <file path="$PROJECT_DIR$/gen/com/prototype/Manifest.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1369382754280" ignored="false" />
+    <file path="/a.dummy" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1370203438091" ignored="false" />
     <file path="/File Header.txt.ft" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1369994823653" ignored="false" />
     <file path="/Map.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1369994885895" ignored="false" />
     <file path="/GameContext.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1370000031070" ignored="false" />
@@ -118,33 +136,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="King.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/angrykings/kings/King.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="7" selection-start="42" selection-end="42" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CastleBlock.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/angrykings/castles/CastleBlock.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="14" selection-start="51" selection-end="51" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Cannon.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/angrykings/cannons/Cannon.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="9" selection-start="46" selection-end="46" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="Cannonball.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/angrykings/cannons/Cannonball.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -163,10 +154,32 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="workspace.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+      <file leaf-file-name="MainActivity.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/angrykings/activities/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="11" selection-start="1642" selection-end="1642" vertical-scroll-proportion="0.0">
+            <state line="42" column="35" selection-start="1240" selection-end="1240" vertical-scroll-proportion="0.93075687">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TestActivity.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/angrykings/activities/TestActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="15" column="1" selection-start="323" selection-end="323" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LobbyActivity.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/angrykings/activities/LobbyActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="54" column="8" selection-start="1483" selection-end="1483" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -175,25 +188,7 @@
       <file leaf-file-name="AndroidManifest.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="26" column="0" selection-start="945" selection-end="945" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LobbyActivity.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/angrykings/activities/LobbyActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="25" column="58" selection-start="756" selection-end="756" vertical-scroll-proportion="0.059027776">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Castle.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/angrykings/castles/Castle.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="9" selection-start="46" selection-end="46" vertical-scroll-proportion="0.0">
+            <state line="20" column="27" selection-start="695" selection-end="695" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -217,11 +212,9 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/com/prototype/PhysicsTest.java" />
         <option value="$PROJECT_DIR$/src/com/angrykings/Player.java" />
         <option value="$PROJECT_DIR$/src/com/angrykings/ServerConnection.java" />
         <option value="$PROJECT_DIR$/src/com/angrykings/GameHUD.java" />
-        <option value="$PROJECT_DIR$/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/src/com/angrykings/acitivities/PhysicsTest.java" />
         <option value="$PROJECT_DIR$/src/com/angrykings/maps/Map.java" />
         <option value="$PROJECT_DIR$/src/com/angrykings/castles/Castle.java" />
@@ -233,6 +226,8 @@
         <option value="$PROJECT_DIR$/src/com/angrykings/PhysicsManager.java" />
         <option value="$PROJECT_DIR$/.idea/workspace.xml" />
         <option value="$PROJECT_DIR$/src/com/angrykings/activities/LobbyActivity.java" />
+        <option value="$PROJECT_DIR$/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/src/com/angrykings/activities/MainActivity.java" />
       </list>
     </option>
   </component>
@@ -432,7 +427,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="assets" />
+              <option name="myItemId" value="gen" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="angrykings" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -446,12 +445,13 @@
     <property name="OverrideImplement.combined" value="true" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="options.splitter.main.proportions" value="0.3" />
-    <property name="options.lastSelected" value="fileTemplates" />
+    <property name="options.lastSelected" value="project.propVCSSupport.Ignored.Files" />
     <property name="MemberChooser.sorted" value="false" />
     <property name="recentsLimit" value="5" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../connectMe" />
+    <property name="AndroidLayoutSelectedEditor" value="text-editor" />
     <property name="project.structure.side.proportion" value="0.28273463" />
-    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="SH25WW406493" />
+    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="emulator-5554" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="WebServerToolWindowFactoryState" value="true" />
@@ -623,7 +623,7 @@
     </configuration>
     <configuration default="false" name="AngryKings" type="AndroidRunConfigurationType" factoryName="Android Application">
       <module name="AngryKings" />
-      <option name="ACTIVITY_CLASS" value="com.angrykings.acitivities.PhysicsTest" />
+      <option name="ACTIVITY_CLASS" value="com.angrykings.activities.PhysicsTest" />
       <option name="MODE" value="specific_activity" />
       <option name="DEPLOY" value="true" />
       <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
@@ -687,7 +687,11 @@
       <created>1370200997032</created>
       <updated>1370200997032</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="fixed typo">
+      <created>1370201474960</created>
+      <updated>1370201474960</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -714,29 +718,32 @@
     <frame x="1358" y="-320" width="1936" height="1056" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Changes" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32962137" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977587" sideWeight="0.72049" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27505568" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27986348" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32962137" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32962137" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2139808" sideWeight="0.72049" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27951002" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977587" sideWeight="0.72049" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977587" sideWeight="0.72049" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32962137" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27986348" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32935154" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32850778" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32850778" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32962137" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2497332" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21558164" sideWeight="0.6703786" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27986348" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -785,7 +792,7 @@
     <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="intellij stuff" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed typo" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -803,6 +810,7 @@
     <MESSAGE value="created empty class model" />
     <MESSAGE value="cleanup" />
     <MESSAGE value="intellij stuff" />
+    <MESSAGE value="fixed typo" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -812,51 +820,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../AndEngine/AndEngineExamples-GLES2/src/org/andengine/examples/PhysicsExample.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="208" column="0" selection-start="7253" selection-end="8609" vertical-scroll-proportion="0.90581715" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/angrykings/Player.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="63" column="0" selection-start="2280" selection-end="2280" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/angrykings/ServerConnection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="0" selection-start="534" selection-end="534" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/angrykings/activities/PhysicsTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="79" column="8" selection-start="2867" selection-end="2867" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/angrykings/maps/Map.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="15" selection-start="138" selection-end="138" vertical-scroll-proportion="0.36266667" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/angrykings/GameHUD.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="34" selection-start="234" selection-end="234" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/angrykings/castles/Castle.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="9" selection-start="46" selection-end="46" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/angrykings/kings/King.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="3" column="7" selection-start="42" selection-end="42" vertical-scroll-proportion="0.0">
@@ -892,6 +855,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/angrykings/activities/LobbyActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="54" column="8" selection-start="1483" selection-end="1483" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="77" column="11" selection-start="5391" selection-end="5391" vertical-scroll-proportion="0.55921054">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/layout/activity_main.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="43" selection-start="757" selection-end="757" vertical-scroll-proportion="0.3547826">
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/angrykings/PhysicsManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="12" column="0" selection-start="207" selection-end="207" vertical-scroll-proportion="0.0">
@@ -899,24 +886,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+    <entry file="file://$PROJECT_DIR$/src/com/angrykings/activities/TestActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="11" selection-start="1642" selection-end="1642" vertical-scroll-proportion="0.0">
-          <folding />
+        <state line="15" column="1" selection-start="323" selection-end="323" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="0" selection-start="945" selection-end="945" vertical-scroll-proportion="0.0">
+        <state line="20" column="27" selection-start="695" selection-end="695" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/angrykings/activities/LobbyActivity.java">
+    <entry file="file://$PROJECT_DIR$/src/com/angrykings/activities/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="58" selection-start="756" selection-end="756" vertical-scroll-proportion="0.059027776">
-          <folding />
+        <state line="42" column="35" selection-start="1240" selection-end="1240" vertical-scroll-proportion="0.93075687">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -929,7 +920,7 @@
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.2" />
+                <option value="0.28273463" />
               </list>
             </option>
           </splitter-proportions>
@@ -941,7 +932,7 @@
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.2" />
+                <option value="0.28273463" />
               </list>
             </option>
           </splitter-proportions>
@@ -965,7 +956,7 @@
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.2" />
+                <option value="0.28273463" />
               </list>
             </option>
           </splitter-proportions>
@@ -973,7 +964,7 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>Android|AndEnginePhysicsBox2DExtension</last-edited>
+          <last-edited>AngryKings</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -1000,7 +991,7 @@
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.2" />
+                <option value="0.28273463" />
               </list>
             </option>
           </splitter-proportions>

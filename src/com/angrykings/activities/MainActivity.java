@@ -1,7 +1,7 @@
 package com.angrykings.activities;
 
+import com.angrykings.R;
 import com.angrykings.ServerConnection;
-import com.prototype.R;
 import com.angrykings.ServerConnection.OnMessageHandler;
 
 import android.app.Activity;

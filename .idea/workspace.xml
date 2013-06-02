@@ -17,7 +17,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="275b1836-533f-4cb8-9cf5-d2b281740d87" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/angrykings/PhysicsManager.java" afterPath="$PROJECT_DIR$/src/com/angrykings/PhysicsManager.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="AngryKings.iws" />
@@ -25,7 +24,7 @@
     <file path="/fragment.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1369998174735" ignored="false" />
     <file path="$APPLICATION_HOME_DIR$/plugins/android/lib/android.jar!/org/jetbrains/android/android.xsd" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1369247335056" ignored="false" />
     <file path="/MyActivity.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1368036531129" ignored="false" />
-    <file path="/Dummy.txt" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1370000114300" ignored="false" />
+    <file path="/Dummy.txt" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1370000123413" ignored="false" />
     <file path="/AndroidManifest.xml" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1369998161869" ignored="false" />
     <file path="$PROJECT_DIR$/gen/com/example/AngryKings/Manifest.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1368036179392" ignored="false" />
     <file path="/PhysicsPrototype.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1369247115198" ignored="false" />
@@ -167,7 +166,7 @@
       <file leaf-file-name="PhysicsManager.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/angrykings/PhysicsManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="49" selection-start="99" selection-end="99" vertical-scroll-proportion="0.24566475">
+            <state line="12" column="0" selection-start="207" selection-end="207" vertical-scroll-proportion="0.37847868">
               <folding />
             </state>
           </provider>
@@ -644,7 +643,11 @@
       <created>1369999925580</created>
       <updated>1369999925580</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="cleanup">
+      <created>1370000127159</created>
+      <updated>1370000127159</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -669,7 +672,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32935154" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -683,7 +686,7 @@
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32935154" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32935154" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3288889" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32962137" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -877,7 +880,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/angrykings/PhysicsManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="49" selection-start="99" selection-end="99" vertical-scroll-proportion="0.24566475">
+        <state line="12" column="0" selection-start="207" selection-end="207" vertical-scroll-proportion="0.37847868">
           <folding />
         </state>
       </provider>

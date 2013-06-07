@@ -1,51 +1,93 @@
 package com.angrykings.activities;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+
+import com.angrykings.Action;
 import com.angrykings.R;
 import com.angrykings.ServerConnection;
 import com.angrykings.ServerConnection.OnMessageHandler;
-
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import com.angrykings.ServerConnection.OnStartHandler;
+import com.angrykings.utils.ServerJSONBuilder;
 
 public class MainActivity extends Activity {
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	private String username;
+	private Button bLobby;
 
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-		final Button nameSendButton = (Button) findViewById(R.id.button);
-		final EditText nameText = (EditText) findViewById(R.id.nameInput);
-
 		ServerConnection.getInstance().setHandler(new OnMessageHandler() {
 
 			@Override
 			public void onMessage(String payload) {
-				Intent intent = new Intent(MainActivity.this, LobbyActivity.class);
-				intent.putExtra("users", payload);
-				intent.putExtra("username", nameText.getText().toString());
-				startActivity(intent);
+				try {
+					JSONObject jObj = new JSONObject(payload);
+					if (jObj.getInt("action") == Action.Server.KNOWN_USER) {
+						username = jObj.getString("name");
+						
+					} else if (jObj.getInt("action") == Action.Server.UNKNOWN_USER) {
+						Intent intent = new Intent(MainActivity.this,
+								LogInActivity.class);
+						Log.d("test", "hier sind wir drin");
+						startActivity(intent);
+					}
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
 			}
 		});
-		ServerConnection.getInstance().start();
-		nameSendButton.setOnClickListener(new View.OnClickListener() {
+		ServerConnection.getInstance().start(new OnStartHandler() {
+			
+			@Override
+			public void onStart() {
+				ServerConnection
+				.getInstance()
+				.getConnection()
+				.sendTextMessage(new ServerJSONBuilder().create(Action.Client.SET_ID).option("id", getImei()).build());				
+			}
+		});
+
+
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			username = extras.getString("username");
+		}
+		bLobby = (Button) findViewById(R.id.lobbyButton);
+		bLobby.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(View v) {
-				ServerConnection
-						.getInstance()
-						.getConnection()
-						.sendTextMessage(
-								"{\"action\":\"name\",\"value\":\"" + nameText.getText().toString()
-										+ "\"}");
+			public void onClick(View arg0) {
+				Intent intent = new Intent(getApplicationContext(),
+						LobbyActivity.class);
+				intent.putExtra("username", username);
+				startActivity(intent);
 			}
+
 		});
+	}
+
+	private String getImei() {
+		getApplicationContext();
+		// IMEI
+		TelephonyManager tManager = (TelephonyManager) getApplicationContext()
+				.getSystemService(Context.TELEPHONY_SERVICE);
+		String imei = tManager.getDeviceId();
+		// Ende IMEI
+		return imei;
 	}
 
 	@Override

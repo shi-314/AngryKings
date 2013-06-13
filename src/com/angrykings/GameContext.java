@@ -18,7 +18,7 @@ public class GameContext {
 
 	public static GameContext getInstance() {
 		if(instance == null)
-			return new GameContext();
+			instance = new GameContext();
 
 		return instance;
 	}
@@ -38,6 +38,23 @@ public class GameContext {
 		this.physicsWorld = physicsWorld;
 		this.vboManager = vboManager;
 	}
+
+	public void setScene(Scene scene) {
+		this.scene = scene;
+	}
+
+	public void setCamera(Camera camera) {
+		this.camera = camera;
+	}
+
+	public void setPhysicsWorld(PhysicsWorld physicsWorld) {
+		this.physicsWorld = physicsWorld;
+	}
+
+	public void setVboManager(VertexBufferObjectManager vboManager) {
+		this.vboManager = vboManager;
+	}
+
 
 	public Scene getScene() {
 		return scene;

@@ -108,7 +108,8 @@ public class PhysicsTest extends BaseGameActivity implements IOnSceneTouchListen
 		final VertexBufferObjectManager vertexBufferObjectManager = this.getVertexBufferObjectManager();
 		final Rectangle ground = new Rectangle(0, CAMERA_HEIGHT - 2, CAMERA_WIDTH, 2, vertexBufferObjectManager);
 		final Rectangle roof = new Rectangle(0, 0, CAMERA_WIDTH, 2, vertexBufferObjectManager);
-		final Rectangle left = new Rectangle(0, 0, 2, CAMERA_HEIGHT, vertexBufferObjectManager);
+		final Rectangle left = new Rectangle(0, 0,
+				2, CAMERA_HEIGHT, vertexBufferObjectManager);
 		final Rectangle right = new Rectangle(CAMERA_WIDTH - 2, 0, 2, CAMERA_HEIGHT, vertexBufferObjectManager);
 
 		ground.setColor(0.5f, 0.5f, 0.5f);
@@ -155,12 +156,12 @@ public class PhysicsTest extends BaseGameActivity implements IOnSceneTouchListen
 			public void onUpdate(float pSecondsElapsed) {
 				boolean ready = physicsReady();
 
-//				if(ready && mRound % 2 == 1) {
-//					Body b = mPlayer2.fire(new Vector2(-45, -25));
-//					mCannonballs.add(b);
-//					mRound++;
-//					Debug.d("round: "+mRound);
-//				}else
+				if(ready && mRound % 2 == 1) {
+					Body b = mPlayer2.fire(new Vector2(-45, -25));
+					mCannonballs.add(b);
+					mRound++;
+					Debug.d("round: "+mRound);
+				}else
 				if(ready && mRound % 2 == 0){
 					if(!mTurnSent) {
 						mRound++;
@@ -183,8 +184,8 @@ public class PhysicsTest extends BaseGameActivity implements IOnSceneTouchListen
 
 		this.mCannonballs = new ArrayList<Body>();
 
-		Vector2 player1Pos = new Vector2(0,0);
-		Vector2 player2Pos = new Vector2(0,0);
+		Vector2 player1Pos = new Vector2(200, 400);
+		Vector2 player2Pos = new Vector2(750, 400);
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {

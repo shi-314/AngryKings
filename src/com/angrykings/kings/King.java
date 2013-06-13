@@ -1,5 +1,10 @@
 package com.angrykings.kings;
 
+import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.scene.Scene;
+import org.andengine.entity.sprite.Sprite;
+import org.andengine.opengl.texture.region.TiledTextureRegion;
+
 /**
  * King
  *
@@ -7,4 +12,5 @@ package com.angrykings.kings;
  * @date 31.05.13
  */
 public abstract class King {
+
 }

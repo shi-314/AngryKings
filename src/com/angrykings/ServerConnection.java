@@ -12,6 +12,10 @@ public class ServerConnection {
 	public static abstract class OnMessageHandler {
 		public abstract void onMessage(String payload);
 	}
+	
+	public static abstract class OnStartHandler{
+		public abstract void onStart();
+	}
 
 	private final WebSocketConnection connection = new WebSocketConnection();
 	private static ServerConnection instance;
@@ -40,7 +44,7 @@ public class ServerConnection {
 		this.handler = handler;
 	}
 
-	public void start() {
+	public void start(final OnStartHandler startHandler) {
 		final String wsuri = "ws://spaeti.pavo.uberspace.de:61224";
 
 		try {
@@ -49,6 +53,7 @@ public class ServerConnection {
 				@Override
 				public void onOpen() {
 					Log.d(TAG, "Status: Connected");
+					startHandler.onStart();
 				}
 
 				@Override

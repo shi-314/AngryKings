@@ -1,6 +1,12 @@
 package com.angrykings.activities;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.angrykings.Action;
 import com.angrykings.ServerConnection;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,15 +21,18 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.angrykings.ServerConnection.OnMessageHandler;
+import com.angrykings.utils.ServerJSONBuilder;
 
 public class LobbyActivity extends ListActivity {
 
 	private String username;
-	private String users;
+	private String users = "";
+	private List<String> user;
 
-	private void updateLobby(String users) {
-		setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, users
-				.replace(username + ",", "").split(",")));
+	private void updateLobby(List<String> user) {
+		
+		setListAdapter(new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1, user));
 	}
 
 	/** Called when the activity is first created. */
@@ -31,21 +40,21 @@ public class LobbyActivity extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Bundle extras = getIntent().getExtras();
+		user = new ArrayList<String>();
 		if (extras != null) {
-			users = extras.getString("users");
 			this.username = extras.getString("username");
 		}
-		try {
-			JSONObject userData = new JSONObject(users);
-			users = userData.getString("names");
-		} catch (JSONException e1) {
-			e1.printStackTrace();
-		}
+		ServerConnection
+				.getInstance()
+				.getConnection()
+				.sendTextMessage(
+						new ServerJSONBuilder().create(
+								Action.Client.GO_TO_LOBBY).build());
 		displayLobby();
 	}
 
 	private void displayLobby() {
-		updateLobby(users);
+		updateLobby(user);
 		getListView().setTextFilterEnabled(true);
 		ServerConnection.getInstance().setHandler(new OnMessageHandler() {
 
@@ -53,32 +62,58 @@ public class LobbyActivity extends ListActivity {
 			public void onMessage(String payload) {
 				try {
 					JSONObject jObj = new JSONObject(payload);
-					if (jObj.getString("action").equals("request")) {
-						new AlertDialog.Builder(LobbyActivity.this).setTitle("Request")
-								.setMessage(jObj.getString("partner") + " requested a match!")
-								.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+					if (jObj.getInt("action") == Action.Server.REQUEST) {
+						new AlertDialog.Builder(LobbyActivity.this)
+								.setTitle("Request")
+								.setMessage(
+										jObj.getString("partner")
+												+ " requested a match!")
+								.setPositiveButton("Okay",
+										new DialogInterface.OnClickListener() {
 
-									public void onClick(DialogInterface dialog, int which) {
-										ServerConnection.getInstance().getConnection()
-												.sendTextMessage("{\"action\":\"accept\"}");
-										Intent intent = new Intent(LobbyActivity.this,
-												PhysicsTest.class);
-										intent.putExtra("myTurn", false);
-										intent.putExtra("username", username);
-										startActivity(intent);
-									}
-								}).setNegativeButton("Deny", new DialogInterface.OnClickListener() {
+											public void onClick(
+													DialogInterface dialog,
+													int which) {
+												ServerConnection
+														.getInstance()
+														.getConnection()
+														.sendTextMessage(
+																new ServerJSONBuilder()
+																		.create(Action.Client.ACCEPT)
+																		.build());
+												Intent intent = new Intent(
+														LobbyActivity.this,
+														PhysicsTest.class);
+												intent.putExtra("myTurn", false);
+												intent.putExtra("username",
+														username);
+												startActivity(intent);
+											}
+										})
+								.setNegativeButton("Deny",
+										new DialogInterface.OnClickListener() {
 
-									public void onClick(DialogInterface dialog, int which) {
-										ServerConnection.getInstance().getConnection()
-												.sendTextMessage("{\"action\":\"deny\"}");
-									}
-								}).show();
-					} else
-						if (jObj.getString("action").equals("lobbyUpdate")) {
-							users = jObj.getString("names");
-							updateLobby(users);
+											public void onClick(
+													DialogInterface dialog,
+													int which) {
+												ServerConnection
+														.getInstance()
+														.getConnection()
+														.sendTextMessage(
+																new ServerJSONBuilder()
+																		.create(Action.Client.DENY)
+																		.build());
+											}
+										}).show();
+					} else if (jObj.getInt("action") == Action.Server.LOBBY_UPDATE) {
+						users = jObj.getString("names");
+						JSONArray userArray = new JSONArray(users);
+						for (int i = 0; i < userArray.length(); i++) {
+							user.add(userArray.getString(i));
+							Log.d("name", username);
 						}
+						updateLobby(user);
+					}
 				} catch (JSONException e) {
 					Log.e("JSON Parser", "Error parsing data " + e.toString());
 				}
@@ -90,8 +125,9 @@ public class LobbyActivity extends ListActivity {
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 
-		final AlertDialog dialog = new AlertDialog.Builder(this).setTitle("Please Wait")
-				.setMessage("Waiting for partner").show();
+		final AlertDialog dialog = new AlertDialog.Builder(this)
+				.setTitle("Please Wait").setMessage("Waiting for partner")
+				.show();
 
 		ServerConnection.getInstance().setHandler(new OnMessageHandler() {
 
@@ -99,11 +135,12 @@ public class LobbyActivity extends ListActivity {
 			public void onMessage(String payload) {
 				try {
 					JSONObject jObj = new JSONObject(payload);
-					if (jObj.getString("action").equals("denied")) {
+					if (jObj.getInt("action") == Action.Server.DENIED) {
 						dialog.cancel();
 						displayLobby();
 					} else {
-						Intent intent = new Intent(LobbyActivity.this, PhysicsTest.class);
+						Intent intent = new Intent(LobbyActivity.this,
+								PhysicsTest.class);
 						intent.putExtra("myTurn", true);
 						intent.putExtra("username", username);
 						startActivity(intent);
@@ -118,8 +155,11 @@ public class LobbyActivity extends ListActivity {
 				.getInstance()
 				.getConnection()
 				.sendTextMessage(
-						"{\"action\":\"pair\",\"partner\":\""
-								+ getListView().getItemAtPosition(position) + "\"}");
+						new ServerJSONBuilder()
+								.create(Action.Client.PAIR)
+								.option("partner",
+										getListView().getItemAtPosition(
+												position).toString()).build());
 
 	}
 }

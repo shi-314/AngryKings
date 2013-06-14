@@ -10,6 +10,7 @@ import com.angrykings.cannons.Cannonball;
 import com.angrykings.maps.BasicMap;
 import com.badlogic.gdx.math.Vector2;
 import org.andengine.engine.camera.Camera;
+import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
@@ -56,7 +57,8 @@ public class MapTest extends BaseGameActivity implements IOnSceneTouchListener {
 	public EngineOptions onCreateEngineOptions() {
 		gc = GameContext.getInstance();
 
-		Camera camera = new Camera(0, 0, GameConfig.CAMERA_WIDTH, GameConfig.CAMERA_HEIGHT);
+		ZoomCamera camera = new ZoomCamera(0, 0, GameConfig.CAMERA_WIDTH, GameConfig.CAMERA_HEIGHT);
+		camera.setZoomFactor(0.5f);
 
 		gc.setCamera(camera);
 
@@ -163,15 +165,16 @@ public class MapTest extends BaseGameActivity implements IOnSceneTouchListener {
 		float x = pSceneTouchEvent.getX();
 		float y = pSceneTouchEvent.getY();
 
-		if(pSceneTouchEvent.isActionUp()) {
-			this.cannon.pointAt(x, y);
-			Vector2 dir = this.cannon.getDirection();
-			Cannonball ball = new Cannonball(this.ballTexture);
-			ball.setPosition(200, 200);
+		this.cannon.pointAt(x, y);
 
-			Vector2 force = this.cannon.getDirection().mul(10);
-			Vector2 forcePosition = new Vector2(ball.getX()+10, ball.getY()+10);
-			ball.getBody().applyForce(force, forcePosition);
+		if(pSceneTouchEvent.isActionUp()) {
+			Vector2 ballPosition = this.cannon.getBarrelEndPosition();
+
+			Cannonball ball = new Cannonball(this.ballTexture);
+			ball.setPosition(ballPosition.x, ballPosition.y);
+
+			Vector2 force = this.cannon.getDirection().mul(150);
+			ball.getBody().applyLinearImpulse(force, ball.getBody().getPosition());
 
 			gc.getScene().attachChild(ball);
 		}

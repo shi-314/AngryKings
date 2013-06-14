@@ -35,7 +35,7 @@ public class Cannonball extends PhysicalEntity {
 
 		GameContext gc = GameContext.getInstance();
 
-		this.ballSprite = new Sprite(0, 0, this.ballTexture, gc.getVboManager());
+		this.ballSprite = new Sprite(-this.ballTexture.getWidth()/2, -this.ballTexture.getHeight()/2, this.ballTexture, gc.getVboManager());
 
 		this.ballFixture = PhysicsFactory.createFixtureDef(density, elasticity, friction);
 

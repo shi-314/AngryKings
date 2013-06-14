@@ -3,14 +3,8 @@ package com.angrykings.cannons;
 import com.angrykings.GameContext;
 import com.badlogic.gdx.math.Vector2;
 import org.andengine.entity.Entity;
-import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
-import org.andengine.opengl.texture.region.TiledTextureRegion;
-import org.andengine.util.debug.Debug;
-
-import java.util.Vector;
 
 /**
  * Cannon
@@ -22,7 +16,7 @@ public class Cannon extends  Entity {
 	protected final TextureRegion cannonTexture;
 	protected final TextureRegion wheelTexture;
 
-	protected Sprite cannonSprite, wheelSprite;
+	protected Sprite barrelSprite, wheelSprite;
 
 	protected final boolean isLeft;
 	protected final float minAngle, maxAngle;
@@ -35,10 +29,10 @@ public class Cannon extends  Entity {
 		GameContext gc = GameContext.getInstance();
 
 		this.wheelSprite = new Sprite(0, 0, this.wheelTexture, gc.getVboManager());
-		this.cannonSprite = new Sprite(0, 0, this.cannonTexture, gc.getVboManager());
-		this.cannonSprite.setRotationCenter(60.0f, 72.0f);
+		this.barrelSprite = new Sprite(0, 0, this.cannonTexture, gc.getVboManager());
+		this.barrelSprite.setRotationCenter(60.0f, 72.0f);
 
-		this.attachChild(this.cannonSprite);
+		this.attachChild(this.barrelSprite);
 		this.attachChild(this.wheelSprite);
 
 		if(!isLeft) {
@@ -54,7 +48,7 @@ public class Cannon extends  Entity {
 	}
 
 	public void pointAt(float x, float y) {
-		double rotation = Math.atan2(y - this.getY() - this.cannonSprite.getHeight()/2, x - this.getX());
+		double rotation = Math.atan2(y - this.getY() - this.barrelSprite.getHeight()/2, x - this.getX());
 
 		rotation = Math.toDegrees(rotation);
 
@@ -62,13 +56,17 @@ public class Cannon extends  Entity {
 			rotation = -rotation + 180;
 
 		if(rotation > this.minAngle && rotation < maxAngle)
-			this.cannonSprite.setRotation((float)rotation);
+			this.barrelSprite.setRotation((float)rotation);
 
 //		Debug.d(""+rotation);
 	}
 
 	public Vector2 getDirection() {
-		float angle = this.cannonSprite.getRotation();
-		return new Vector2((float)Math.sin(angle), (float)Math.cos(angle));
+		float angle = (float)Math.toRadians((double) this.barrelSprite.getRotation());
+		return new Vector2((float)Math.cos(angle), (float)Math.sin(angle));
+	}
+
+	public Vector2 getBarrelEndPosition() {
+		return new Vector2(this.getX(), this.getY()).add(this.getDirection().mul(256));
 	}
 }

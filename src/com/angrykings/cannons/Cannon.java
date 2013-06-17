@@ -81,9 +81,9 @@ public class Cannon extends  Entity {
 		ball.registerPhysicsConnector();
 
 		ball.getBody().applyLinearImpulse(this.getDirection().mul(force), ball.getBody().getPosition());
-		ball.setPosition(ballPosition.x, ballPosition.y);
+		ball.getAreaShape().setPosition(ballPosition.x, ballPosition.y);
 
-		gc.getScene().attachChild(ball);
+		gc.getScene().attachChild(ball.getAreaShape());
 
 		PhysicsManager.getInstance().addPhysicalEntity(ball);
 

@@ -15,13 +15,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  * @author Shivan Taher <zn31415926535@gmail.com>
  * @date 31.05.13
  */
-public class CastleBlock extends PhysicalEntity {
+public class CastleBlock {
 	public CastleBlock(TextureRegion blockTexture) {
-		super(0, 0, blockTexture, GameContext.getInstance().getVboManager());
-	}
 
-	@Override
-	public Body getBody() {
-		return null;  //To change body of implemented methods use File | Settings | File Templates.
 	}
 }

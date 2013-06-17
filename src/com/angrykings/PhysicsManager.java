@@ -55,7 +55,7 @@ public class PhysicsManager implements IUpdateHandler {
 
 			if(linearVelocity < PhysicsManager.MIN_LINEAR_VELOCITY && angularVelocity < PhysicsManager.MIN_ANGULAR_VELOCITY) {
 				Debug.d("remove physical entity: lin: " + b.getLinearVelocity().len() + " angular: " + b.getAngularVelocity());
-				gc.getScene().detachChild(entity);
+				gc.getScene().detachChild(entity.getAreaShape());
 				gc.getPhysicsWorld().destroyBody(b);
 				it.remove();
 			}

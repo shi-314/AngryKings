@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import org.andengine.entity.Entity;
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.shape.IAreaShape;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -25,25 +26,26 @@ public class Cannonball extends PhysicalEntity {
 	protected final TextureRegion ballTexture;
 	protected final Body ballBody;
 	protected final FixtureDef ballFixture;
+	protected final Sprite ballSprite;
 
 	public Cannonball(TextureRegion ballTexture, Vector2 position) {
 		this(ballTexture, 5.5f, 0.1f, 0.9f, position);
 	}
 
 	public Cannonball(TextureRegion ballTexture, float density, float elasticity, float friction, Vector2 position) {
-		super(0, 0, ballTexture, GameContext.getInstance().getVboManager());
-
 		GameContext gc = GameContext.getInstance();
+
+		this.ballSprite = new Sprite(0, 0, ballTexture, gc.getVboManager());
 
 		this.ballTexture = ballTexture;
 
-		this.setPosition(position.x-this.ballTexture.getWidth()/2, position.y-this.ballTexture.getHeight()/2);
+		this.ballSprite.setPosition(position.x - this.ballTexture.getWidth() / 2, position.y - this.ballTexture.getHeight() / 2);
 
 		this.ballFixture = PhysicsFactory.createFixtureDef(density, elasticity, friction);
 
 		this.ballBody = PhysicsFactory.createCircleBody(
 				gc.getPhysicsWorld(),
-				this,
+				this.ballSprite,
 				BodyDef.BodyType.DynamicBody,
 				this.ballFixture
 		);
@@ -57,5 +59,8 @@ public class Cannonball extends PhysicalEntity {
 		return this.ballBody;
 	}
 
-
+	@Override
+	public IAreaShape getAreaShape() {
+		return this.ballSprite;
+	}
 }

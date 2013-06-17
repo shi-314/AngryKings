@@ -8,6 +8,7 @@ import com.angrykings.GameContext;
 import com.angrykings.PhysicsManager;
 import com.angrykings.cannons.Cannon;
 import com.angrykings.cannons.Cannonball;
+import com.angrykings.castles.Castle;
 import com.angrykings.maps.BasicMap;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -64,6 +65,7 @@ public class MapTest extends BaseGameActivity implements IOnSceneTouchListener {
 
 	private Cannon cannon;
 	private RepeatingSpriteBackground skySprite;
+	private Castle castle;
 
 
 	@Override
@@ -167,6 +169,11 @@ public class MapTest extends BaseGameActivity implements IOnSceneTouchListener {
 		this.cannon = new Cannon(this.cannonTexture, this.wheelTexture, this.ballTexture, true);
 		this.cannon.setPosition(-400, 890);
 		scene.attachChild(this.cannon);
+		
+		castle = new Castle(this, 400, 890);
+		castle.createTextures();
+		castle.createSinglePieces();
+		
 
 		FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.9f, 0.1f, 0.9f);
 		Rectangle box = new Rectangle(200, 0, 100, 100, getVertexBufferObjectManager());

@@ -2,6 +2,7 @@ package com.angrykings.cannons;
 
 import com.angrykings.GameContext;
 import com.angrykings.PhysicalEntity;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -22,40 +23,39 @@ import org.andengine.opengl.texture.region.TiledTextureRegion;
 public class Cannonball extends PhysicalEntity {
 
 	protected final TextureRegion ballTexture;
-	protected final Sprite ballSprite;
 	protected final Body ballBody;
 	protected final FixtureDef ballFixture;
 
-	public Cannonball(TextureRegion ballTexture) {
-		this(ballTexture, 5.5f, 0.1f, 0.9f);
+	public Cannonball(TextureRegion ballTexture, Vector2 position) {
+		this(ballTexture, 5.5f, 0.1f, 0.9f, position);
 	}
 
-	public Cannonball(TextureRegion ballTexture, float density, float elasticity, float friction) {
-		this.ballTexture = ballTexture;
+	public Cannonball(TextureRegion ballTexture, float density, float elasticity, float friction, Vector2 position) {
+		super(0, 0, ballTexture, GameContext.getInstance().getVboManager());
 
 		GameContext gc = GameContext.getInstance();
 
-		this.ballSprite = new Sprite(-this.ballTexture.getWidth()/2, -this.ballTexture.getHeight()/2, this.ballTexture, gc.getVboManager());
+		this.ballTexture = ballTexture;
+
+		this.setPosition(position.x-this.ballTexture.getWidth()/2, position.y-this.ballTexture.getHeight()/2);
 
 		this.ballFixture = PhysicsFactory.createFixtureDef(density, elasticity, friction);
 
 		this.ballBody = PhysicsFactory.createCircleBody(
 				gc.getPhysicsWorld(),
-				this.ballSprite,
+				this,
 				BodyDef.BodyType.DynamicBody,
 				this.ballFixture
 		);
 
-		gc.getPhysicsWorld().registerPhysicsConnector(
-				new PhysicsConnector(this.ballSprite, this.ballBody, true, true)
-		);
-
-		this.attachChild(ballSprite);
+		this.ballBody.setLinearDamping(0.05f);
+		this.ballBody.setAngularDamping(0.9f);
 	}
 
 	@Override
 	public Body getBody() {
 		return this.ballBody;
 	}
+
 
 }

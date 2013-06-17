@@ -5,28 +5,38 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import com.angrykings.GameConfig;
 import com.angrykings.GameContext;
+import com.angrykings.PhysicsManager;
 import com.angrykings.cannons.Cannon;
 import com.angrykings.cannons.Cannonball;
 import com.angrykings.maps.BasicMap;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
+import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
+import org.andengine.entity.scene.background.RepeatingSpriteBackground;
 import org.andengine.entity.util.FPSLogger;
+import org.andengine.extension.physics.box2d.PhysicsConnector;
+import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.atlas.bitmap.source.AssetBitmapTextureAtlasSource;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.ui.IGameInterface;
 import org.andengine.ui.activity.BaseGameActivity;
+import org.andengine.util.debug.Debug;
 
 /**
  * MapTest
@@ -46,11 +56,14 @@ public class MapTest extends BaseGameActivity implements IOnSceneTouchListener {
 	private TextureRegion cannonTexture;
 	private TextureRegion wheelTexture;
 	private TextureRegion ballTexture;
+	private TiledTextureRegion skyTexture;
 
 	//
 	// Game Objects
 	//
+
 	private Cannon cannon;
+	private RepeatingSpriteBackground skySprite;
 
 
 	@Override
@@ -58,7 +71,7 @@ public class MapTest extends BaseGameActivity implements IOnSceneTouchListener {
 		gc = GameContext.getInstance();
 
 		ZoomCamera camera = new ZoomCamera(0, 0, GameConfig.CAMERA_WIDTH, GameConfig.CAMERA_HEIGHT);
-		camera.setZoomFactor(0.5f);
+		camera.setZoomFactor(0.3f);
 
 		gc.setCamera(camera);
 
@@ -102,6 +115,15 @@ public class MapTest extends BaseGameActivity implements IOnSceneTouchListener {
 		this.ballTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(textureAtlas, this, "ball.png", 0, 0);
 		textureAtlas.load();
 
+
+		this.skySprite = new RepeatingSpriteBackground(
+				GameConfig.CAMERA_WIDTH,
+				GameConfig.CAMERA_HEIGHT,
+				this.getTextureManager(),
+				AssetBitmapTextureAtlasSource.create(this.getAssets(), "gfx/sky.png"),
+				this.getVertexBufferObjectManager()
+		);
+
 		pOnCreateResourcesCallback.onCreateResourcesFinished();
 	}
 
@@ -119,7 +141,7 @@ public class MapTest extends BaseGameActivity implements IOnSceneTouchListener {
 		//
 
 		Scene scene = new Scene();
-		scene.setBackground(new Background(0, 0, 0));
+		scene.setBackground(this.skySprite);
 		scene.setOnSceneTouchListener(this);
 
 		gc.setScene(scene);
@@ -128,8 +150,9 @@ public class MapTest extends BaseGameActivity implements IOnSceneTouchListener {
 		// initialize the physics engine
 		//
 
-		PhysicsWorld physicsWorld = new PhysicsWorld(new Vector2(0, SensorManager.GRAVITY_EARTH), true);
+		PhysicsWorld physicsWorld = new PhysicsWorld(new Vector2(0, SensorManager.GRAVITY_EARTH), false);
 
+		physicsWorld.setAutoClearForces(true);
 		gc.setPhysicsWorld(physicsWorld);
 
 		scene.registerUpdateHandler(physicsWorld);
@@ -138,14 +161,20 @@ public class MapTest extends BaseGameActivity implements IOnSceneTouchListener {
 		// initialize the entities
 		//
 
-		scene.setBackground(new Background(0.7f, 0.7f, 1.0f));
-
-		BasicMap map = new BasicMap(this.grassTexture);
+		BasicMap map = new BasicMap(this.grassTexture, this.skyTexture);
 		scene.attachChild(map);
 
-		this.cannon = new Cannon(this.cannonTexture, this.wheelTexture, true);
-		this.cannon.setPosition(300, 300);
+		this.cannon = new Cannon(this.cannonTexture, this.wheelTexture, this.ballTexture, true);
+		this.cannon.setPosition(-400, 890);
 		scene.attachChild(this.cannon);
+
+		FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.9f, 0.1f, 0.9f);
+		Rectangle box = new Rectangle(200, 0, 100, 100, getVertexBufferObjectManager());
+		box.setColor(1,0,0,1);
+		Body body = PhysicsFactory.createBoxBody(physicsWorld, box, BodyDef.BodyType.DynamicBody, FIXTURE_DEF);
+		scene.attachChild(box);
+		physicsWorld.registerPhysicsConnector(new PhysicsConnector(box, body, true, true));
+		scene.registerUpdateHandler(PhysicsManager.getInstance());
 
 		pOnCreateSceneCallback.onCreateSceneFinished(scene);
 	}
@@ -168,15 +197,7 @@ public class MapTest extends BaseGameActivity implements IOnSceneTouchListener {
 		this.cannon.pointAt(x, y);
 
 		if(pSceneTouchEvent.isActionUp()) {
-			Vector2 ballPosition = this.cannon.getBarrelEndPosition();
-
-			Cannonball ball = new Cannonball(this.ballTexture);
-			ball.setPosition(ballPosition.x, ballPosition.y);
-
-			Vector2 force = this.cannon.getDirection().mul(150);
-			ball.getBody().applyLinearImpulse(force, ball.getBody().getPosition());
-
-			gc.getScene().attachChild(ball);
+			this.cannon.fire(200);
 		}
 
 		return false;

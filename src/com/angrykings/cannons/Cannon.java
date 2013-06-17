@@ -1,10 +1,12 @@
 package com.angrykings.cannons;
 
 import com.angrykings.GameContext;
+import com.angrykings.PhysicsManager;
 import com.badlogic.gdx.math.Vector2;
 import org.andengine.entity.Entity;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.TextureRegion;
+import org.andengine.util.debug.Debug;
 
 /**
  * Cannon
@@ -15,15 +17,17 @@ import org.andengine.opengl.texture.region.TextureRegion;
 public class Cannon extends  Entity {
 	protected final TextureRegion cannonTexture;
 	protected final TextureRegion wheelTexture;
+	protected final TextureRegion cannonballTexture;
 
 	protected Sprite barrelSprite, wheelSprite;
 
 	protected final boolean isLeft;
 	protected final float minAngle, maxAngle;
 
-	public Cannon(TextureRegion cannonTexture, TextureRegion wheelTexture, boolean isLeft) {
+	public Cannon(TextureRegion cannonTexture, TextureRegion wheelTexture, TextureRegion cannonballTexture, boolean isLeft) {
 		this.cannonTexture = cannonTexture;
 		this.wheelTexture = wheelTexture;
+		this.cannonballTexture = cannonballTexture;
 		this.isLeft = isLeft;
 
 		GameContext gc = GameContext.getInstance();
@@ -57,16 +61,32 @@ public class Cannon extends  Entity {
 
 		if(rotation > this.minAngle && rotation < maxAngle)
 			this.barrelSprite.setRotation((float)rotation);
-
-//		Debug.d(""+rotation);
 	}
 
 	public Vector2 getDirection() {
 		float angle = (float)Math.toRadians((double) this.barrelSprite.getRotation());
-		return new Vector2((float)Math.cos(angle), (float)Math.sin(angle));
+		return new Vector2((float)Math.cos(angle), (float)Math.sin(angle)).nor();
 	}
 
-	public Vector2 getBarrelEndPosition() {
-		return new Vector2(this.getX(), this.getY()).add(this.getDirection().mul(256));
+	private Vector2 getBarrelEndPosition() {
+		return new Vector2(this.getX(), this.getY() + 36).add(this.getDirection().mul(256));
+	}
+
+	public Cannonball fire(float force) {
+		GameContext gc = GameContext.getInstance();
+
+		Vector2 ballPosition = this.getBarrelEndPosition();
+
+		Cannonball ball = new Cannonball(this.cannonballTexture, ballPosition);
+		ball.registerPhysicsConnector();
+
+		ball.getBody().applyLinearImpulse(this.getDirection().mul(force), ball.getBody().getPosition());
+		ball.setPosition(ballPosition.x, ballPosition.y);
+
+		gc.getScene().attachChild(ball);
+
+		PhysicsManager.getInstance().addPhysicalEntity(ball);
+
+		return ball;
 	}
 }

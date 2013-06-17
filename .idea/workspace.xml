@@ -35,91 +35,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="275b1836-533f-4cb8-9cf5-d2b281740d87" name="Default" comment="added game entities and started with creating a test environment">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/angrykings/maps/BasicMap.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/angrykings/GameConfig.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/angrykings/activities/MapTest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/angrykings/PhysicalEntity.java" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\background_grass.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\badge.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\badge.svg" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\badge_large.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\banana_tiled.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\box.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\carddeck_tiled.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\chick.svg" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\chromatic_circle.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\click_to_unload.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\desert_tiled.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\enemy.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\face_box.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\face_box_menu.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\face_box_tiled.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\face_circle_tiled.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\face_hexagon_tiled.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\face_triangle_tiled.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\frog.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\helicopter_tiled.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\i_love_8_bit.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\imageformat_bmp.bmp" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\imageformat_gif.gif" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\imageformat_gif.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\imageformat_jpg.jpg" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\imageformat_png.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\menu_back.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\menu_background.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\menu_ok.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\menu_quit.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\menu_reset.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\next.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\notes.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\onscreen_control_base.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\onscreen_control_knob.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\pacdroid.svg" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\pacdroid_apples.svg" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\parallax_background_layer_back.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\parallax_background_layer_front.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\parallax_background_layer_mid.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\particle_fire.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\particle_point.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\paused.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\player.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\racetrack_curve.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\racetrack_straight.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\radar.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\radarpoint.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\snake_background.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\snake_head.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\snake_tailpart.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\snapdragon_tiled.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\spritesheets\texturepackerexample.pvr.ccz" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\spritesheets\texturepackerexample.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\tank.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\test.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\texturecompositing\alphamask.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\texturecompositing\balloon.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\texturecompositing\zynga.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\toggle_button.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\gfx\vehicles.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\level\example.lvl" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\tmx\desert.tmx" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\tmx\desert.tsx" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Shivan\IdeaProjects\AngryKings\assets\tmx\desert_with_tsx_tileset.tmx" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidManifest.xml" afterPath="$PROJECT_DIR$/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/angrykings/cannons/Cannon.java" afterPath="$PROJECT_DIR$/src/com/angrykings/cannons/Cannon.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/angrykings/cannons/Cannonball.java" afterPath="$PROJECT_DIR$/src/com/angrykings/cannons/Cannonball.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/angrykings/castles/CastleBlock.java" afterPath="$PROJECT_DIR$/src/com/angrykings/castles/CastleBlock.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/angrykings/GameContext.java" afterPath="$PROJECT_DIR$/src/com/angrykings/GameContext.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/angrykings/kings/King.java" afterPath="$PROJECT_DIR$/src/com/angrykings/kings/King.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/angrykings/maps/Map.java" afterPath="$PROJECT_DIR$/src/com/angrykings/maps/Map.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/angrykings/activities/PhysicsTest.java" afterPath="$PROJECT_DIR$/src/com/angrykings/activities/PhysicsTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="AngryKings.iws" />
     <ignored path=".idea/workspace.xml" />
+    <ignored path="gen/com/angrykings/R.java" />
+    <ignored path="gen/com/angrykings/BuildConfig.java" />
+    <ignored path="gen/com/angrykings/Manifest.java" />
     <file path="/fragment.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1370589486280" ignored="false" />
     <file path="$APPLICATION_HOME_DIR$/plugins/android/lib/android.jar!/org/jetbrains/android/android.xsd" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1369247335056" ignored="false" />
     <file path="/MyActivity.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1368036531129" ignored="false" />
-    <file path="/Dummy.txt" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1371164465128" ignored="false" />
+    <file path="/Dummy.txt" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1371506302044" ignored="false" />
     <file path="/AndroidManifest.xml" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1370514090511" ignored="false" />
     <file path="$PROJECT_DIR$/gen/com/example/AngryKings/Manifest.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1368036179392" ignored="false" />
     <file path="/PhysicsPrototype.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1369247115198" ignored="false" />
@@ -206,15 +133,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="GameContext.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/angrykings/GameContext.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="19" column="28" selection-start="524" selection-end="524" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="PhysicsTest.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/angrykings/activities/PhysicsTest.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -227,7 +145,25 @@
       <file leaf-file-name="MapTest.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/angrykings/activities/MapTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="171" column="61" selection-start="5179" selection-end="5179" vertical-scroll-proportion="1.0578512">
+            <state line="173" column="32" selection-start="5557" selection-end="5557" vertical-scroll-proportion="-0.19648094">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Castle.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/angrykings/castles/Castle.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="46" column="16" selection-start="1133" selection-end="1133" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GameConfig.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/angrykings/GameConfig.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="11" column="19" selection-start="227" selection-end="227" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -245,10 +181,8 @@
       <file leaf-file-name="Cannonball.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/angrykings/cannons/Cannonball.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="53" column="5" selection-start="1660" selection-end="1660" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state line="53" column="5" selection-start="1699" selection-end="1699" vertical-scroll-proportion="0.0">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -256,10 +190,8 @@
       <file leaf-file-name="PhysicalEntity.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/angrykings/PhysicalEntity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="11" selection-start="260" selection-end="260" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state line="12" column="11" selection-start="457" selection-end="457" vertical-scroll-proportion="0.0">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -267,10 +199,8 @@
       <file leaf-file-name="Cannon.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/angrykings/cannons/Cannon.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="67" column="5" selection-start="1896" selection-end="1896" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state line="67" column="5" selection-start="1964" selection-end="1964" vertical-scroll-proportion="0.0">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -288,15 +218,6 @@
         <entry file="file://$PROJECT_DIR$/src/com/angrykings/maps/Map.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="1" column="0" selection-start="29" selection-end="29" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CastleBlock.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/angrykings/castles/CastleBlock.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="1" column="0" selection-start="32" selection-end="32" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -399,7 +320,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -418,70 +338,9 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AngryKings" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AngryKings" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="angrykings" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AngryKings" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AngryKings" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="angrykings" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="maps" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AngryKings" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AngryKings" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="angrykings" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cannons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="PackagesPane" />
     </panes>
   </component>
@@ -503,11 +362,11 @@
     <property name="WebServerToolWindowFactoryState" value="true" />
     <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_AVD" value="Device01" />
     <property name="restartRequiresConfirmation" value="true" />
-    <property name="FullScreen" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
+    <property name="FullScreen" value="false" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="PublishConfig">
     <servers>
@@ -574,19 +433,6 @@
       <option name="PORT" value="5005" />
       <method />
     </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <method />
-    </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="" />
@@ -613,6 +459,19 @@
       <envs />
       <properties />
       <listeners />
+      <method />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -768,7 +627,7 @@
     <frame x="1358" y="-320" width="1936" height="1096" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24574468" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24520256" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -778,8 +637,8 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.278157" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24053451" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3272921" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23987207" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32622603" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3283582" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32962137" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -787,7 +646,7 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21344717" sideWeight="0.6727079" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21344717" sideWeight="0.75479746" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2761194" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977587" sideWeight="0.72049" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2497332" sideWeight="0.6714922" order="2" side_tool="false" content_ui="combo" />
@@ -872,11 +731,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/angrykings/activities/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../AndEngine/AndEngineExamples-GLES2/src/org/andengine/examples/SpriteExample.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="65" column="64" selection-start="2354" selection-end="2354" vertical-scroll-proportion="0.0" />
@@ -889,9 +743,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../AndEngine/AndEngine-GLES2/src/org/andengine/opengl/texture/atlas/bitmap/BitmapTextureAtlas.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="79" column="11" selection-start="3805" selection-end="3805" vertical-scroll-proportion="0.33333334">
-          <folding />
-        </state>
+        <state line="79" column="11" selection-start="3805" selection-end="3805" vertical-scroll-proportion="0.33333334" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../AndEngine/AndEngine-GLES2/src/org/andengine/entity/sprite/AnimatedSprite.java">
@@ -915,13 +767,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/angrykings/castles/CastleBlock.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="0" selection-start="32" selection-end="32" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/angrykings/maps/BasicMap.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="32" column="0" selection-start="922" selection-end="922" vertical-scroll-proportion="0.0">
@@ -933,10 +778,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/angrykings/cannons/Cannonball.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="53" column="5" selection-start="1660" selection-end="1660" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state line="53" column="5" selection-start="1699" selection-end="1699" vertical-scroll-proportion="0.0">
+          <folding />
         </state>
       </provider>
     </entry>
@@ -949,10 +792,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/angrykings/cannons/Cannon.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="67" column="5" selection-start="1896" selection-end="1896" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state line="67" column="5" selection-start="1964" selection-end="1964" vertical-scroll-proportion="0.0">
+          <folding />
         </state>
       </provider>
     </entry>
@@ -965,10 +806,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/angrykings/PhysicalEntity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="11" selection-start="260" selection-end="260" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state line="12" column="11" selection-start="457" selection-end="457" vertical-scroll-proportion="0.0">
+          <folding />
         </state>
       </provider>
     </entry>
@@ -979,9 +818,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/angrykings/GameConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="19" selection-start="227" selection-end="227" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/angrykings/castles/Castle.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="46" column="16" selection-start="1133" selection-end="1133" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/angrykings/activities/MapTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="171" column="61" selection-start="5179" selection-end="5179" vertical-scroll-proportion="1.0578512">
+        <state line="173" column="32" selection-start="5557" selection-end="5557" vertical-scroll-proportion="-0.19648094">
           <folding />
         </state>
       </provider>

@@ -77,7 +77,7 @@ public class Cannon extends  Entity {
 
 		Vector2 ballPosition = this.getBarrelEndPosition();
 
-		Cannonball ball = new Cannonball(this.cannonballTexture, ballPosition);
+		Cannonball ball = new Cannonball(this.cannonballTexture, ballPosition.x, ballPosition.y);
 		ball.registerPhysicsConnector();
 
 		ball.getBody().applyLinearImpulse(this.getDirection().mul(force), ball.getBody().getPosition());

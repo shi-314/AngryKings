@@ -205,6 +205,9 @@ public class MapTest extends BaseGameActivity implements IOnSceneTouchListener {
 
 		if(pSceneTouchEvent.isActionUp()) {
 			this.cannon.fire(200);
+		}else if(pSceneTouchEvent.isActionMove()) {
+			Debug.d("move : "+x+", "+y);
+			gc.getCamera().setCenter(x, y);
 		}
 
 		return false;

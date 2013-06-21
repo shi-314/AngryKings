@@ -23,6 +23,7 @@ import org.andengine.ui.activity.BaseGameActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Intent;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 
@@ -144,9 +145,17 @@ public class MapTest extends BaseGameActivity implements IOnSceneTouchListener {
 							if (jObj.getInt("action") == Action.Server.TURN
 									&& mRound % 2 == 1) {
 								mRound++;
+								MapTest.this.enemyCannon.pointAt(
+										Float.parseFloat(jObj.getString("x")),
+										Float.parseFloat(jObj.getString("y")));
 								MapTest.this.enemyCannon.fire(200);
 								mTurnSent = false;
 
+							}else if(jObj.getInt("action") == Action.Server.PARTNER_LEFT){
+								Intent intent = new Intent(
+										MapTest.this,
+										LobbyActivity.class);
+								startActivity(intent);
 							}
 						} catch (JSONException e) {
 
@@ -261,8 +270,8 @@ public class MapTest extends BaseGameActivity implements IOnSceneTouchListener {
 			if (gc.getPhysicsWorld() == null)
 				return false;
 
-			float x = pSceneTouchEvent.getX();
-			float y = pSceneTouchEvent.getY();
+			float x = Math.round(pSceneTouchEvent.getX());
+			float y = Math.round(pSceneTouchEvent.getY());
 
 			this.cannon.pointAt(x, y);
 
@@ -275,7 +284,8 @@ public class MapTest extends BaseGameActivity implements IOnSceneTouchListener {
 						.sendTextMessage(
 								new ServerJSONBuilder()
 										.create(Action.Client.TURN)
-										.option("value", "").build());
+										.option("x", String.valueOf(x))
+										.option("y", String.valueOf(y)).build());
 				mTurnSent = true;
 			}
 		}

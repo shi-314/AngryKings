@@ -1,10 +1,9 @@
 package com.angrykings.activities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import com.angrykings.Action;
-import com.angrykings.ServerConnection;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,6 +19,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.angrykings.Action;
+import com.angrykings.ServerConnection;
 import com.angrykings.ServerConnection.OnMessageHandler;
 import com.angrykings.utils.ServerJSONBuilder;
 
@@ -27,6 +28,7 @@ public class LobbyActivity extends ListActivity {
 
 	private String username;
 	private List<String> users;
+	private Map<String, String> listItemToName = new HashMap<String, String>();
 
 	private void updateLobby(List<String> user) {
 		setListAdapter(new ArrayAdapter<String>(this,
@@ -104,11 +106,20 @@ public class LobbyActivity extends ListActivity {
 											}
 										}).show();
 					} else if (jObj.getInt("action") == Action.Server.LOBBY_UPDATE) {
-						JSONArray userArray = new JSONArray(jObj.getString("names"));
+						JSONArray userArray = new JSONArray(jObj
+								.getString("names"));
 						users.clear();
+
 						for (int i = 0; i < userArray.length(); i++) {
-							users.add(userArray.getString(i));
-							Log.d("name", username);
+							String eingabe = userArray.getJSONArray(i)
+									.getString(0)
+									+ "   Gewonnen: "
+									+ userArray.getJSONArray(i).getString(1)
+									+ "   Verloren: "
+									+ userArray.getJSONArray(i).getString(2);
+							users.add(eingabe);
+							listItemToName.put(eingabe, userArray.getJSONArray(i)
+									.getString(0));
 						}
 						updateLobby(users);
 					}
@@ -155,9 +166,9 @@ public class LobbyActivity extends ListActivity {
 				.sendTextMessage(
 						new ServerJSONBuilder()
 								.create(Action.Client.PAIR)
-								.option("partner",
+								.option("partner",listItemToName.get(
 										getListView().getItemAtPosition(
-												position).toString()).build());
+												position).toString())).build());
 
 	}
 }

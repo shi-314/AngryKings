@@ -23,23 +23,26 @@ import org.andengine.opengl.texture.region.TiledTextureRegion;
  */
 public class Cannonball extends PhysicalEntity {
 
-	protected final TextureRegion ballTexture;
-	protected final Body ballBody;
-	protected final FixtureDef ballFixture;
-	protected final Sprite ballSprite;
+	private final TextureRegion ballTexture;
+	private final Body ballBody;
+	private final FixtureDef ballFixture;
+	private final Sprite ballSprite;
 
-	public Cannonball(TextureRegion ballTexture, Vector2 position) {
-		this(ballTexture, 5.5f, 0.1f, 0.9f, position);
+	public Cannonball(TextureRegion ballTexture, float x, float y) {
+		this(ballTexture, 5.5f, 0.1f, 0.9f, x, y);
 	}
 
-	public Cannonball(TextureRegion ballTexture, float density, float elasticity, float friction, Vector2 position) {
+	public Cannonball(TextureRegion ballTexture, float density, float elasticity, float friction, float x, float y) {
 		GameContext gc = GameContext.getInstance();
-
-		this.ballSprite = new Sprite(0, 0, ballTexture, gc.getVboManager());
 
 		this.ballTexture = ballTexture;
 
-		this.ballSprite.setPosition(position.x - this.ballTexture.getWidth() / 2, position.y - this.ballTexture.getHeight() / 2);
+		this.ballSprite = new Sprite(
+				x - this.ballTexture.getWidth() / 2,
+				y - this.ballTexture.getHeight() / 2,
+				ballTexture,
+				gc.getVboManager()
+		);
 
 		this.ballFixture = PhysicsFactory.createFixtureDef(density, elasticity, friction);
 
@@ -63,4 +66,5 @@ public class Cannonball extends PhysicalEntity {
 	public IAreaShape getAreaShape() {
 		return this.ballSprite;
 	}
+
 }

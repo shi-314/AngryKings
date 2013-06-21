@@ -3,13 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/../AndEngine/AndEngine-GLES2/AndEngine.iml" filepath="$PROJECT_DIR$/../AndEngine/AndEngine-GLES2/AndEngine.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../AndEngine/AndEngineExamples-GLES2/AndEngineExamples.iml" filepath="$PROJECT_DIR$/../AndEngine/AndEngineExamples-GLES2/AndEngineExamples.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../AndEngine/AndEngineMODPlayerExtension-master/AndEngineMODPlayerExtension.iml" filepath="$PROJECT_DIR$/../AndEngine/AndEngineMODPlayerExtension-master/AndEngineMODPlayerExtension.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../AndEngine/AndEngineMultiplayerExtension-GLES2/AndEngineMultiplayerExtension.iml" filepath="$PROJECT_DIR$/../AndEngine/AndEngineMultiplayerExtension-GLES2/AndEngineMultiplayerExtension.iml" />
       <module fileurl="file://$PROJECT_DIR$/../AndEngine/AndEnginePhysicsBox2DExtension-GLES2/AndEnginePhysicsBox2DExtension.iml" filepath="$PROJECT_DIR$/../AndEngine/AndEnginePhysicsBox2DExtension-GLES2/AndEnginePhysicsBox2DExtension.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../AndEngine/AndEngineSVGTextureRegionExtension-GLES2/AndEngineSVGTextureRegionExtension.iml" filepath="$PROJECT_DIR$/../AndEngine/AndEngineSVGTextureRegionExtension-GLES2/AndEngineSVGTextureRegionExtension.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../AndEngine/AndEngineTMXTiledMapExtension-GLES2/AndEngineTMXTiledMapExtension.iml" filepath="$PROJECT_DIR$/../AndEngine/AndEngineTMXTiledMapExtension-GLES2/AndEngineTMXTiledMapExtension.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../AndEngine/AndEngineTexturePackerExtension-GLES2/AndEngineTexturePackerExtension.iml" filepath="$PROJECT_DIR$/../AndEngine/AndEngineTexturePackerExtension-GLES2/AndEngineTexturePackerExtension.iml" />
       <module fileurl="file://$PROJECT_DIR$/AngryKings.iml" filepath="$PROJECT_DIR$/AngryKings.iml" />
     </modules>
   </component>

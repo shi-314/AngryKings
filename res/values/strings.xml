@@ -6,5 +6,6 @@
     <string name="sendName">Absenden</string>
     <string name="setName">Gib deinen Namen ein!</string>
     <string name="lobbyButton">Zur Lobby</string>
+    <string name="introButton">Intro anschauen</string>
 
 </resources>

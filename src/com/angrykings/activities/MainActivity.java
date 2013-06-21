@@ -25,6 +25,7 @@ public class MainActivity extends Activity {
 
 	private String username;
 	private Button bLobby;
+	private Button bIntro;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +78,16 @@ public class MainActivity extends Activity {
 				startActivity(intent);
 			}
 
+		});
+		bIntro = (Button) findViewById(R.id.introButton);
+		bIntro.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				Intent intent = new Intent(getApplicationContext(), IntroActivity.class);
+				startActivity(intent);
+			}
+			
 		});
 	}
 

@@ -26,11 +26,9 @@ import com.angrykings.utils.ServerJSONBuilder;
 public class LobbyActivity extends ListActivity {
 
 	private String username;
-	private String users = "";
-	private List<String> user;
+	private List<String> users;
 
 	private void updateLobby(List<String> user) {
-		
 		setListAdapter(new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, user));
 	}
@@ -40,7 +38,7 @@ public class LobbyActivity extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Bundle extras = getIntent().getExtras();
-		user = new ArrayList<String>();
+		users = new ArrayList<String>();
 		if (extras != null) {
 			this.username = extras.getString("username");
 		}
@@ -54,7 +52,7 @@ public class LobbyActivity extends ListActivity {
 	}
 
 	private void displayLobby() {
-		updateLobby(user);
+		updateLobby(users);
 		getListView().setTextFilterEnabled(true);
 		ServerConnection.getInstance().setHandler(new OnMessageHandler() {
 
@@ -83,8 +81,8 @@ public class LobbyActivity extends ListActivity {
 																		.build());
 												Intent intent = new Intent(
 														LobbyActivity.this,
-														PhysicsTest.class);
-												intent.putExtra("myTurn", false);
+														MapTest.class);
+												intent.putExtra("myTurn", true);
 												intent.putExtra("username",
 														username);
 												startActivity(intent);
@@ -106,13 +104,13 @@ public class LobbyActivity extends ListActivity {
 											}
 										}).show();
 					} else if (jObj.getInt("action") == Action.Server.LOBBY_UPDATE) {
-						users = jObj.getString("names");
-						JSONArray userArray = new JSONArray(users);
+						JSONArray userArray = new JSONArray(jObj.getString("names"));
+						users.clear();
 						for (int i = 0; i < userArray.length(); i++) {
-							user.add(userArray.getString(i));
+							users.add(userArray.getString(i));
 							Log.d("name", username);
 						}
-						updateLobby(user);
+						updateLobby(users);
 					}
 				} catch (JSONException e) {
 					Log.e("JSON Parser", "Error parsing data " + e.toString());
@@ -140,8 +138,8 @@ public class LobbyActivity extends ListActivity {
 						displayLobby();
 					} else {
 						Intent intent = new Intent(LobbyActivity.this,
-								PhysicsTest.class);
-						intent.putExtra("myTurn", true);
+								MapTest.class);
+						intent.putExtra("myTurn", false);
 						intent.putExtra("username", username);
 						startActivity(intent);
 					}

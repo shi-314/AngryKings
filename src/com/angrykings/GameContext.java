@@ -28,6 +28,8 @@ public class GameContext {
 	private PhysicsWorld physicsWorld;
 	private VertexBufferObjectManager vboManager;
 
+	private GameHUD hud;
+
 	private GameContext() {
 
 	}
@@ -55,6 +57,9 @@ public class GameContext {
 		this.vboManager = vboManager;
 	}
 
+	public void setHud(GameHUD hud) {
+		this.hud = hud;
+	}
 
 	public Scene getScene() {
 		return scene;
@@ -70,5 +75,9 @@ public class GameContext {
 
 	public Camera getCamera() {
 		return camera;
+	}
+
+	public GameHUD getHud() {
+		return hud;
 	}
 }

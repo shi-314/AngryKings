@@ -10,7 +10,7 @@ import org.andengine.util.debug.Debug;
 
 /**
  * Cannon
- * 
+ *
  * @author Shivan Taher <zn31415926535@gmail.com>
  * @date 31.05.13
  */
@@ -69,11 +69,10 @@ public class Cannon extends Entity {
 	}
 
 	public Vector2 getDirection() {
-		float angle = (float) Math.toRadians((double) this.barrelSprite
-				.getRotation());
+		float angle = (float) Math.toRadians((double) this.barrelSprite.getRotation());
+
 		if (this.isLeft) {
-			return new Vector2((float) Math.cos(angle), (float) Math.sin(angle))
-					.nor();
+			return new Vector2((float) Math.cos(angle), (float) Math.sin(angle)).nor();
 		} else {
 			return new Vector2( - (float) Math.cos(angle), (float) Math.sin(angle))
 			.nor();

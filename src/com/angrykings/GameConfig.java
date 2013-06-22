@@ -13,9 +13,14 @@ public final class GameConfig {
 	public static final int CAMERA_WIDTH = 960;
 	public static final int CAMERA_HEIGHT = 540;
 
+	public static final float CAMERA_STARTUP_ZOOM = 0.3f;
+	public static final float CAMERA_ZOOM_MIN = 0.2f;
+	public static final float CAMERA_ZOOM_MAX = 1.2f;
+
+	public static final float CAMERA_MIN_X = -2500;
+	public static final float CAMERA_MAX_X = 3600;
+	public static final float CAMERA_MIN_Y = -1300;
+	public static final float CAMERA_MAX_Y = 1400;
+
 	public final static boolean LOG_FPS = false;
-
-	private GameConfig() {
-
-	}
 }

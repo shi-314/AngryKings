@@ -37,7 +37,8 @@ import org.andengine.input.touch.detector.ScrollDetector.IScrollDetectorListener
  * @author Shivan Taher <zn31415926535@gmail.com>
  * @date 06.06.13
  */
-public class LocalTestActivity extends BaseGameActivity implements IOnSceneTouchListener, IScrollDetectorListener, IPinchZoomDetectorListener {
+public class LocalTestActivity extends BaseGameActivity
+		implements IOnSceneTouchListener, IScrollDetectorListener, IPinchZoomDetectorListener {
 
 	private GameContext gc;
 
@@ -51,6 +52,7 @@ public class LocalTestActivity extends BaseGameActivity implements IOnSceneTouch
 	private TextureRegion ballTexture;
 	private TiledTextureRegion skyTexture;
 	private TiledTextureRegion aimButtonTexture;
+	private TiledTextureRegion whiteFlagButtonTexture;
 
 	//
 	// Game Objects
@@ -75,7 +77,13 @@ public class LocalTestActivity extends BaseGameActivity implements IOnSceneTouch
 		gc = GameContext.getInstance();
 
 		ZoomCamera camera = new ZoomCamera(0, 0, GameConfig.CAMERA_WIDTH, GameConfig.CAMERA_HEIGHT);
-		camera.setZoomFactor(0.3f);
+
+		camera.setZoomFactor(GameConfig.CAMERA_STARTUP_ZOOM);
+		camera.setBounds(
+				GameConfig.CAMERA_MIN_X, GameConfig.CAMERA_MIN_Y,
+				GameConfig.CAMERA_MAX_X, GameConfig.CAMERA_MAX_Y
+		);
+		camera.setBoundsEnabled(true);
 
 		gc.setCamera(camera);
 
@@ -95,8 +103,7 @@ public class LocalTestActivity extends BaseGameActivity implements IOnSceneTouch
 		// tile set for the map
 		//
 
-		BitmapTextureAtlas textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 32, 32, TextureOptions.BILINEAR);
-
+		BitmapTextureAtlas textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 50, 393, TextureOptions.BILINEAR);
 		this.grassTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAtlas, this, "grass.png", 0, 0, 1, 1); // 32x32
 		textureAtlas.load();
 
@@ -114,6 +121,10 @@ public class LocalTestActivity extends BaseGameActivity implements IOnSceneTouch
 
 		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 160, 80, TextureOptions.BILINEAR);
 		this.aimButtonTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAtlas, this, "aim_button.png", 0, 0, 2, 1);
+		textureAtlas.load();
+
+		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 80, 80, TextureOptions.BILINEAR);
+		this.whiteFlagButtonTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAtlas, this, "white_flag_button.png", 0, 0, 1, 1);
 		textureAtlas.load();
 
 		this.skySprite = new RepeatingSpriteBackground(
@@ -192,17 +203,21 @@ public class LocalTestActivity extends BaseGameActivity implements IOnSceneTouch
 		scene.setOnSceneTouchListener(this);
 		scene.setTouchAreaBindingOnActionDownEnabled(true);
 
-		final GameHUD hud = new GameHUD(this.aimButtonTexture);
-
-		gc.setHud(hud);
-
+		final GameHUD hud = new GameHUD(this.aimButtonTexture, this.whiteFlagButtonTexture);
 		hud.setOnAimTouched(new Runnable() {
 			@Override
 			public void run() {
 				isAiming = !isAiming;
 			}
 		});
+		hud.setOnWhiteFlagTouched(new Runnable() {
+			@Override
+			public void run() {
+				finish();
+			}
+		});
 
+		gc.setHud(hud);
 		gc.getCamera().setHUD(hud);
 
 		pOnCreateSceneCallback.onCreateSceneFinished(scene);
@@ -257,14 +272,20 @@ public class LocalTestActivity extends BaseGameActivity implements IOnSceneTouch
 	public void onPinchZoom(PinchZoomDetector pPinchZoomDetector, TouchEvent pTouchEvent, float pZoomFactor) {
 		GameContext gc = GameContext.getInstance();
 		ZoomCamera camera = (ZoomCamera)gc.getCamera();
-		camera.setZoomFactor(this.pinchZoomStartedCameraZoomFactor * pZoomFactor);
+
+		float factor = this.pinchZoomStartedCameraZoomFactor * pZoomFactor;
+		if(factor > GameConfig.CAMERA_ZOOM_MIN && factor < GameConfig.CAMERA_ZOOM_MAX)
+			camera.setZoomFactor(factor);
 	}
 
 	@Override
 	public void onPinchZoomFinished(PinchZoomDetector pPinchZoomDetector, TouchEvent pTouchEvent, float pZoomFactor) {
 		GameContext gc = GameContext.getInstance();
 		ZoomCamera camera = (ZoomCamera)gc.getCamera();
-		camera.setZoomFactor(this.pinchZoomStartedCameraZoomFactor * pZoomFactor);
+
+		float factor = this.pinchZoomStartedCameraZoomFactor * pZoomFactor;
+		if(factor > GameConfig.CAMERA_ZOOM_MIN && factor < GameConfig.CAMERA_ZOOM_MAX)
+			camera.setZoomFactor(factor);
 	}
 
 	@Override

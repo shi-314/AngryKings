@@ -30,39 +30,44 @@ import org.andengine.ui.activity.BaseActivity;
  */
 public class BasicMap extends Map {
 
+	public static final float GROUND_X = -2500;
+	public static final float GROUND_Y = 1000;
+	public static final float GRASS_TILES = 150;
+	public static final float GRASS_ENDING_HEIGHT = 4000;
+
 	public BasicMap(TiledTextureRegion textureRegion, TiledTextureRegion skyTexture) {
 		super(textureRegion);
 
 		GameContext gc = GameContext.getInstance();
 
-		// TODO: Remove constants
-
-		//
-		// Background
-		//
-
-//		RepeatingSpriteBackground sky = new RepeatingSpriteBackground(GameConfig.CAMERA_WIDTH, GameConfig.CAMERA_HEIGHT, )
-//
-//		TiledSprite sky = new TiledSprite(0, 0, skyTexture, gc.getVboManager());
-//		gc.getScene().setBackground(new EntityBackground(sky));
-
-
-
-
 		//
 		// Grass Texture
 		//
 
-		for(int i=0; i<128; i++) {
-			TiledSprite groundSprite = new TiledSprite(i*32 - 1500, 1000, this.textureRegion, gc.getVboManager());
+		float grassWidth = textureRegion.getWidth();
+
+		for(int i=0; i<BasicMap.GRASS_TILES; i++) {
+			TiledSprite groundSprite = new TiledSprite(i*grassWidth + BasicMap.GROUND_X, BasicMap.GROUND_Y, this.textureRegion, gc.getVboManager());
 			this.attachChild(groundSprite);
 		}
+
+		Rectangle groundEnding = new Rectangle(
+				BasicMap.GROUND_X,
+				BasicMap.GROUND_Y + textureRegion.getHeight(),
+				BasicMap.GRASS_TILES*grassWidth,
+				GRASS_ENDING_HEIGHT,
+				gc.getVboManager()
+		);
+
+		groundEnding.setColor(0.63137f, 0.435294f, 0.250980f);
+
+		this.attachChild(groundEnding);
 
 		//
 		// Ground Body (Physics)
 		//
 
-		final Rectangle ground = new Rectangle(-1500, 1000, 4200, 2, gc.getVboManager());
+		final Rectangle ground = new Rectangle(BasicMap.GROUND_X, BasicMap.GROUND_Y, BasicMap.GRASS_TILES*grassWidth, 2, gc.getVboManager());
 		ground.setColor(1.0f, 0.0f, 0.0f);
 
 		final FixtureDef wallFixture = PhysicsFactory.createFixtureDef(0, 0.1f, 1.0f);

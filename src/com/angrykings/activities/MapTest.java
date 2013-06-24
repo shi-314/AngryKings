@@ -20,6 +20,7 @@ import org.andengine.opengl.texture.atlas.bitmap.source.AssetBitmapTextureAtlasS
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.ui.activity.BaseGameActivity;
+import org.andengine.util.debug.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -64,6 +65,9 @@ public class MapTest extends BaseGameActivity implements IOnSceneTouchListener {
 	private TextureRegion wheelTexture;
 	private TextureRegion ballTexture;
 	private TiledTextureRegion skyTexture;
+	private TiledTextureRegion stoneTexture;
+	private TextureRegion roofTexture;
+	private TextureRegion woodTexture;
 
 	//
 	// Game Objects
@@ -76,6 +80,8 @@ public class MapTest extends BaseGameActivity implements IOnSceneTouchListener {
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
+		Debug.d("entering MapTest");
+
 		gc = GameContext.getInstance();
 
 		ZoomCamera camera = new ZoomCamera(0, 0, GameConfig.CAMERA_WIDTH,
@@ -100,12 +106,16 @@ public class MapTest extends BaseGameActivity implements IOnSceneTouchListener {
 		//
 
 		BitmapTextureAtlas textureAtlas = new BitmapTextureAtlas(
-				this.getTextureManager(), 32, 32, TextureOptions.BILINEAR);
+				this.getTextureManager(), 50, 393, TextureOptions.BILINEAR);
 
 		this.grassTexture = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(textureAtlas, this, "grass.png", 0, 0, 1,
 						1); // 32x32
 		textureAtlas.load();
+
+		//
+		// cannon textures
+		//
 
 		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 256,
 				72, TextureOptions.BILINEAR);
@@ -129,6 +139,20 @@ public class MapTest extends BaseGameActivity implements IOnSceneTouchListener {
 				GameConfig.CAMERA_HEIGHT, this.getTextureManager(),
 				AssetBitmapTextureAtlasSource.create(this.getAssets(),
 						"gfx/sky.png"), this.getVertexBufferObjectManager());
+
+		//
+		// castle textures
+		//
+
+		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 384, 128, TextureOptions.BILINEAR);
+		this.stoneTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAtlas, this, "stones.png", 0, 0, 3, 1);
+		textureAtlas.load();
+		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 128, 128, TextureOptions.BILINEAR);
+		this.roofTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(textureAtlas, this, "roof.png", 0, 0);
+		textureAtlas.load();
+		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 409, 50, TextureOptions.BILINEAR);
+		this.woodTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(textureAtlas, this, "wood.png", 0, 0);
+		textureAtlas.load();
 
 		pOnCreateResourcesCallback.onCreateResourcesFinished();
 	}
@@ -237,9 +261,7 @@ public class MapTest extends BaseGameActivity implements IOnSceneTouchListener {
 		this.enemyCannon.setPosition(enemyX, enemyY);
 		scene.attachChild(this.enemyCannon);
 
-		castle = new Castle(this, 400, 890);
-		castle.createTextures();
-		castle.createSinglePieces();
+		castle = new Castle(400, 890, this.stoneTexture, this.roofTexture, this.woodTexture);
 
 		FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.9f, 0.1f,
 				0.9f);

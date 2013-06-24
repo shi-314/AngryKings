@@ -31,7 +31,7 @@ public class GameHUD extends HUD {
 	/**
 	 * This entity represents a slider to indicate the height of the players castle.
 	 */
-	private class LifeBar extends Entity {
+	public class LifeBar extends Entity {
 		private final Rectangle barFrame;
 		private final Rectangle barFilled;
 
@@ -57,7 +57,7 @@ public class GameHUD extends HUD {
 		}
 
 		public void setValue(float value) {
-			this.barFilled.setHeight(-LifeBar.BAR_HEIGHT*value);
+			this.barFilled.setHeight(-LifeBar.BAR_HEIGHT*Math.min(value, 1.0f));
 		}
 	}
 
@@ -130,5 +130,13 @@ public class GameHUD extends HUD {
 
 	public AnimatedSprite getWhiteFlagButton() {
 		return whiteFlagButton;
+	}
+
+	public LifeBar getRightLifeBar() {
+		return rightLifeBar;
+	}
+
+	public LifeBar getLeftLifeBar() {
+		return leftLifeBar;
 	}
 }

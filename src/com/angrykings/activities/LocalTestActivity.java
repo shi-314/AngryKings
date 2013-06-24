@@ -2,6 +2,7 @@ package com.angrykings.activities;
 
 import com.angrykings.*;
 import org.andengine.engine.camera.ZoomCamera;
+import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
@@ -30,6 +31,7 @@ import com.angrykings.maps.BasicMap;
 import com.badlogic.gdx.math.Vector2;
 import org.andengine.input.touch.detector.PinchZoomDetector.IPinchZoomDetectorListener;
 import org.andengine.input.touch.detector.ScrollDetector.IScrollDetectorListener;
+import org.andengine.util.debug.Debug;
 
 /**
  * MapTest
@@ -53,6 +55,9 @@ public class LocalTestActivity extends BaseGameActivity
 	private TiledTextureRegion skyTexture;
 	private TiledTextureRegion aimButtonTexture;
 	private TiledTextureRegion whiteFlagButtonTexture;
+	private TiledTextureRegion stoneTexture;
+	private TextureRegion roofTexture;
+	private TextureRegion woodTexture;
 
 	//
 	// Game Objects
@@ -100,12 +105,24 @@ public class LocalTestActivity extends BaseGameActivity
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 
 		//
-		// tile set for the map
+		// map textures
 		//
 
 		BitmapTextureAtlas textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 50, 393, TextureOptions.BILINEAR);
 		this.grassTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAtlas, this, "grass.png", 0, 0, 1, 1); // 32x32
 		textureAtlas.load();
+
+
+		this.skySprite = new RepeatingSpriteBackground(
+				GameConfig.CAMERA_WIDTH,
+				GameConfig.CAMERA_HEIGHT, this.getTextureManager(),
+				AssetBitmapTextureAtlasSource.create(this.getAssets(), "gfx/sky.png"),
+				this.getVertexBufferObjectManager()
+		);
+
+		//
+		// cannon textures
+		//
 
 		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 256, 72, TextureOptions.BILINEAR);
 		this.cannonTexture = BitmapTextureAtlasTextureRegionFactory .createFromAsset(textureAtlas, this, "cannon.png", 0, 0);
@@ -119,6 +136,10 @@ public class LocalTestActivity extends BaseGameActivity
 		this.ballTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(textureAtlas, this, "ball.png", 0, 0);
 		textureAtlas.load();
 
+		//
+		// hud textures
+		//
+
 		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 160, 80, TextureOptions.BILINEAR);
 		this.aimButtonTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAtlas, this, "aim_button.png", 0, 0, 2, 1);
 		textureAtlas.load();
@@ -127,12 +148,21 @@ public class LocalTestActivity extends BaseGameActivity
 		this.whiteFlagButtonTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAtlas, this, "white_flag_button.png", 0, 0, 1, 1);
 		textureAtlas.load();
 
-		this.skySprite = new RepeatingSpriteBackground(
-				GameConfig.CAMERA_WIDTH,
-				GameConfig.CAMERA_HEIGHT, this.getTextureManager(),
-				AssetBitmapTextureAtlasSource.create(this.getAssets(), "gfx/sky.png"),
-				this.getVertexBufferObjectManager()
-		);
+		//
+		// castle textures
+		//
+
+		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 384, 128, TextureOptions.BILINEAR);
+		this.stoneTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAtlas, this, "stones.png", 0, 0, 3, 1);
+		textureAtlas.load();
+
+		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 128, 128, TextureOptions.BILINEAR);
+		this.roofTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(textureAtlas, this, "roof.png", 0, 0);
+		textureAtlas.load();
+
+		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 409, 50, TextureOptions.BILINEAR);
+		this.woodTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(textureAtlas, this, "wood.png", 0, 0);
+		textureAtlas.load();
 
 		pOnCreateResourcesCallback.onCreateResourcesFinished();
 	}
@@ -191,6 +221,8 @@ public class LocalTestActivity extends BaseGameActivity
 		this.enemyCannon.setPosition(enemyX, enemyY);
 		scene.attachChild(this.enemyCannon);
 
+		castle = new Castle(400, BasicMap.GROUND_Y, this.stoneTexture, this.roofTexture, this.woodTexture);
+
 		scene.registerUpdateHandler(PhysicsManager.getInstance());
 
 		//
@@ -220,6 +252,20 @@ public class LocalTestActivity extends BaseGameActivity
 		gc.setHud(hud);
 		gc.getCamera().setHUD(hud);
 
+		final float initialCastleHeight = castle.getInitialHeight();
+
+		scene.registerUpdateHandler(new IUpdateHandler() {
+			@Override
+			public void onUpdate(float pSecondsElapsed) {
+				hud.getLeftLifeBar().setValue(castle.getHeight()/initialCastleHeight);
+			}
+
+			@Override
+			public void reset() {
+
+			}
+		});
+
 		pOnCreateSceneCallback.onCreateSceneFinished(scene);
 	}
 
@@ -242,7 +288,7 @@ public class LocalTestActivity extends BaseGameActivity
 			this.cannon.pointAt(x, y);
 
 			if (pSceneTouchEvent.isActionUp()) {
-				this.cannon.fire(200);
+				this.cannon.fire(400);
 			}
 		}else{
 			if(pSceneTouchEvent.isActionDown()) {

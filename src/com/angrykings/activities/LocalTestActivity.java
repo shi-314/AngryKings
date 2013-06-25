@@ -1,5 +1,6 @@
 package com.angrykings.activities;
 
+import android.graphics.Color;
 import com.angrykings.*;
 import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.engine.handler.IUpdateHandler;
@@ -15,6 +16,9 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.detector.PinchZoomDetector;
 import org.andengine.input.touch.detector.ScrollDetector;
 import org.andengine.input.touch.detector.SurfaceScrollDetector;
+import org.andengine.opengl.font.Font;
+import org.andengine.opengl.font.FontFactory;
+import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
@@ -31,7 +35,6 @@ import com.angrykings.maps.BasicMap;
 import com.badlogic.gdx.math.Vector2;
 import org.andengine.input.touch.detector.PinchZoomDetector.IPinchZoomDetectorListener;
 import org.andengine.input.touch.detector.ScrollDetector.IScrollDetectorListener;
-import org.andengine.util.debug.Debug;
 
 /**
  * MapTest
@@ -58,6 +61,8 @@ public class LocalTestActivity extends BaseGameActivity
 	private TiledTextureRegion stoneTexture;
 	private TextureRegion roofTexture;
 	private TextureRegion woodTexture;
+	private Font statusFont;
+	private Font playerNameFont;
 
 	//
 	// Game Objects
@@ -140,13 +145,23 @@ public class LocalTestActivity extends BaseGameActivity
 		// hud textures
 		//
 
-		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 160, 80, TextureOptions.BILINEAR);
+		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 128, 64, TextureOptions.BILINEAR);
 		this.aimButtonTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAtlas, this, "aim_button.png", 0, 0, 2, 1);
 		textureAtlas.load();
 
-		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 80, 80, TextureOptions.BILINEAR);
+		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 64, 64, TextureOptions.BILINEAR);
 		this.whiteFlagButtonTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAtlas, this, "white_flag_button.png", 0, 0, 1, 1);
 		textureAtlas.load();
+
+		FontFactory.setAssetBasePath("font/");
+
+		final ITexture statusFontTexture = new BitmapTextureAtlas(this.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
+		this.statusFont = FontFactory.createFromAsset(this.getFontManager(), statusFontTexture, this.getAssets(), "Plok.ttf", 22.0f, true, Color.BLACK);
+		this.statusFont.load();
+
+		final ITexture playerNameFontTexture = new BitmapTextureAtlas(this.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
+		this.playerNameFont = FontFactory.createFromAsset(this.getFontManager(), playerNameFontTexture, this.getAssets(), "Plok.ttf", 16.0f, true, Color.BLACK);
+		this.playerNameFont.load();
 
 		//
 		// castle textures
@@ -235,7 +250,7 @@ public class LocalTestActivity extends BaseGameActivity
 		scene.setOnSceneTouchListener(this);
 		scene.setTouchAreaBindingOnActionDownEnabled(true);
 
-		final GameHUD hud = new GameHUD(this.aimButtonTexture, this.whiteFlagButtonTexture);
+		final GameHUD hud = new GameHUD(this.aimButtonTexture, this.whiteFlagButtonTexture, this.statusFont, this.playerNameFont);
 		hud.setOnAimTouched(new Runnable() {
 			@Override
 			public void run() {
@@ -265,6 +280,10 @@ public class LocalTestActivity extends BaseGameActivity
 
 			}
 		});
+
+		hud.setLeftPlayerName("Shivan");
+		hud.setRightPlayerName("Ray");
+		hud.setStatus("Du bist dran!");
 
 		pOnCreateSceneCallback.onCreateSceneFinished(scene);
 	}

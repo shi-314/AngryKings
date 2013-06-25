@@ -18,44 +18,32 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 
-public class Roof extends PhysicalEntity{
+public class Roof extends PhysicalEntity {
 
 	protected final TextureRegion roofTexture;
 	protected final Sprite roofSprite;
 	protected final Body roofBody;
-	protected final FixtureDef roofFixture;
-	
-	public Roof(TextureRegion roofTexture, float x, float y){
+
+	public final static FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.7f, 0.2f, 0.5f);
+
+	public Roof(TextureRegion roofTexture, float x, float y) {
 		this.roofTexture = roofTexture;
 
 		GameContext gc = GameContext.getInstance();
 
-		this.roofSprite = new Sprite(x,y, this.roofTexture,
-				gc.getVboManager());
-
-		this.roofFixture = PhysicsFactory.createFixtureDef(0.9f, 0.1f, 0.9f);
-
-		this.roofBody = createTriangleBody(gc.getPhysicsWorld(), roofSprite, BodyDef.BodyType.DynamicBody, roofFixture);
-		
-
-		//this.attachChild(roofSprite);
+		this.roofSprite = new Sprite(x, y, this.roofTexture, gc.getVboManager());
+		this.roofBody = createTriangleBody(gc.getPhysicsWorld(), roofSprite, BodyDef.BodyType.DynamicBody, Roof.FIXTURE_DEF);
 	}
-	
+
 	@Override
 	public Body getBody() {
-		// TODO Auto-generated method stub
 		return roofBody;
 	}
 
 	/**
-	 * Creates a {@link Body} based on a {@link PolygonShape} in the form of a triangle:
-	 * <pre>
-	 *  /\
-	 * /__\
-	 * </pre>
+	 * Creates a Body based on a PolygonShape in the form of a triangle:
 	 */
 	private static Body createTriangleBody(final PhysicsWorld pPhysicsWorld, final IAreaShape pAreaShape, final BodyType pBodyType, final FixtureDef pFixtureDef) {
-		/* Remember that the vertices are relative to the center-coordinates of the Shape. */
 		final float halfWidth = pAreaShape.getWidthScaled() * 0.5f / PIXEL_TO_METER_RATIO_DEFAULT;
 		final float halfHeight = pAreaShape.getHeightScaled() * 0.5f / PIXEL_TO_METER_RATIO_DEFAULT;
 
@@ -76,8 +64,7 @@ public class Roof extends PhysicalEntity{
 
 	@Override
 	public IAreaShape getAreaShape() {
-		// TODO Auto-generated method stub
 		return roofSprite;
 	}
-	
+
 }

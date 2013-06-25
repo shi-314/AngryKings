@@ -19,47 +19,37 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
  * @date 31.05.13
  */
 public class Stone extends PhysicalEntity {
-	
+
 	protected final TiledTextureRegion stoneTexture;
 	protected AnimatedSprite stoneSprite;
 	protected final Body stoneBody;
-	protected final FixtureDef stoneFixture;
-	
+
+	public final static FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(1.0f, 0.1f, 0.9f);
+
 	public Stone(TiledTextureRegion stoneTexture, float x, float y) {
-		
+
 		this.stoneTexture = stoneTexture;
 		GameContext gc = GameContext.getInstance();
-		
+
 		this.stoneSprite = new AnimatedSprite(x, y, this.stoneTexture, gc.getVboManager());
-		stoneSprite.setCurrentTileIndex(2);
-		
-		this.stoneFixture = PhysicsFactory.createFixtureDef(0.9f, 0.1f, 0.9f);
-		
-		
+		stoneSprite.setCurrentTileIndex(0);
+
 		this.stoneBody = PhysicsFactory.createBoxBody(
 				gc.getPhysicsWorld(),
 				this.stoneSprite,
-				//BodyDef.BodyType.DynamicBody,
 				BodyDef.BodyType.DynamicBody,
-				this.stoneFixture
+				Stone.FIXTURE_DEF
 		);
-
-		
-		//this.attachChild(stoneSprite);
 	}
-		
-	
-	
+
+
 	@Override
 	public Body getBody() {
-		return stoneBody;  //To change body of implemented methods use File | Settings | File Templates.
+		return stoneBody;
 	}
-
-
 
 	@Override
 	public IAreaShape getAreaShape() {
-		// TODO Auto-generated method stub
 		return this.stoneSprite;
 	}
 }

@@ -12,41 +12,36 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
-public class Wood extends PhysicalEntity{
+public class Wood extends PhysicalEntity {
 
 	protected final TextureRegion woodTexture;
 	protected final Sprite woodSprite;
 	protected final Body woodBody;
-	protected final FixtureDef woodFixture;
-	
-	public Wood(TextureRegion woodTexture, float x, float y){
+
+	public final static FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.5f, 0.05f, 0.8f);
+
+	public Wood(TextureRegion woodTexture, float x, float y) {
 		this.woodTexture = woodTexture;
 
 		GameContext gc = GameContext.getInstance();
 
-		this.woodSprite = new Sprite(x,y, this.woodTexture,
-				gc.getVboManager());
+		this.woodSprite = new Sprite(x, y, this.woodTexture, gc.getVboManager());
 
-		this.woodFixture = PhysicsFactory.createFixtureDef(0.9f, 0.1f, 0.9f);
-
-		this.woodBody = PhysicsFactory
-				.createBoxBody(gc.getPhysicsWorld(), this.woodSprite,
-						BodyDef.BodyType.DynamicBody, this.woodFixture);
-
-
-		//this.attachChild(woodSprite);
+		this.woodBody = PhysicsFactory.createBoxBody(
+				gc.getPhysicsWorld(), this.woodSprite,
+				BodyDef.BodyType.DynamicBody,
+				Wood.FIXTURE_DEF
+		);
 	}
 
 	@Override
 	public Body getBody() {
-		// TODO Auto-generated method stub
 		return woodBody;
 	}
 
 	@Override
 	public IAreaShape getAreaShape() {
-		// TODO Auto-generated method stub
 		return this.woodSprite;
 	}
-	
+
 }

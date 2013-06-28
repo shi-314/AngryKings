@@ -31,7 +31,13 @@ public class Stone extends PhysicalEntity {
 		this.stoneTexture = stoneTexture;
 		GameContext gc = GameContext.getInstance();
 
-		this.stoneSprite = new AnimatedSprite(x, y, this.stoneTexture, gc.getVboManager());
+		this.stoneSprite = new AnimatedSprite(
+				x - this.stoneTexture.getWidth() / 2,
+				y - this.stoneTexture.getHeight() / 2,
+				this.stoneTexture,
+				gc.getVboManager()
+		);
+
 		stoneSprite.setCurrentTileIndex(0);
 
 		this.stoneBody = PhysicsFactory.createBoxBody(

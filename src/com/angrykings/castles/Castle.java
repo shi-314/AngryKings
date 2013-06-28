@@ -31,8 +31,8 @@ public class Castle {
 	private final ArrayList<PhysicalEntity> blocks;
 
 	private final float initialHeight;
-	
-	public Castle(float x, float y, TiledTextureRegion stoneTexture, TextureRegion roofTexture, TextureRegion woodTexture){
+
+	public Castle(float x, float y, TiledTextureRegion stoneTexture, TextureRegion roofTexture, TextureRegion woodTexture) {
 		this.x = x;
 		this.y = y;
 
@@ -79,9 +79,9 @@ public class Castle {
 
 	public float getHeight() {
 		float highest = Float.MAX_VALUE;
-		for(PhysicalEntity e : this.blocks) {
+		for (PhysicalEntity e : this.blocks) {
 			float y = e.getAreaShape().getY();
-			if(y < highest)
+			if (y < highest)
 				highest = y;
 		}
 
@@ -92,27 +92,28 @@ public class Castle {
 		return initialHeight;
 	}
 
-	private void build(){
+	private void build() {
 
 		GameContext gc = GameContext.getInstance();
 
-		float leftBottomStoneX = x;
-		float leftBottomStoneY = y - stoneTexture.getHeight();
+		float leftBottomStoneX = x + stoneTexture.getWidth() / 2;
+		float leftBottomStoneY = y - stoneTexture.getHeight() / 2;
 		float rightBottomStoneX = leftBottomStoneX + woodTexture.getWidth() - stoneTexture.getWidth();
-		float middleWoodY = leftBottomStoneY - woodTexture.getHeight();
-		float topStoneY = middleWoodY - stoneTexture.getHeight();
-		float topWoodY = topStoneY - woodTexture.getHeight();
-		float roofX = leftBottomStoneX + woodTexture.getWidth()/2 - roofTexture.getWidth()/2;
-		float roofY = topWoodY - roofTexture.getHeight();
+		float middleWoodX = leftBottomStoneX + woodTexture.getWidth() / 2 - stoneTexture.getWidth() / 2;
+		float middleWoodY = leftBottomStoneY - woodTexture.getHeight() / 2 - stoneTexture.getHeight() / 2;
+		float topStoneY = middleWoodY - stoneTexture.getHeight() / 2 - woodTexture.getHeight() / 2;
+		float topWoodY = topStoneY - woodTexture.getHeight() / 2 - stoneTexture.getHeight() / 2;
+		float roofX = leftBottomStoneX + woodTexture.getWidth() / 2 - roofTexture.getWidth() / 2;
+		float roofY = topWoodY - roofTexture.getHeight() / 2  - woodTexture.getHeight() / 2;
 
 		this.addStone(leftBottomStoneX, leftBottomStoneY);
 		this.addStone(rightBottomStoneX, leftBottomStoneY);
-		this.addWood(leftBottomStoneX, middleWoodY);
+		this.addWood(middleWoodX, middleWoodY);
 		this.addStone(leftBottomStoneX, topStoneY);
 		this.addStone(rightBottomStoneX, topStoneY);
-		this.addWood(leftBottomStoneX, topWoodY);
+		this.addWood(middleWoodX, topWoodY);
 		this.addRoof(roofX, roofY);
 
 	}
-	
+
 }

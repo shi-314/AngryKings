@@ -25,8 +25,8 @@ public class PhysicsManager implements IUpdateHandler {
 		return instance;
 	}
 
-	private static final float MIN_LINEAR_VELOCITY = 1e-5f;
-	private static final float MIN_ANGULAR_VELOCITY = 1e-3f;
+	private static final float MIN_LINEAR_VELOCITY = 1e-3f;
+	private static final float MIN_ANGULAR_VELOCITY = 1e-2f;
 	private ArrayList<PhysicalEntity> physicalEntities;
 
 	public PhysicsManager() {
@@ -46,6 +46,9 @@ public class PhysicsManager implements IUpdateHandler {
 			PhysicalEntity entity = it.next();
 			Body b = entity.getBody();
 
+			if(!entity.isAutoRemoveEnabled())
+				continue;
+
 			float linearVelocity = b.getLinearVelocity().len();
 			float angularVelocity = b.getAngularVelocity();
 
@@ -55,10 +58,38 @@ public class PhysicsManager implements IUpdateHandler {
 
 			if(linearVelocity < PhysicsManager.MIN_LINEAR_VELOCITY && angularVelocity < PhysicsManager.MIN_ANGULAR_VELOCITY) {
 				Debug.d("remove physical entity: lin: " + b.getLinearVelocity().len() + " angular: " + b.getAngularVelocity());
-				gc.getScene().detachChild(entity.getAreaShape());
-				gc.getPhysicsWorld().destroyBody(b);
+				entity.remove();
 				it.remove();
 			}
+		}
+	}
+
+	public void cleanup() {
+		GameContext gc = GameContext.getInstance();
+
+		Debug.d("PhysicsManager: cleanup");
+
+		Iterator<PhysicalEntity> it = this.physicalEntities.iterator();
+		while(it.hasNext()) {
+			PhysicalEntity entity = it.next();
+			Body b = entity.getBody();
+
+			if(!entity.isAutoRemoveEnabled())
+				continue;
+
+			Debug.d("remove physical entity: lin: " + b.getLinearVelocity().len() + " angular: " + b.getAngularVelocity());
+			entity.remove();
+			it.remove();
+		}
+	}
+
+	public void setEntitiesActive(boolean status) {
+		GameContext gc = GameContext.getInstance();
+
+		Iterator<PhysicalEntity> it = this.physicalEntities.iterator();
+		while(it.hasNext()) {
+			PhysicalEntity entity = it.next();
+			entity.getBody().setActive(status);
 		}
 	}
 

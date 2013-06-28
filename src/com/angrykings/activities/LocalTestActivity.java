@@ -11,6 +11,7 @@ import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.RepeatingSpriteBackground;
 import org.andengine.entity.util.FPSLogger;
+import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.detector.PinchZoomDetector;
@@ -207,12 +208,15 @@ public class LocalTestActivity extends BaseGameActivity
 		// initialize the physics engine
 		//
 
-		PhysicsWorld physicsWorld = new PhysicsWorld(new Vector2(0, SensorManager.GRAVITY_EARTH), false);
-
+		PhysicsWorld physicsWorld = new FixedStepPhysicsWorld(
+				30,
+				new Vector2(0, SensorManager.GRAVITY_EARTH),
+				true,
+				3,
+				2
+		);
 		physicsWorld.setAutoClearForces(true);
 		gc.setPhysicsWorld(physicsWorld);
-
-		scene.registerUpdateHandler(physicsWorld);
 
 		//
 		// initialize the entities
@@ -237,8 +241,8 @@ public class LocalTestActivity extends BaseGameActivity
 		scene.attachChild(this.enemyCannon);
 
 		castle = new Castle(400, BasicMap.GROUND_Y, this.stoneTexture, this.roofTexture, this.woodTexture);
-
-		scene.registerUpdateHandler(PhysicsManager.getInstance());
+		castle = new Castle(100, BasicMap.GROUND_Y, this.stoneTexture, this.roofTexture, this.woodTexture);
+		castle = new Castle(300, BasicMap.GROUND_Y-500, this.stoneTexture, this.roofTexture, this.woodTexture);
 
 		//
 		// initialize navigation
@@ -284,6 +288,9 @@ public class LocalTestActivity extends BaseGameActivity
 		hud.setLeftPlayerName("Shivan");
 		hud.setRightPlayerName("Ray");
 		hud.setStatus("Du bist dran!");
+
+		scene.registerUpdateHandler(physicsWorld);
+		scene.registerUpdateHandler(PhysicsManager.getInstance());
 
 		pOnCreateSceneCallback.onCreateSceneFinished(scene);
 	}

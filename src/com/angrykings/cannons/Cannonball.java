@@ -30,6 +30,7 @@ public class Cannonball extends PhysicalEntity {
 
 	public Cannonball(TextureRegion ballTexture, float x, float y) {
 		this(ballTexture, 5.5f, 0.1f, 0.9f, x, y);
+		this.autoRemove = true;
 	}
 
 	public Cannonball(TextureRegion ballTexture, float density, float elasticity, float friction, float x, float y) {

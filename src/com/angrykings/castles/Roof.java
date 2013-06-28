@@ -31,7 +31,12 @@ public class Roof extends PhysicalEntity {
 
 		GameContext gc = GameContext.getInstance();
 
-		this.roofSprite = new Sprite(x, y, this.roofTexture, gc.getVboManager());
+		this.roofSprite = new Sprite(
+				x - this.roofTexture.getWidth() / 2,
+				y - this.roofTexture.getHeight() / 2,
+				this.roofTexture, gc.getVboManager()
+		);
+
 		this.roofBody = createTriangleBody(gc.getPhysicsWorld(), roofSprite, BodyDef.BodyType.DynamicBody, Roof.FIXTURE_DEF);
 	}
 

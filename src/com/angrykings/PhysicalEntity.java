@@ -16,6 +16,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  * @date 14.06.13
  */
 public abstract class PhysicalEntity {
+	protected boolean autoRemove = false;
+
 	public abstract Body getBody();
 	public abstract IAreaShape getAreaShape();
 
@@ -25,5 +27,16 @@ public abstract class PhysicalEntity {
 		gc.getPhysicsWorld().registerPhysicsConnector(
 				new PhysicsConnector(this.getAreaShape(), this.getBody(), true, true)
 		);
+	}
+
+	public boolean isAutoRemoveEnabled() {
+		return this.autoRemove;
+	}
+
+	public void remove() {
+		GameContext gc = GameContext.getInstance();
+
+		gc.getScene().detachChild(this.getAreaShape());
+		gc.getPhysicsWorld().destroyBody(this.getBody());
 	}
 }

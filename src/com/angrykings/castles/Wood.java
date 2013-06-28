@@ -25,7 +25,12 @@ public class Wood extends PhysicalEntity {
 
 		GameContext gc = GameContext.getInstance();
 
-		this.woodSprite = new Sprite(x, y, this.woodTexture, gc.getVboManager());
+		this.woodSprite = new Sprite(
+				x - this.woodTexture.getWidth() / 2,
+				y - this.woodTexture.getHeight() / 2,
+				this.woodTexture,
+				gc.getVboManager()
+		);
 
 		this.woodBody = PhysicsFactory.createBoxBody(
 				gc.getPhysicsWorld(), this.woodSprite,

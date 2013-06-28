@@ -22,5 +22,11 @@ public final class GameConfig {
 	public static final float CAMERA_MIN_Y = -1300;
 	public static final float CAMERA_MAX_Y = 1400;
 
-	public final static boolean LOG_FPS = false;
+	public static final boolean LOG_FPS = false;
+
+	public static final int PHYSICS_STEPS_PER_SEC = 30;
+	public static final int PHYSICS_VELOCITY_ITERATION = 3;
+	public static final int PHYSICS_POSITION_ITERATION = 3;
+
+	public static final float CANNON_FORCE = 300;
 }

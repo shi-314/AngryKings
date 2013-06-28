@@ -25,7 +25,7 @@ public class Cannon extends Entity {
 	protected final float minAngle, maxAngle;
 
 	public Cannon(TextureRegion cannonTexture, TextureRegion wheelTexture,
-			TextureRegion cannonballTexture, boolean isLeft) {
+				  TextureRegion cannonballTexture, boolean isLeft) {
 		this.cannonTexture = cannonTexture;
 		this.wheelTexture = wheelTexture;
 		this.cannonballTexture = cannonballTexture;
@@ -54,18 +54,26 @@ public class Cannon extends Entity {
 		this.setPosition(100, 300);
 	}
 
-	public void pointAt(float x, float y) {
-		double rotation = Math.atan2(
-				y - this.getY() - this.barrelSprite.getHeight() / 2,
-				x - this.getX());
+	/**
+	 *
+	 * @param x
+	 * @param y
+	 * @return	Returns true if the angle was set and false if the angle is out of bounds
+	 */
+	public boolean pointAt(int x, int y) {
+		double rotation = Math.atan2(y - this.getY() - this.barrelSprite.getHeight() / 2, x - this.getX());
 
 		rotation = Math.toDegrees(rotation);
 
 		if (!this.isLeft)
 			rotation = -rotation + 180;
 
-		if (rotation > this.minAngle && rotation < maxAngle)
+		if (rotation > this.minAngle && rotation < maxAngle) {
 			this.barrelSprite.setRotation((float) rotation);
+			return true;
+		}
+
+		return false;
 	}
 
 	public Vector2 getDirection() {
@@ -74,8 +82,8 @@ public class Cannon extends Entity {
 		if (this.isLeft) {
 			return new Vector2((float) Math.cos(angle), (float) Math.sin(angle)).nor();
 		} else {
-			return new Vector2( - (float) Math.cos(angle), (float) Math.sin(angle))
-			.nor();
+			return new Vector2(-(float) Math.cos(angle), (float) Math.sin(angle))
+					.nor();
 		}
 	}
 
@@ -97,8 +105,7 @@ public class Cannon extends Entity {
 		Cannonball ball = new Cannonball(this.cannonballTexture, ballPosition.x, ballPosition.y);
 		ball.registerPhysicsConnector();
 
-		ball.getBody().applyLinearImpulse(this.getDirection().mul(force),
-				ball.getBody().getPosition());
+		ball.getBody().applyLinearImpulse(this.getDirection().mul(force), ball.getBody().getPosition());
 		ball.getAreaShape().setPosition(ballPosition.x, ballPosition.y);
 
 		gc.getScene().attachChild(ball.getAreaShape());

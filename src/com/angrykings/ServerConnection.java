@@ -49,7 +49,6 @@ public class ServerConnection {
 
 		try {
 			connection.connect(wsuri, new WebSocketHandler() {
-
 				@Override
 				public void onOpen() {
 					Log.d(TAG, "Status: Connected");

@@ -105,8 +105,9 @@ public class LobbyActivity extends ListActivity {
 											}
 										}).show();
 					} else if (jObj.getInt("action") == Action.Server.LOBBY_UPDATE) {
-						JSONArray userArray = new JSONArray(jObj
-								.getString("names"));
+						Log.d("AngryKings", "received lobby update: "+jObj.get("names"));
+
+						JSONArray userArray = new JSONArray(jObj .getString("names"));
 						users.clear();
 
 						for (int i = 0; i < userArray.length(); i++) {
@@ -116,10 +117,11 @@ public class LobbyActivity extends ListActivity {
 									+ userArray.getJSONArray(i).getString(1)
 									+ "   Verloren: "
 									+ userArray.getJSONArray(i).getString(2);
+
 							users.add(eingabe);
-							listItemToName.put(eingabe, userArray.getJSONArray(i)
-									.getString(0));
+							listItemToName.put(eingabe, userArray.getJSONArray(i).getString(0));
 						}
+
 						updateLobby(users);
 					}
 				} catch (JSONException e) {

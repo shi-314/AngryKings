@@ -7,5 +7,6 @@
     <string name="setName">Gib deinen Namen ein!</string>
     <string name="lobbyButton">Zur Lobby</string>
     <string name="introButton">Intro anschauen</string>
+	<string name="waitForConnection">Verbindung wird hergestellt...</string>
 
 </resources>

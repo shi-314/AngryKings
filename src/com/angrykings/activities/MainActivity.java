@@ -30,7 +30,15 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.activity_main);
+
+		bIntro = (Button) findViewById(R.id.introButton);
+
+		bLobby = (Button) findViewById(R.id.lobbyButton);
+		bLobby.setText(this.getString(R.string.waitForConnection));
+		bLobby.setEnabled(false);
+
 		ServerConnection.getInstance().setHandler(new OnMessageHandler() {
 
 			@Override
@@ -39,7 +47,8 @@ public class MainActivity extends Activity {
 					JSONObject jObj = new JSONObject(payload);
 					if (jObj.getInt("action") == Action.Server.KNOWN_USER) {
 						username = jObj.getString("name");
-						
+						bLobby.setText(getString(R.string.lobbyButton));
+						bLobby.setEnabled(true);
 					} else if (jObj.getInt("action") == Action.Server.UNKNOWN_USER) {
 						Intent intent = new Intent(MainActivity.this,
 								LogInActivity.class);
@@ -51,6 +60,7 @@ public class MainActivity extends Activity {
 				}
 			}
 		});
+
 		ServerConnection.getInstance().start(new OnStartHandler() {
 			
 			@Override
@@ -67,7 +77,7 @@ public class MainActivity extends Activity {
 		if (extras != null) {
 			username = extras.getString("username");
 		}
-		bLobby = (Button) findViewById(R.id.lobbyButton);
+
 		bLobby.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -79,7 +89,7 @@ public class MainActivity extends Activity {
 			}
 
 		});
-		bIntro = (Button) findViewById(R.id.introButton);
+
 		bIntro.setOnClickListener(new OnClickListener() {
 
 			@Override

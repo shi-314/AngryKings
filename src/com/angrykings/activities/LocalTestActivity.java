@@ -311,7 +311,7 @@ public class LocalTestActivity extends BaseGameActivity
 			float x = pSceneTouchEvent.getX();
 			float y = pSceneTouchEvent.getY();
 
-			this.cannon.pointAt(x, y);
+			this.cannon.pointAt((int)x, (int)y);
 
 			if (pSceneTouchEvent.isActionUp()) {
 				this.cannon.fire(400);

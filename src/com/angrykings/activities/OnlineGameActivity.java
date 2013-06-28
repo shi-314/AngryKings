@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import com.angrykings.*;
 import com.angrykings.utils.ServerJSONBuilder;
+import de.tavendo.autobahn.WebSocketConnection;
 import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.options.EngineOptions;
@@ -77,7 +78,7 @@ public class OnlineGameActivity extends BaseGameActivity
 	private Cannon cannon;
 	private Cannon enemyCannon;
 	private RepeatingSpriteBackground skySprite;
-	private Castle castle;
+	private Castle leftCastle, rightCastle;
 
 	//
 	// Navigation Attributes
@@ -92,8 +93,13 @@ public class OnlineGameActivity extends BaseGameActivity
 	// Network
 	//
 
+	private static String JSON_LOSE;
+	private ServerConnection serverConnection;
+	private WebSocketConnection webSocketConnection;
 	private int round;
 	boolean turnSent;
+	int aimX, aimY;
+
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
@@ -109,6 +115,11 @@ public class OnlineGameActivity extends BaseGameActivity
 		camera.setBoundsEnabled(true);
 
 		gc.setCamera(camera);
+
+		OnlineGameActivity.JSON_LOSE = new ServerJSONBuilder().create(Action.Client.LOSE).build();
+
+		this.serverConnection = ServerConnection.getInstance();
+		this.webSocketConnection = this.serverConnection.getConnection();
 
 		return new EngineOptions(
 				true,
@@ -213,16 +224,22 @@ public class OnlineGameActivity extends BaseGameActivity
 							JSONObject jObj = new JSONObject(payload);
 							if (jObj.getInt("action") == Action.Server.TURN && round % 2 == 1) {
 								round++;
-								OnlineGameActivity.this.enemyCannon.pointAt(
-										Float.parseFloat(jObj.getString("x")),
-										Float.parseFloat(jObj.getString("y")));
-								OnlineGameActivity.this.enemyCannon.fire(200);
+
+								int x = Integer.parseInt(jObj.getString("x"));
+								int y = Integer.parseInt(jObj.getString("y"));
+
+								gc.getHud().setStatus("enemy: x="+x+", y="+y);
+
+								OnlineGameActivity.this.enemyCannon.pointAt(x, y);
+								OnlineGameActivity.this.enemyCannon.fire(GameConfig.CANNON_FORCE);
 								turnSent = false;
 							} else if (jObj.getInt("action") == Action.Server.PARTNER_LEFT) {
 								Intent intent = new Intent(
 										OnlineGameActivity.this,
 										LobbyActivity.class);
 								startActivity(intent);
+							} else if (jObj.getInt("action") == Action.Server.YOU_WIN) {
+								gc.getHud().setStatus("Du hast gewonnen!");
 							}
 						} catch (JSONException e) {
 
@@ -251,12 +268,13 @@ public class OnlineGameActivity extends BaseGameActivity
 		//
 
 		PhysicsWorld physicsWorld = new FixedStepPhysicsWorld(
-				30,
+				GameConfig.PHYSICS_STEPS_PER_SEC,
 				new Vector2(0, SensorManager.GRAVITY_EARTH),
 				true,
-				3,
-				2
+				GameConfig.PHYSICS_VELOCITY_ITERATION,
+				GameConfig.PHYSICS_POSITION_ITERATION
 		);
+
 		physicsWorld.setAutoClearForces(true);
 		gc.setPhysicsWorld(physicsWorld);
 
@@ -269,6 +287,8 @@ public class OnlineGameActivity extends BaseGameActivity
 
 		Boolean amILeft = false;
 
+		String leftPlayerName = "";
+		String rightPlayerName = "";
 		int myX = 0;
 		int myY = 0;
 		int enemyX = 0;
@@ -284,6 +304,8 @@ public class OnlineGameActivity extends BaseGameActivity
 				myY = 890;
 				enemyX = 1500;
 				enemyY = 890;
+				leftPlayerName = extras.getString("username");
+				// TODO: Enemy Name
 			} else {
 				this.round = 1;
 				amILeft = false;
@@ -291,6 +313,8 @@ public class OnlineGameActivity extends BaseGameActivity
 				enemyY = 890;
 				myX = 1500;
 				myY = 890;
+				rightPlayerName = extras.getString("username");
+				// TODO: Enemy Name
 			}
 		}
 
@@ -302,7 +326,9 @@ public class OnlineGameActivity extends BaseGameActivity
 		this.enemyCannon.setPosition(enemyX, enemyY);
 		scene.attachChild(this.enemyCannon);
 
-		castle = new Castle(400, 890, this.stoneTexture, this.roofTexture, this.woodTexture);
+		this.leftCastle = new Castle(-900, BasicMap.GROUND_Y, this.stoneTexture, this.roofTexture, this.woodTexture);
+		this.rightCastle = new Castle(1800, BasicMap.GROUND_Y, this.stoneTexture, this.roofTexture, this.woodTexture);
+
 
 		//
 		// initialize navigation
@@ -324,19 +350,32 @@ public class OnlineGameActivity extends BaseGameActivity
 		hud.setOnWhiteFlagTouched(new Runnable() {
 			@Override
 			public void run() {
-				finish();
+				hud.setStatus("Du hast aufgegeben!");
+				webSocketConnection.sendTextMessage(OnlineGameActivity.JSON_LOSE);
 			}
 		});
 
 		gc.setHud(hud);
 		gc.getCamera().setHUD(hud);
 
-		final float initialCastleHeight = castle.getInitialHeight();
+		final float initialLeftCastleHeight = leftCastle.getInitialHeight();
+		final float initialRightCastleHeight = rightCastle.getInitialHeight();
+		final boolean left = amILeft;
 
 		scene.registerUpdateHandler(new IUpdateHandler() {
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
-				hud.getLeftLifeBar().setValue(castle.getHeight()/initialCastleHeight);
+
+				float leftLife = leftCastle.getHeight()/initialLeftCastleHeight;
+				float rightLife = rightCastle.getHeight()/initialRightCastleHeight;
+
+				hud.getLeftLifeBar().setValue(leftLife);
+				hud.getRightLifeBar().setValue(rightLife);
+
+				if(left && leftLife < 0.3f || !left && rightLife < 0.3f) {
+					gc.getHud().setStatus("Du hast verloren!");
+					webSocketConnection.sendTextMessage(OnlineGameActivity.JSON_LOSE);
+				}
 			}
 
 			@Override
@@ -371,20 +410,28 @@ public class OnlineGameActivity extends BaseGameActivity
 			float x = pSceneTouchEvent.getX();
 			float y = pSceneTouchEvent.getY();
 
-			this.cannon.pointAt(x, y);
+			int iX = (int) x;
+			int iY = (int) y;
+
+			if(this.cannon.pointAt(iX, iY)) {
+				this.aimX = iX;
+				this.aimY = iY;
+			}
+
+			gc.getHud().setStatus("x="+this.aimX+", y="+this.aimY);
 
 			if (pSceneTouchEvent.isActionUp()) {
 				if (!turnSent && round % 2 == 0) {
 					this.round++;
-					this.cannon.fire(200);
-					ServerConnection
-							.getInstance()
-							.getConnection()
-							.sendTextMessage(
-									new ServerJSONBuilder()
-											.create(Action.Client.TURN)
-											.option("x", String.valueOf(x))
-											.option("y", String.valueOf(y)).build());
+					this.cannon.fire(GameConfig.CANNON_FORCE);
+
+					this.webSocketConnection.sendTextMessage(
+							new ServerJSONBuilder()
+									.create(Action.Client.TURN)
+									.option("x", String.valueOf(this.aimX))
+									.option("y", String.valueOf(this.aimY)).build()
+					);
+
 					this.turnSent = true;
 				}
 			}

@@ -170,8 +170,8 @@ public class MapTest extends BaseGameActivity implements IOnSceneTouchListener {
 									&& mRound % 2 == 1) {
 								mRound++;
 								MapTest.this.enemyCannon.pointAt(
-										Float.parseFloat(jObj.getString("x")),
-										Float.parseFloat(jObj.getString("y")));
+										Integer.parseInt(jObj.getString("x")),
+										Integer.parseInt(jObj.getString("y")));
 								MapTest.this.enemyCannon.fire(200);
 								mTurnSent = false;
 
@@ -295,7 +295,7 @@ public class MapTest extends BaseGameActivity implements IOnSceneTouchListener {
 			float x = Math.round(pSceneTouchEvent.getX());
 			float y = Math.round(pSceneTouchEvent.getY());
 
-			this.cannon.pointAt(x, y);
+			this.cannon.pointAt((int) x, (int) y);
 
 			if (pSceneTouchEvent.isActionUp()) {
 				mRound++;

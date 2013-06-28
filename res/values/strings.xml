@@ -8,5 +8,6 @@
     <string name="lobbyButton">Zur Lobby</string>
     <string name="introButton">Intro anschauen</string>
 	<string name="waitForConnection">Verbindung wird hergestellt...</string>
+	<string name="end_question">Willst du wirklich aufgeben?</string>
 
 </resources>

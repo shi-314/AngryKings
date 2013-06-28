@@ -31,8 +31,7 @@ public class LobbyActivity extends ListActivity {
 	private Map<String, String> listItemToName = new HashMap<String, String>();
 
 	private void updateLobby(List<String> user) {
-		setListAdapter(new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, user));
+		setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, user));
 	}
 
 	/** Called when the activity is first created. */
@@ -83,7 +82,7 @@ public class LobbyActivity extends ListActivity {
 																		.build());
 												Intent intent = new Intent(
 														LobbyActivity.this,
-														MapTest.class);
+														OnlineGameActivity.class);
 												intent.putExtra("myTurn", true);
 												intent.putExtra("username",
 														username);
@@ -148,8 +147,7 @@ public class LobbyActivity extends ListActivity {
 						dialog.cancel();
 						displayLobby();
 					} else {
-						Intent intent = new Intent(LobbyActivity.this,
-								MapTest.class);
+						Intent intent = new Intent(LobbyActivity.this, OnlineGameActivity.class);
 						intent.putExtra("myTurn", false);
 						intent.putExtra("username", username);
 						startActivity(intent);

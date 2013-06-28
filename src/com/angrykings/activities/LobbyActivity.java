@@ -135,6 +135,10 @@ public class LobbyActivity extends ListActivity {
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 
+		final String partnerName = listItemToName.get(
+				getListView().getItemAtPosition(
+						position).toString());
+		
 		final AlertDialog dialog = new AlertDialog.Builder(this)
 				.setTitle("Please Wait").setMessage("Waiting for partner")
 				.show();
@@ -152,6 +156,7 @@ public class LobbyActivity extends ListActivity {
 						Intent intent = new Intent(LobbyActivity.this, OnlineGameActivity.class);
 						intent.putExtra("myTurn", false);
 						intent.putExtra("username", username);
+						intent.putExtra("partnername", partnerName);
 						startActivity(intent);
 					}
 				} catch (JSONException e) {
@@ -166,9 +171,7 @@ public class LobbyActivity extends ListActivity {
 				.sendTextMessage(
 						new ServerJSONBuilder()
 								.create(Action.Client.PAIR)
-								.option("partner",listItemToName.get(
-										getListView().getItemAtPosition(
-												position).toString())).build());
+								.option("partner",partnerName).build());
 
 	}
 }

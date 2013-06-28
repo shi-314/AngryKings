@@ -305,7 +305,7 @@ public class OnlineGameActivity extends BaseGameActivity
 				enemyX = 1500;
 				enemyY = 890;
 				leftPlayerName = extras.getString("username");
-				// TODO: Enemy Name
+				rightPlayerName = extras.getString("partnername");
 			} else {
 				this.round = 1;
 				amILeft = false;
@@ -313,8 +313,8 @@ public class OnlineGameActivity extends BaseGameActivity
 				enemyY = 890;
 				myX = 1500;
 				myY = 890;
+				leftPlayerName = extras.getString("partnername");
 				rightPlayerName = extras.getString("username");
-				// TODO: Enemy Name
 			}
 		}
 
@@ -383,10 +383,15 @@ public class OnlineGameActivity extends BaseGameActivity
 
 			}
 		});
-
-		hud.setLeftPlayerName("Shivan");
-		hud.setRightPlayerName("Ray");
-		hud.setStatus("Du bist dran!");
+		
+		hud.setLeftPlayerName(leftPlayerName);
+		hud.setRightPlayerName(rightPlayerName);
+		
+		if(amILeft){
+			hud.setStatus("Du bist dran!");
+		}else{
+			hud.setStatus("Gegner ist dran!");
+		}
 
 		scene.registerUpdateHandler(physicsWorld);
 		scene.registerUpdateHandler(PhysicsManager.getInstance());

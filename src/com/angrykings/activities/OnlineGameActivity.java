@@ -326,7 +326,7 @@ public class OnlineGameActivity extends BaseGameActivity
 		this.enemyCannon.setPosition(enemyX, enemyY);
 		scene.attachChild(this.enemyCannon);
 
-		this.leftCastle = new Castle(-900, BasicMap.GROUND_Y, this.stoneTexture, this.roofTexture, this.woodTexture);
+		this.leftCastle = new Castle(-1500, BasicMap.GROUND_Y, this.stoneTexture, this.roofTexture, this.woodTexture);
 		this.rightCastle = new Castle(1800, BasicMap.GROUND_Y, this.stoneTexture, this.roofTexture, this.woodTexture);
 
 

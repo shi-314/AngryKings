@@ -35,6 +35,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.angrykings.GameConfig;
 import com.angrykings.GameContext;
@@ -92,14 +93,14 @@ public class LocalTestActivity extends BaseGameActivity implements
 	private PinchZoomDetector pinchZoomDetector;
 	private float pinchZoomStartedCameraZoomFactor;
 	boolean isAiming = true;
-	
+
 	private Handler handler;
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
-		
+
 		handler = new Handler();
-		
+
 		gc = GameContext.getInstance();
 
 		ZoomCamera camera = new ZoomCamera(0, 0, GameConfig.CAMERA_WIDTH,
@@ -277,10 +278,11 @@ public class LocalTestActivity extends BaseGameActivity implements
 
 		castle = new Castle(400, BasicMap.GROUND_Y, this.stoneTexture,
 				this.roofTexture, this.woodTexture);
-		castle = new Castle(100, BasicMap.GROUND_Y, this.stoneTexture,
-				this.roofTexture, this.woodTexture);
-		castle = new Castle(300, BasicMap.GROUND_Y - 500, this.stoneTexture,
-				this.roofTexture, this.woodTexture);
+
+		// castle = new Castle(100, BasicMap.GROUND_Y, this.stoneTexture,
+		// this.roofTexture, this.woodTexture);
+		// castle = new Castle(300, BasicMap.GROUND_Y - 500, this.stoneTexture,
+		// this.roofTexture, this.woodTexture);
 
 		//
 		// initialize navigation
@@ -361,7 +363,6 @@ public class LocalTestActivity extends BaseGameActivity implements
 		hud.setLeftPlayerName("Shivan");
 		hud.setRightPlayerName("Ray");
 		hud.setStatus("Du bist dran!");
-
 		scene.registerUpdateHandler(physicsWorld);
 		scene.registerUpdateHandler(PhysicsManager.getInstance());
 

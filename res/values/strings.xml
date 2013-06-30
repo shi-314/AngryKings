@@ -7,7 +7,7 @@
     <string name="setName">Gib deinen Namen ein!</string>
     <string name="lobbyButton">Zur Lobby</string>
     <string name="introButton">Intro anschauen</string>
-	<string name="waitForConnection">Verbindung wird hergestellt...</string>
+	<string name="waitForConnection">Verbindung wird hergestellt&#8230;</string>
 	<string name="end_question">Willst du wirklich aufgeben?</string>
 	<string name="weiterSpielenButton">Ich will kämpfen</string>
 	<string name="resignButton">aufgeben :(</string>

@@ -1,11 +1,5 @@
 package com.angrykings.activities;
 
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.Bundle;
-import com.angrykings.*;
-import com.angrykings.utils.ServerJSONBuilder;
-import de.tavendo.autobahn.WebSocketConnection;
 import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.options.EngineOptions;
@@ -19,7 +13,9 @@ import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.detector.PinchZoomDetector;
+import org.andengine.input.touch.detector.PinchZoomDetector.IPinchZoomDetectorListener;
 import org.andengine.input.touch.detector.ScrollDetector;
+import org.andengine.input.touch.detector.ScrollDetector.IScrollDetectorListener;
 import org.andengine.input.touch.detector.SurfaceScrollDetector;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
@@ -31,17 +27,33 @@ import org.andengine.opengl.texture.atlas.bitmap.source.AssetBitmapTextureAtlasS
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.ui.activity.BaseGameActivity;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import android.app.Dialog;
+import android.content.Intent;
+import android.graphics.Color;
 import android.hardware.SensorManager;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
+import com.angrykings.Action;
+import com.angrykings.GameConfig;
+import com.angrykings.GameContext;
+import com.angrykings.GameHUD;
+import com.angrykings.PhysicsManager;
+import com.angrykings.R;
+import com.angrykings.ServerConnection;
 import com.angrykings.cannons.Cannon;
 import com.angrykings.castles.Castle;
 import com.angrykings.maps.BasicMap;
+import com.angrykings.utils.ServerJSONBuilder;
 import com.badlogic.gdx.math.Vector2;
-import org.andengine.input.touch.detector.PinchZoomDetector.IPinchZoomDetectorListener;
-import org.andengine.input.touch.detector.ScrollDetector.IScrollDetectorListener;
-import org.json.JSONException;
-import org.json.JSONObject;
+
+import de.tavendo.autobahn.WebSocketConnection;
 
 /**
  * OnlineGameActivity
@@ -53,6 +65,7 @@ public class OnlineGameActivity extends BaseGameActivity
 		implements IOnSceneTouchListener, IScrollDetectorListener, IPinchZoomDetectorListener {
 
 	private GameContext gc;
+	private Handler handler;
 
 	//
 	// Textures
@@ -104,6 +117,7 @@ public class OnlineGameActivity extends BaseGameActivity
 	@Override
 	public EngineOptions onCreateEngineOptions() {
 		gc = GameContext.getInstance();
+		handler = new Handler();
 
 		ZoomCamera camera = new ZoomCamera(0, 0, GameConfig.CAMERA_WIDTH, GameConfig.CAMERA_HEIGHT);
 
@@ -350,8 +364,42 @@ public class OnlineGameActivity extends BaseGameActivity
 		hud.setOnWhiteFlagTouched(new Runnable() {
 			@Override
 			public void run() {
-				hud.setStatus("Du hast aufgegeben!");
-				webSocketConnection.sendTextMessage(OnlineGameActivity.JSON_LOSE);
+				handler.post(new Runnable() {
+					@Override
+					public void run() {
+						final Dialog dialog = new Dialog(OnlineGameActivity.this);
+						dialog.setContentView(R.layout.quit_dialog);
+						dialog.setTitle("Aufgeben?");
+						dialog.setCancelable(true);
+						
+						TextView text = (TextView) dialog.findViewById(R.id.lBeendenFrage);
+						Button bCancel = (Button) dialog
+								.findViewById(R.id.bCancel);
+						Button bResign = (Button) dialog
+								.findViewById(R.id.bResign);
+
+						bCancel.setOnClickListener(new View.OnClickListener() {
+
+							@Override
+							public void onClick(View v) {
+								dialog.dismiss();
+							}
+						});
+						bResign.setOnClickListener(new View.OnClickListener() {
+
+							@Override
+							public void onClick(View v) {
+								hud.setStatus("Du hast aufgegeben!");
+								webSocketConnection.sendTextMessage(OnlineGameActivity.JSON_LOSE);
+								dialog.dismiss();
+//								Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//								startActivity(intent);
+							}
+						});
+						dialog.show();
+					}
+				});
+				
 			}
 		});
 

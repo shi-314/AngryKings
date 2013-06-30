@@ -4,7 +4,7 @@
     android:layout_gravity="center" android:orientation="vertical"  >
 
     <TextView
-        android:id="@+id/lbl_your_name" android:text="@string/end_question" 
+        android:id="@+id/lBeendenFrage" android:text="@string/end_question" 
         android:layout_width="wrap_content" android:layout_height="wrap_content" />
 
     <LinearLayout
@@ -12,18 +12,20 @@
         android:layout_height="wrap_content" >
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/bCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:text="Ich will kämpfen!" />
+            android:text="@string/weiterSpielenButton"
+            android:textSize="12sp" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/bResign"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text="aufgeben :(" />
+            android:layout_weight="0.4"
+            android:textSize="12sp"
+            android:text="@string/resignButton" />
 
     </LinearLayout>
 

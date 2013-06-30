@@ -316,11 +316,11 @@ public class LocalTestActivity extends BaseGameActivity implements
 						dialog.setCancelable(true);
 
 						TextView text = (TextView) dialog
-								.findViewById(R.id.lbl_your_name);
+								.findViewById(R.id.lBeendenFrage);
 						Button button = (Button) dialog
-								.findViewById(R.id.button1);
+								.findViewById(R.id.bCancel);
 						Button button2 = (Button) dialog
-								.findViewById(R.id.button2);
+								.findViewById(R.id.bResign);
 
 						button.setOnClickListener(new View.OnClickListener() {
 

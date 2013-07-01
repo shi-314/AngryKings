@@ -50,7 +50,8 @@
             android:name="com.angrykings.activities.LogInActivity"
             android:screenOrientation="landscape" >
         </activity>
-        <activity android:name="com.angrykings.activities.OnlineGameActivity" >
+        <activity android:name="com.angrykings.activities.OnlineGameActivity"
+            android:configChanges="orientation|screenSize" >
         </activity>
     </application>
 

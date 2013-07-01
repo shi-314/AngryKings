@@ -1,8 +1,7 @@
-package com.angrykings.activities;
+package com.angrykings.unused;
 
-import android.os.Bundle;
-import android.os.Handler;
-import com.angrykings.Player;
+import java.util.ArrayList;
+
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.options.EngineOptions;
@@ -29,15 +28,15 @@ import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.debug.Debug;
 
 import android.hardware.SensorManager;
+import android.os.Bundle;
+import android.os.Handler;
 import android.widget.Toast;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-
-import java.util.ArrayList;
 
 
 public class PhysicsTest extends BaseGameActivity implements IOnSceneTouchListener {

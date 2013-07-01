@@ -1,12 +1,12 @@
 package com.angrykings.cannons;
 
-import com.angrykings.GameContext;
-import com.angrykings.PhysicsManager;
-import com.badlogic.gdx.math.Vector2;
 import org.andengine.entity.Entity;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.TextureRegion;
-import org.andengine.util.debug.Debug;
+
+import com.angrykings.GameContext;
+import com.angrykings.PhysicsManager;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * Cannon

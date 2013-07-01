@@ -1,11 +1,12 @@
 package com.angrykings;
 
-import com.badlogic.gdx.physics.box2d.Body;
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.util.debug.Debug;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import com.badlogic.gdx.physics.box2d.Body;
 
 /**
  * PhysicsManager
@@ -39,8 +40,6 @@ public class PhysicsManager implements IUpdateHandler {
 
 	@Override
 	public void onUpdate(float pSecondsElapsed) {
-		GameContext gc = GameContext.getInstance();
-
 		Iterator<PhysicalEntity> it = this.physicalEntities.iterator();
 		while(it.hasNext()) {
 			PhysicalEntity entity = it.next();
@@ -64,6 +63,7 @@ public class PhysicsManager implements IUpdateHandler {
 		}
 	}
 
+	/*
 	public void cleanup() {
 		GameContext gc = GameContext.getInstance();
 
@@ -82,10 +82,9 @@ public class PhysicsManager implements IUpdateHandler {
 			it.remove();
 		}
 	}
+	*/
 
 	public void setEntitiesActive(boolean status) {
-		GameContext gc = GameContext.getInstance();
-
 		Iterator<PhysicalEntity> it = this.physicalEntities.iterator();
 		while(it.hasNext()) {
 			PhysicalEntity entity = it.next();

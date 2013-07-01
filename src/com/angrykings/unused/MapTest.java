@@ -1,4 +1,4 @@
-package com.angrykings.activities;
+package com.angrykings.unused;
 
 import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.engine.options.EngineOptions;
@@ -33,6 +33,7 @@ import com.angrykings.GameConfig;
 import com.angrykings.GameContext;
 import com.angrykings.PhysicsManager;
 import com.angrykings.ServerConnection;
+import com.angrykings.activities.LobbyActivity;
 import com.angrykings.cannons.Cannon;
 import com.angrykings.castles.Castle;
 import com.angrykings.maps.BasicMap;

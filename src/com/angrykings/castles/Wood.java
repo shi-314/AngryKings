@@ -2,7 +2,6 @@ package com.angrykings.castles;
 
 import org.andengine.entity.shape.IAreaShape;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
 

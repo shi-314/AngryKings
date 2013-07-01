@@ -1,20 +1,13 @@
 package com.angrykings.castles;
 
-import com.angrykings.PhysicalEntity;
-import com.angrykings.maps.BasicMap;
-import org.andengine.opengl.texture.TextureOptions;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import java.util.ArrayList;
+
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 
 import com.angrykings.GameContext;
-import com.angrykings.activities.MapTest;
-import com.badlogic.gdx.math.Vector2;
-
-import org.andengine.util.debug.Debug;
-
-import java.util.ArrayList;
+import com.angrykings.PhysicalEntity;
+import com.angrykings.maps.BasicMap;
 
 /**
  * Castle
@@ -98,8 +91,6 @@ public class Castle {
 
 	private void build() {
 
-		GameContext gc = GameContext.getInstance();
-		
 
 //		float leftBottomStoneX = x + stoneTexture.getWidth() / 2;
 //		float leftBottomStoneY = y - stoneTexture.getHeight() / 2;

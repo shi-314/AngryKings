@@ -1,26 +1,14 @@
 package com.angrykings.maps;
 
-import android.graphics.LinearGradient;
-import android.graphics.Shader;
-import com.angrykings.GameConfig;
+import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.sprite.TiledSprite;
+import org.andengine.extension.physics.box2d.PhysicsFactory;
+import org.andengine.opengl.texture.region.TiledTextureRegion;
+
 import com.angrykings.GameContext;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import org.andengine.entity.primitive.Rectangle;
-import org.andengine.entity.scene.Scene;
-import org.andengine.entity.scene.background.Background;
-import org.andengine.entity.scene.background.EntityBackground;
-import org.andengine.entity.scene.background.RepeatingSpriteBackground;
-import org.andengine.entity.sprite.AnimatedSprite;
-import org.andengine.entity.sprite.Sprite;
-import org.andengine.entity.sprite.TiledSprite;
-import org.andengine.extension.physics.box2d.PhysicsConnector;
-import org.andengine.extension.physics.box2d.PhysicsFactory;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
-import org.andengine.opengl.texture.region.TextureRegion;
-import org.andengine.opengl.texture.region.TiledTextureRegion;
-import org.andengine.ui.activity.BaseActivity;
 
 /**
  * AngryKings

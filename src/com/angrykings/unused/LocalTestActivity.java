@@ -1,4 +1,4 @@
-package com.angrykings.activities;
+package com.angrykings.unused;
 
 import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.engine.handler.IUpdateHandler;

@@ -38,7 +38,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.angrykings.Action;
 import com.angrykings.GameConfig;
@@ -239,13 +238,19 @@ public class OnlineGameActivity extends BaseGameActivity
 							if (jObj.getInt("action") == Action.Server.TURN && round % 2 == 1) {
 								round++;
 
-								int x = Integer.parseInt(jObj.getString("x"));
-								int y = Integer.parseInt(jObj.getString("y"));
+								final int x = Integer.parseInt(jObj.getString("x"));
+								final int y = Integer.parseInt(jObj.getString("y"));
 
 								gc.getHud().setStatus("enemy: x="+x+", y="+y);
 
-								OnlineGameActivity.this.enemyCannon.pointAt(x, y);
-								OnlineGameActivity.this.enemyCannon.fire(GameConfig.CANNON_FORCE);
+								OnlineGameActivity.this.runOnUpdateThread(new Runnable() {
+									
+									@Override
+									public void run() {
+										OnlineGameActivity.this.enemyCannon.pointAt(x, y);
+										OnlineGameActivity.this.enemyCannon.fire(GameConfig.CANNON_FORCE);										
+									}
+								});
 								turnSent = false;
 							} else if (jObj.getInt("action") == Action.Server.PARTNER_LEFT) {
 								Intent intent = new Intent(
@@ -372,7 +377,7 @@ public class OnlineGameActivity extends BaseGameActivity
 						dialog.setTitle("Aufgeben?");
 						dialog.setCancelable(true);
 						
-						TextView text = (TextView) dialog.findViewById(R.id.lBeendenFrage);
+						//TextView text = (TextView) dialog.findViewById(R.id.lBeendenFrage);
 						Button bCancel = (Button) dialog
 								.findViewById(R.id.bCancel);
 						Button bResign = (Button) dialog
@@ -476,7 +481,13 @@ public class OnlineGameActivity extends BaseGameActivity
 			if (pSceneTouchEvent.isActionUp()) {
 				if (!turnSent && round % 2 == 0) {
 					this.round++;
-					this.cannon.fire(GameConfig.CANNON_FORCE);
+					this.runOnUpdateThread(new Runnable() {
+						
+						@Override
+						public void run() {
+							OnlineGameActivity.this.cannon.fire(GameConfig.CANNON_FORCE);							
+						}
+					});
 
 					this.webSocketConnection.sendTextMessage(
 							new ServerJSONBuilder()

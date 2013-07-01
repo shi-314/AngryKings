@@ -132,7 +132,7 @@ public class LobbyActivity extends ListActivity {
 	}
 
 	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
+	protected void onListItemClick(final ListView l, final View v, final int position, final long id) {
 		super.onListItemClick(l, v, position, id);
 
 		final String partnerName = listItemToName.get(
@@ -146,20 +146,21 @@ public class LobbyActivity extends ListActivity {
 		ServerConnection.getInstance().setHandler(new OnMessageHandler() {
 
 			@Override
-			public void onMessage(String payload) {
+			public void onMessage(final String payload) {
 				try {
-					JSONObject jObj = new JSONObject(payload);
+					final JSONObject jObj = new JSONObject(payload);
 					if (jObj.getInt("action") == Action.Server.DENIED) {
 						dialog.cancel();
 						displayLobby();
 					} else {
+						dialog.dismiss();
 						Intent intent = new Intent(LobbyActivity.this, OnlineGameActivity.class);
 						intent.putExtra("myTurn", false);
 						intent.putExtra("username", username);
 						intent.putExtra("partnername", partnerName);
 						startActivity(intent);
 					}
-				} catch (JSONException e) {
+				} catch (final JSONException e) {
 					e.printStackTrace();
 				}
 			}

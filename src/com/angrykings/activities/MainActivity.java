@@ -61,16 +61,21 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		ServerConnection.getInstance().start(new OnStartHandler() {
-			
-			@Override
-			public void onStart() {
-				ServerConnection
-				.getInstance()
-				.getConnection()
-				.sendTextMessage(new ServerJSONBuilder().create(Action.Client.SET_ID).option("id", getImei()).build());				
-			}
-		});
+		if(!ServerConnection.getInstance().getConnection().isConnected()){
+			ServerConnection.getInstance().start(new OnStartHandler() {
+				
+				@Override
+				public void onStart() {
+					ServerConnection
+					.getInstance()
+					.getConnection()
+					.sendTextMessage(new ServerJSONBuilder().create(Action.Client.SET_ID).option("id", getImei()).build());				
+				}
+			});
+		}else{
+			bLobby.setText(getString(R.string.lobbyButton));
+			bLobby.setEnabled(true);
+		}
 
 
 		Bundle extras = getIntent().getExtras();

@@ -36,6 +36,7 @@ import android.graphics.Color;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 
@@ -65,7 +66,8 @@ public class OnlineGameActivity extends BaseGameActivity
 
 	private GameContext gc;
 	private Handler handler;
-
+	private GameHUD hud;
+	
 	//
 	// Textures
 	//
@@ -359,7 +361,7 @@ public class OnlineGameActivity extends BaseGameActivity
 		scene.setOnSceneTouchListener(this);
 		scene.setTouchAreaBindingOnActionDownEnabled(true);
 
-		final GameHUD hud = new GameHUD(this.aimButtonTexture, this.whiteFlagButtonTexture, this.statusFont, this.playerNameFont);
+		hud = new GameHUD(this.aimButtonTexture, this.whiteFlagButtonTexture, this.statusFont, this.playerNameFont);
 		hud.setOnAimTouched(new Runnable() {
 			@Override
 			public void run() {
@@ -369,43 +371,7 @@ public class OnlineGameActivity extends BaseGameActivity
 		hud.setOnWhiteFlagTouched(new Runnable() {
 			@Override
 			public void run() {
-				handler.post(new Runnable() {
-					@Override
-					public void run() {
-						final Dialog dialog = new Dialog(OnlineGameActivity.this);
-						dialog.setContentView(R.layout.quit_dialog);
-						dialog.setTitle("Aufgeben?");
-						dialog.setCancelable(true);
-						
-						//TextView text = (TextView) dialog.findViewById(R.id.lBeendenFrage);
-						Button bCancel = (Button) dialog
-								.findViewById(R.id.bCancel);
-						Button bResign = (Button) dialog
-								.findViewById(R.id.bResign);
-
-						bCancel.setOnClickListener(new View.OnClickListener() {
-
-							@Override
-							public void onClick(View v) {
-								dialog.dismiss();
-							}
-						});
-						bResign.setOnClickListener(new View.OnClickListener() {
-
-							@Override
-							public void onClick(View v) {
-								hud.setStatus("Du hast aufgegeben!");
-								webSocketConnection.sendTextMessage(OnlineGameActivity.JSON_LOSE);
-								dialog.dismiss();
-								Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-								intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-								startActivity(intent);
-							}
-						});
-						dialog.show();
-					}
-				});
-				
+				resign();
 			}
 		});
 
@@ -569,5 +535,54 @@ public class OnlineGameActivity extends BaseGameActivity
 		final float zoomFactor = camera.getZoomFactor();
 
 		camera.offsetCenter(-pDistanceX / zoomFactor, -pDistanceY / zoomFactor);
+	}
+
+	private void resign() {
+		handler.post(new Runnable() {
+			@Override
+			public void run() {
+				final Dialog dialog = new Dialog(OnlineGameActivity.this);
+				dialog.setContentView(R.layout.quit_dialog);
+				dialog.setTitle("Aufgeben?");
+				dialog.setCancelable(true);
+				
+				//TextView text = (TextView) dialog.findViewById(R.id.lBeendenFrage);
+				Button bCancel = (Button) dialog
+						.findViewById(R.id.bCancel);
+				Button bResign = (Button) dialog
+						.findViewById(R.id.bResign);
+
+				bCancel.setOnClickListener(new View.OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						dialog.dismiss();
+					}
+				});
+				bResign.setOnClickListener(new View.OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						hud.setStatus("Du hast aufgegeben!");
+						webSocketConnection.sendTextMessage(OnlineGameActivity.JSON_LOSE);
+						dialog.dismiss();
+						Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						startActivity(intent);
+					}
+				});
+				dialog.show();
+			}
+		});
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event)  {
+	    if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+	        resign();
+	        return true;
+	    }
+	    return super.onKeyDown(keyCode, event);
+
 	}
 }

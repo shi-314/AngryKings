@@ -51,6 +51,7 @@ public class MainActivity extends Activity {
 					} else if (jObj.getInt("action") == Action.Server.UNKNOWN_USER) {
 						Intent intent = new Intent(MainActivity.this,
 								LogInActivity.class);
+						intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 						startActivity(intent);
 					}
 				} catch (JSONException e) {
@@ -90,6 +91,7 @@ public class MainActivity extends Activity {
 				Intent intent = new Intent(getApplicationContext(),
 						LobbyActivity.class);
 				intent.putExtra("username", username);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);
 			}
 
@@ -100,6 +102,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				Intent intent = new Intent(getApplicationContext(), IntroActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 				startActivity(intent);
 			}
 			

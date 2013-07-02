@@ -398,6 +398,7 @@ public class OnlineGameActivity extends BaseGameActivity
 								webSocketConnection.sendTextMessage(OnlineGameActivity.JSON_LOSE);
 								dialog.dismiss();
 								Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+								intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 								startActivity(intent);
 							}
 						});

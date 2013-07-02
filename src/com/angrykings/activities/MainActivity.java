@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -45,14 +44,13 @@ public class MainActivity extends Activity {
 			public void onMessage(String payload) {
 				try {
 					JSONObject jObj = new JSONObject(payload);
-					if (jObj.getInt("action") == Action.Server.KNOWN_USER) {
+					if (jObj.getInt("action") == Action.Server.KNOWN_USER || jObj.getInt("action") == Action.Server.SEND_NAME) {
 						username = jObj.getString("name");
 						bLobby.setText(getString(R.string.lobbyButton));
 						bLobby.setEnabled(true);
 					} else if (jObj.getInt("action") == Action.Server.UNKNOWN_USER) {
 						Intent intent = new Intent(MainActivity.this,
 								LogInActivity.class);
-						Log.d("test", "hier sind wir drin");
 						startActivity(intent);
 					}
 				} catch (JSONException e) {
@@ -73,8 +71,10 @@ public class MainActivity extends Activity {
 				}
 			});
 		}else{
-			bLobby.setText(getString(R.string.lobbyButton));
-			bLobby.setEnabled(true);
+			ServerConnection
+			.getInstance()
+			.getConnection()
+			.sendTextMessage(new ServerJSONBuilder().create(Action.Client.GET_NAME).build());				
 		}
 
 

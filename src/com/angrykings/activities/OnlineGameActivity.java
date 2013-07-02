@@ -397,8 +397,8 @@ public class OnlineGameActivity extends BaseGameActivity
 								hud.setStatus("Du hast aufgegeben!");
 								webSocketConnection.sendTextMessage(OnlineGameActivity.JSON_LOSE);
 								dialog.dismiss();
-//								Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//								startActivity(intent);
+								Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+								startActivity(intent);
 							}
 						});
 						dialog.show();

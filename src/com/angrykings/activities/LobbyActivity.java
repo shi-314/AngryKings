@@ -155,9 +155,10 @@ public class LobbyActivity extends ListActivity {
 					} else {
 						dialog.dismiss();
 						Intent intent = new Intent(LobbyActivity.this, OnlineGameActivity.class);
-						intent.putExtra("myTurn", false);
-						intent.putExtra("username", username);
-						intent.putExtra("partnername", partnerName);
+						intent.putExtra("myTurn", false)
+						.putExtra("username", username)
+						.putExtra("partnername", partnerName)
+						.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 						startActivity(intent);
 					}
 				} catch (final JSONException e) {

@@ -24,6 +24,9 @@ public class Roof extends PhysicalEntity {
 
 	public final static FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.7f, 0.2f, 0.5f);
 
+	private final static float LINEAR_DAMPING = 0.1f;
+	private final static float ANGULAR_DAMPING = 0.1f;
+
 	public Roof(TextureRegion roofTexture, float x, float y) {
 		this.roofTexture = roofTexture;
 
@@ -62,7 +65,12 @@ public class Roof extends PhysicalEntity {
 				new Vector2(left, bottom)
 		};
 
-		return PhysicsFactory.createPolygonBody(pPhysicsWorld, pAreaShape, vertices, pBodyType, pFixtureDef);
+		Body body = PhysicsFactory.createPolygonBody(pPhysicsWorld, pAreaShape, vertices, pBodyType, pFixtureDef);
+
+		body.setLinearDamping(Roof.LINEAR_DAMPING);
+		body.setAngularDamping(Roof.ANGULAR_DAMPING);
+
+		return  body;
 	}
 
 	@Override

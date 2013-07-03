@@ -19,6 +19,9 @@ public class Wood extends PhysicalEntity {
 
 	public final static FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.5f, 0.05f, 0.8f);
 
+	private final static float LINEAR_DAMPING = 0.1f;
+	private final static float ANGULAR_DAMPING = 0.1f;
+
 	public Wood(TextureRegion woodTexture, float x, float y) {
 		this.woodTexture = woodTexture;
 
@@ -36,6 +39,9 @@ public class Wood extends PhysicalEntity {
 				BodyDef.BodyType.DynamicBody,
 				Wood.FIXTURE_DEF
 		);
+
+		this.woodBody.setLinearDamping(Wood.LINEAR_DAMPING);
+		this.woodBody.setAngularDamping(Wood.ANGULAR_DAMPING);
 	}
 
 	@Override

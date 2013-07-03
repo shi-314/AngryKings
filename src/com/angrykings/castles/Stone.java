@@ -25,8 +25,10 @@ public class Stone extends PhysicalEntity {
 
 	public final static FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(1.0f, 0.1f, 0.9f);
 
-	public Stone(TiledTextureRegion stoneTexture, float x, float y) {
+	private final static float LINEAR_DAMPING = 0.1f;
+	private final static float ANGULAR_DAMPING = 0.1f;
 
+	public Stone(TiledTextureRegion stoneTexture, float x, float y) {
 		this.stoneTexture = stoneTexture;
 		GameContext gc = GameContext.getInstance();
 
@@ -45,6 +47,9 @@ public class Stone extends PhysicalEntity {
 				BodyDef.BodyType.DynamicBody,
 				Stone.FIXTURE_DEF
 		);
+
+		this.stoneBody.setLinearDamping(Stone.LINEAR_DAMPING);
+		this.stoneBody.setAngularDamping(Stone.ANGULAR_DAMPING);
 	}
 
 

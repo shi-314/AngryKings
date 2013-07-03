@@ -2,6 +2,7 @@ package com.angrykings.castles;
 
 import java.util.ArrayList;
 
+import com.angrykings.PhysicsManager;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 
@@ -46,12 +47,12 @@ public class Castle {
 		GameContext gc = GameContext.getInstance();
 
 		Wood wood = new Wood(this.woodTexture, x, y);
-		
+
 		wood.registerPhysicsConnector();
-		//wood.getAreaShape().setRotation(90f);
 		gc.getScene().attachChild(wood.getAreaShape());
-		
+
 		this.blocks.add(wood);
+		PhysicsManager.getInstance().addPhysicalEntity(wood);
 	}
 
 	private void addStone(float x, float y) {
@@ -62,6 +63,7 @@ public class Castle {
 		gc.getScene().attachChild(stone.getAreaShape());
 
 		this.blocks.add(stone);
+		PhysicsManager.getInstance().addPhysicalEntity(stone);
 	}
 
 	private void addRoof(float x, float y) {
@@ -72,6 +74,7 @@ public class Castle {
 		gc.getScene().attachChild(roof.getAreaShape());
 
 		this.blocks.add(roof);
+		PhysicsManager.getInstance().addPhysicalEntity(roof);
 	}
 
 	public float getHeight() {
@@ -90,30 +93,9 @@ public class Castle {
 	}
 
 	private void build() {
-
-
-//		float leftBottomStoneX = x + stoneTexture.getWidth() / 2;
-//		float leftBottomStoneY = y - stoneTexture.getHeight() / 2;
-//		float rightBottomStoneX = leftBottomStoneX + woodTexture.getWidth() - stoneTexture.getWidth();
-//		float middleWoodX = leftBottomStoneX + woodTexture.getWidth() / 2 - stoneTexture.getWidth() / 2;
-//		float middleWoodY = leftBottomStoneY - woodTexture.getHeight() / 2 - stoneTexture.getHeight() / 2;
-//		
-//		float topStoneY = middleWoodY - stoneTexture.getHeight() / 2 - woodTexture.getHeight() / 2;
-//		float topWoodY = topStoneY - woodTexture.getHeight() / 2 - stoneTexture.getHeight() / 2;
-//		float roofX = leftBottomStoneX + woodTexture.getWidth() / 2 - roofTexture.getWidth() / 2;
-//		float roofY = topWoodY - roofTexture.getHeight() / 2  - woodTexture.getHeight() / 2;
-//
-//		this.addStone(leftBottomStoneX, leftBottomStoneY);
-//		this.addStone(rightBottomStoneX, leftBottomStoneY);
-//		this.addWood(middleWoodX, middleWoodY);
-//		this.addStone(leftBottomStoneX, topStoneY);
-//		this.addStone(rightBottomStoneX, topStoneY);
-//		this.addWood(middleWoodX, topWoodY);
-//		this.addRoof(roofX, roofY);
-		
 		float bottomStone1X = x + stoneTexture.getWidth() / 2;
 		float bottomStone1Y = y - stoneTexture.getHeight() / 2;
-		float bottomStone2X = bottomStone1X + woodTexture.getWidth() - stoneTexture.getWidth() / 2; 
+		float bottomStone2X = bottomStone1X + woodTexture.getWidth() - stoneTexture.getWidth() / 2;
 		float bottomStone3X = bottomStone2X + woodTexture.getWidth() - stoneTexture.getWidth() / 2;
 		float row2Stone1Y = bottomStone1Y - stoneTexture.getHeight();
 		float row3Wood1X = bottomStone1X + woodTexture.getWidth() / 2 - stoneTexture.getWidth() / 2;
@@ -129,7 +111,7 @@ public class Castle {
 		float row8Stone1Y = row7Wood1Y - stoneTexture.getHeight();
 		float row9Stone1Y = row8Stone1Y - stoneTexture.getHeight();
 		float row10roof1Y = row9Stone1Y - roofTexture.getHeight();
-		
+
 		this.addStone(bottomStone1X, bottomStone1Y);
 		this.addStone(bottomStone2X, bottomStone1Y);
 		this.addStone(bottomStone3X, bottomStone1Y);
@@ -150,7 +132,6 @@ public class Castle {
 		this.addStone(row4Stone2X, row9Stone1Y);
 		this.addRoof(row4Stone1X, row10roof1Y);
 		this.addRoof(row4Stone2X, row10roof1Y);
-		
 	}
 
 	public ArrayList<PhysicalEntity> getBlocks() {

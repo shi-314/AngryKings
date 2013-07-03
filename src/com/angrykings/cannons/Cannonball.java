@@ -24,12 +24,17 @@ public class Cannonball extends PhysicalEntity {
 	private final FixtureDef ballFixture;
 	private final Sprite ballSprite;
 
+	private static final float DEFAULT_LINEAR_DAMPING = 0.05f;
+	private static final float DEFAULT_ANGULAR_DAMPING = 0.09f;
+
+	private static final FixtureDef DEFAULT_FIXTURE_DEF = PhysicsFactory.createFixtureDef(5.5f, 0.1f, 0.9f);
+
 	public Cannonball(TextureRegion ballTexture, float x, float y) {
-		this(ballTexture, 5.5f, 0.1f, 0.9f, x, y);
+		this(ballTexture, x, y, Cannonball.DEFAULT_FIXTURE_DEF, Cannonball.DEFAULT_LINEAR_DAMPING, Cannonball.DEFAULT_ANGULAR_DAMPING);
 		this.autoRemove = true;
 	}
 
-	public Cannonball(TextureRegion ballTexture, float density, float elasticity, float friction, float x, float y) {
+	public Cannonball(TextureRegion ballTexture, float x, float y, FixtureDef fixtureDef, float linearDamping, float angularDamping) {
 		GameContext gc = GameContext.getInstance();
 
 		this.ballTexture = ballTexture;
@@ -41,7 +46,7 @@ public class Cannonball extends PhysicalEntity {
 				gc.getVboManager()
 		);
 
-		this.ballFixture = PhysicsFactory.createFixtureDef(density, elasticity, friction);
+		this.ballFixture = fixtureDef;
 
 		this.ballBody = PhysicsFactory.createCircleBody(
 				gc.getPhysicsWorld(),
@@ -50,8 +55,8 @@ public class Cannonball extends PhysicalEntity {
 				this.ballFixture
 		);
 
-		this.ballBody.setLinearDamping(0.05f);
-		this.ballBody.setAngularDamping(0.9f);
+		this.ballBody.setLinearDamping(linearDamping);
+		this.ballBody.setAngularDamping(angularDamping);
 	}
 
 	@Override

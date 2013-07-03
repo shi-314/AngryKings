@@ -1,7 +1,27 @@
 package com.angrykings.activities;
 
+import android.app.Dialog;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.hardware.SensorManager;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.Button;
+import com.angrykings.*;
+import com.angrykings.cannons.Cannon;
+import com.angrykings.cannons.Cannonball;
+import com.angrykings.castles.Castle;
+import com.angrykings.maps.BasicMap;
+import com.angrykings.utils.ServerJSONBuilder;
+import com.badlogic.gdx.math.Vector2;
+import de.tavendo.autobahn.WebSocketConnection;
 import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.engine.handler.IUpdateHandler;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
@@ -10,7 +30,6 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.RepeatingSpriteBackground;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
-import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.detector.PinchZoomDetector;
 import org.andengine.input.touch.detector.PinchZoomDetector.IPinchZoomDetectorListener;
@@ -27,34 +46,9 @@ import org.andengine.opengl.texture.atlas.bitmap.source.AssetBitmapTextureAtlasS
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.ui.activity.BaseGameActivity;
+import org.andengine.util.debug.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import android.app.Dialog;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.hardware.SensorManager;
-import android.os.Bundle;
-import android.os.Handler;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Button;
-
-import com.angrykings.Action;
-import com.angrykings.GameConfig;
-import com.angrykings.GameContext;
-import com.angrykings.GameHUD;
-import com.angrykings.PhysicsManager;
-import com.angrykings.R;
-import com.angrykings.ServerConnection;
-import com.angrykings.cannons.Cannon;
-import com.angrykings.castles.Castle;
-import com.angrykings.maps.BasicMap;
-import com.angrykings.utils.ServerJSONBuilder;
-import com.badlogic.gdx.math.Vector2;
-
-import de.tavendo.autobahn.WebSocketConnection;
 
 /**
  * OnlineGameActivity
@@ -68,7 +62,7 @@ public class OnlineGameActivity extends BaseGameActivity
 	private GameContext gc;
 	private Handler handler;
 	private GameHUD hud;
-	
+
 	//
 	// Textures
 	//
@@ -114,7 +108,6 @@ public class OnlineGameActivity extends BaseGameActivity
 	private int round;
 	boolean turnSent;
 	int aimX, aimY;
-
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
@@ -247,11 +240,28 @@ public class OnlineGameActivity extends BaseGameActivity
 								gc.getHud().setStatus("enemy: x="+x+", y="+y);
 
 								OnlineGameActivity.this.runOnUpdateThread(new Runnable() {
-									
 									@Override
 									public void run() {
+										PhysicsManager.getInstance().setFreeze(false);
 										OnlineGameActivity.this.enemyCannon.pointAt(x, y);
-										OnlineGameActivity.this.enemyCannon.fire(GameConfig.CANNON_FORCE);										
+
+										final Cannonball ball = OnlineGameActivity.this.enemyCannon.fire(GameConfig.CANNON_FORCE);
+
+										if(GameConfig.USE_FIXED_CANNONBALL_TIME) {
+											getEngine().registerUpdateHandler(new TimerHandler(GameConfig.CANNONBALL_TIME_SEC, new ITimerCallback() {
+												@Override
+												public void onTimePassed(TimerHandler pTimerHandler) {
+													ball.remove();
+												}
+											}));
+										}
+
+										ball.setOnRemove(new Runnable() {
+											@Override
+											public void run() {
+												PhysicsManager.getInstance().setFreeze(true);
+											}
+										});
 									}
 								});
 								turnSent = false;
@@ -264,7 +274,7 @@ public class OnlineGameActivity extends BaseGameActivity
 								gc.getHud().setStatus("Du hast gewonnen!");
 							}
 						} catch (JSONException e) {
-
+							// TODO: Catch the exception
 						}
 					}
 				}
@@ -289,10 +299,10 @@ public class OnlineGameActivity extends BaseGameActivity
 		// initialize the physics engine
 		//
 
-		PhysicsWorld physicsWorld = new FixedStepPhysicsWorld(
+		FixedStepPhysicsWorld physicsWorld = new FixedStepPhysicsWorld(
 				GameConfig.PHYSICS_STEPS_PER_SEC,
 				new Vector2(0, SensorManager.GRAVITY_EARTH),
-				true,
+				false,
 				GameConfig.PHYSICS_VELOCITY_ITERATION,
 				GameConfig.PHYSICS_POSITION_ITERATION
 		);
@@ -351,7 +361,6 @@ public class OnlineGameActivity extends BaseGameActivity
 		this.leftCastle = new Castle(-1500, BasicMap.GROUND_Y, this.stoneTexture, this.roofTexture, this.woodTexture);
 		this.rightCastle = new Castle(1800, BasicMap.GROUND_Y, this.stoneTexture, this.roofTexture, this.woodTexture);
 
-
 		//
 		// initialize navigation
 		//
@@ -383,10 +392,21 @@ public class OnlineGameActivity extends BaseGameActivity
 		final float initialRightCastleHeight = rightCastle.getInitialHeight();
 		final boolean left = amILeft;
 
+		hud.setLeftPlayerName(leftPlayerName);
+		hud.setRightPlayerName(rightPlayerName);
+
+		Debug.d("left player name: "+leftPlayerName);
+		Debug.d("right player name: " + rightPlayerName);
+
+		if(amILeft){
+			hud.setStatus("Du bist dran!");
+		}else{
+			hud.setStatus("Gegner ist dran!");
+		}
+
 		scene.registerUpdateHandler(new IUpdateHandler() {
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
-
 				float leftLife = leftCastle.getHeight()/initialLeftCastleHeight;
 				float rightLife = rightCastle.getHeight()/initialRightCastleHeight;
 
@@ -404,18 +424,13 @@ public class OnlineGameActivity extends BaseGameActivity
 
 			}
 		});
-		
-		hud.setLeftPlayerName(leftPlayerName);
-		hud.setRightPlayerName(rightPlayerName);
-		
-		if(amILeft){
-			hud.setStatus("Du bist dran!");
-		}else{
-			hud.setStatus("Gegner ist dran!");
-		}
 
 		scene.registerUpdateHandler(physicsWorld);
-		scene.registerUpdateHandler(PhysicsManager.getInstance());
+
+		if(!GameConfig.USE_FIXED_CANNONBALL_TIME)
+			scene.registerUpdateHandler(PhysicsManager.getInstance());
+
+		PhysicsManager.getInstance().setFreeze(true);
 
 		pOnCreateSceneCallback.onCreateSceneFinished(scene);
 	}
@@ -433,6 +448,16 @@ public class OnlineGameActivity extends BaseGameActivity
 			return false;
 
 		if(this.isAiming) {
+
+			//
+			// aim and fire
+			//
+
+			if(!PhysicsManager.getInstance().isReady()) {
+				gc.getHud().setStatus("Wait for physics...");
+				return true;
+			}
+
 			float x = pSceneTouchEvent.getX();
 			float y = pSceneTouchEvent.getY();
 
@@ -450,10 +475,28 @@ public class OnlineGameActivity extends BaseGameActivity
 				if (!turnSent && round % 2 == 0) {
 					this.round++;
 					this.runOnUpdateThread(new Runnable() {
-						
+
 						@Override
 						public void run() {
-							OnlineGameActivity.this.cannon.fire(GameConfig.CANNON_FORCE);							
+							PhysicsManager.getInstance().setFreeze(false);
+
+							final Cannonball ball = OnlineGameActivity.this.cannon.fire(GameConfig.CANNON_FORCE);
+
+							if(GameConfig.USE_FIXED_CANNONBALL_TIME) {
+								getEngine().registerUpdateHandler(new TimerHandler(GameConfig.CANNONBALL_TIME_SEC, new ITimerCallback() {
+									@Override
+									public void onTimePassed(TimerHandler pTimerHandler) {
+										ball.remove();
+									}
+								}));
+							}
+
+							ball.setOnRemove(new Runnable() {
+								@Override
+								public void run() {
+									PhysicsManager.getInstance().setFreeze(true);
+								}
+							});
 						}
 					});
 
@@ -467,7 +510,13 @@ public class OnlineGameActivity extends BaseGameActivity
 					this.turnSent = true;
 				}
 			}
+
 		}else{
+
+			//
+			// pinch and zoom
+			//
+
 			if(pSceneTouchEvent.isActionDown()) {
 				this.scrollDetector.setEnabled(true);
 			}
@@ -479,6 +528,7 @@ public class OnlineGameActivity extends BaseGameActivity
 			}else{
 				this.scrollDetector.onTouchEvent(pSceneTouchEvent);
 			}
+
 		}
 
 		return true;
@@ -547,7 +597,7 @@ public class OnlineGameActivity extends BaseGameActivity
 				//dialog.setTitle("Aufgeben?");
 				dialog.setCancelable(true);
 				dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-				
+
 				//TextView text = (TextView) dialog.findViewById(R.id.lBeendenFrage);
 				Button bCancel = (Button) dialog
 						.findViewById(R.id.bCancel);
@@ -577,7 +627,7 @@ public class OnlineGameActivity extends BaseGameActivity
 			}
 		});
 	}
-	
+
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event)  {
 	    if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {

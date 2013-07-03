@@ -1,12 +1,12 @@
 package com.angrykings;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
+import com.angrykings.maps.BasicMap;
+import com.badlogic.gdx.physics.box2d.Body;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.util.debug.Debug;
 
-import com.badlogic.gdx.physics.box2d.Body;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * PhysicsManager
@@ -18,6 +18,8 @@ import com.badlogic.gdx.physics.box2d.Body;
  */
 public class PhysicsManager implements IUpdateHandler {
 	private static PhysicsManager instance = null;
+	private boolean ready;
+	private boolean freezed;
 
 	public static PhysicsManager getInstance() {
 		if(instance == null)
@@ -26,11 +28,12 @@ public class PhysicsManager implements IUpdateHandler {
 		return instance;
 	}
 
-	private static final float MIN_LINEAR_VELOCITY = 1e-3f;
-	private static final float MIN_ANGULAR_VELOCITY = 1e-2f;
+	private static final float MIN_LINEAR_VELOCITY = 1e-2f;
+	private static final float MIN_ANGULAR_VELOCITY = 1e-1f;
 	private ArrayList<PhysicalEntity> physicalEntities;
 
 	public PhysicsManager() {
+		this.ready = true;
 		this.physicalEntities = new ArrayList<PhysicalEntity>();
 	}
 
@@ -40,6 +43,8 @@ public class PhysicsManager implements IUpdateHandler {
 
 	@Override
 	public void onUpdate(float pSecondsElapsed) {
+		this.ready = true;
+
 		Iterator<PhysicalEntity> it = this.physicalEntities.iterator();
 		while(it.hasNext()) {
 			PhysicalEntity entity = it.next();
@@ -59,30 +64,43 @@ public class PhysicsManager implements IUpdateHandler {
 				Debug.d("remove physical entity: lin: " + b.getLinearVelocity().len() + " angular: " + b.getAngularVelocity());
 				entity.remove();
 				it.remove();
+			}else{
+				Debug.d("not ready: lin="+linearVelocity+", ang="+angularVelocity);
+				this.ready = false;
+			}
+
+			if(entity.getAreaShape().getY() > BasicMap.GROUND_Y + 100) {
+				Debug.d("remove physical entity (seems to have fallen down of the 'ground'): y " + entity.getAreaShape().getY());
+				entity.remove();
+				it.remove();
 			}
 		}
 	}
 
-	/*
-	public void cleanup() {
-		GameContext gc = GameContext.getInstance();
-
-		Debug.d("PhysicsManager: cleanup");
+	public void setFreeze(boolean freeze) {
+		Debug.d((freeze ? "" : "un") + "freeze");
 
 		Iterator<PhysicalEntity> it = this.physicalEntities.iterator();
 		while(it.hasNext()) {
 			PhysicalEntity entity = it.next();
 			Body b = entity.getBody();
 
-			if(!entity.isAutoRemoveEnabled())
+			// ignore auto removable entities like cannon balls -> just freeze the castle blocks
+
+			if(entity.isAutoRemoveEnabled())
 				continue;
 
-			Debug.d("remove physical entity: lin: " + b.getLinearVelocity().len() + " angular: " + b.getAngularVelocity());
-			entity.remove();
-			it.remove();
+			b.setActive(!freeze);
 		}
+
+		GameContext.getInstance().getPhysicsWorld().clearForces();
+
+		this.freezed = freeze;
 	}
-	*/
+
+	public boolean isReady() {
+		return this.ready && (GameConfig.USE_FIXED_CANNONBALL_TIME ? this.freezed : true);
+	}
 
 	public void setEntitiesActive(boolean status) {
 		Iterator<PhysicalEntity> it = this.physicalEntities.iterator();

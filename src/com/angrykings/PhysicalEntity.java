@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.Body;
  * @date 14.06.13
  */
 public abstract class PhysicalEntity {
+	private Runnable onRemove = null;
 	protected boolean autoRemove = false;
 
 	public abstract Body getBody();
@@ -30,7 +31,14 @@ public abstract class PhysicalEntity {
 		return this.autoRemove;
 	}
 
+	public void setOnRemove(Runnable onRemove) {
+		this.onRemove = onRemove;
+	}
+
 	public void remove() {
+		if(this.onRemove != null)
+			this.onRemove.run();
+
 		// TODO this needs to be run in runOnUpdateThread(), dont know why it is not crashing right now
 		GameContext gc = GameContext.getInstance();
 

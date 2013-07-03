@@ -99,16 +99,16 @@ public class Castle {
 		float bottomStone3X = bottomStone2X + woodTexture.getWidth() - stoneTexture.getWidth() / 2;
 		float row2Stone1Y = bottomStone1Y - stoneTexture.getHeight();
 		float row3Wood1X = bottomStone1X + woodTexture.getWidth() / 2 - stoneTexture.getWidth() / 2;
-		float row3Wood1Y = row2Stone1Y - woodTexture.getHeight();
+		float row3Wood1Y = row2Stone1Y - woodTexture.getHeight() / 2 - stoneTexture.getHeight() / 2;
 		float row3Wood2X = row3Wood1X + woodTexture.getWidth();
 		float row4Stone1X = bottomStone1X + woodTexture.getWidth() / 2;
-		float row4Stone1Y = row3Wood1Y - stoneTexture.getHeight();
+		float row4Stone1Y = row3Wood1Y - stoneTexture.getHeight() / 2 - woodTexture.getHeight() / 2;
 		float row4Stone2X = row4Stone1X + woodTexture.getWidth() - stoneTexture.getWidth();
 		float row5Wood1X = row4Stone1X + woodTexture.getWidth() / 2 - stoneTexture.getWidth() / 2;
-		float row5Wood1Y = row4Stone1Y - woodTexture.getHeight();
-		float row6Stone1Y = row5Wood1Y - stoneTexture.getHeight();
-		float row7Wood1Y = row6Stone1Y - woodTexture.getHeight();
-		float row8Stone1Y = row7Wood1Y - stoneTexture.getHeight();
+		float row5Wood1Y = row4Stone1Y - woodTexture.getHeight() / 2 - stoneTexture.getHeight() / 2;
+		float row6Stone1Y = row5Wood1Y - stoneTexture.getHeight() / 2 - woodTexture.getHeight() / 2;
+		float row7Wood1Y = row6Stone1Y - woodTexture.getHeight() / 2 - stoneTexture.getHeight() / 2;
+		float row8Stone1Y = row7Wood1Y - stoneTexture.getHeight() / 2 - woodTexture.getHeight() / 2;
 		float row9Stone1Y = row8Stone1Y - stoneTexture.getHeight();
 		float row10roof1Y = row9Stone1Y - roofTexture.getHeight();
 

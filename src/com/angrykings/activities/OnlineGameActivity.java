@@ -33,6 +33,7 @@ import org.json.JSONObject;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -543,8 +544,9 @@ public class OnlineGameActivity extends BaseGameActivity
 			public void run() {
 				final Dialog dialog = new Dialog(OnlineGameActivity.this);
 				dialog.setContentView(R.layout.quit_dialog);
-				dialog.setTitle("Aufgeben?");
+				//dialog.setTitle("Aufgeben?");
 				dialog.setCancelable(true);
+				dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 				
 				//TextView text = (TextView) dialog.findViewById(R.id.lBeendenFrage);
 				Button bCancel = (Button) dialog

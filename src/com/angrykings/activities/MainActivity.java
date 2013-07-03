@@ -35,7 +35,8 @@ public class MainActivity extends Activity {
 		bIntro = (Button) findViewById(R.id.introButton);
 
 		bLobby = (Button) findViewById(R.id.lobbyButton);
-		bLobby.setText(this.getString(R.string.waitForConnection));
+		bLobby.setBackgroundResource(R.drawable.verbinde_button);
+		//bLobby.setText(this.getString(R.string.waitForConnection));
 		bLobby.setEnabled(false);
 
 		ServerConnection.getInstance().setHandler(new OnMessageHandler() {
@@ -46,7 +47,8 @@ public class MainActivity extends Activity {
 					JSONObject jObj = new JSONObject(payload);
 					if (jObj.getInt("action") == Action.Server.KNOWN_USER || jObj.getInt("action") == Action.Server.SEND_NAME) {
 						username = jObj.getString("name");
-						bLobby.setText(getString(R.string.lobbyButton));
+						bLobby.setBackgroundResource(R.drawable.lobby_button);
+						//bLobby.setText(getString(R.string.lobbyButton));
 						bLobby.setEnabled(true);
 					} else if (jObj.getInt("action") == Action.Server.UNKNOWN_USER) {
 						Intent intent = new Intent(MainActivity.this,

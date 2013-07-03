@@ -315,8 +315,7 @@ public class LocalTestActivity extends BaseGameActivity implements
 						dialog.setTitle("Test");
 						dialog.setCancelable(true);
 
-						TextView text = (TextView) dialog
-								.findViewById(R.id.lBeendenFrage);
+						
 						Button button = (Button) dialog
 								.findViewById(R.id.bCancel);
 						Button button2 = (Button) dialog

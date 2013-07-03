@@ -60,7 +60,7 @@ public class LobbyActivity extends ListActivity {
 			@Override
 			public void onMessage(String payload) {
 				try {
-					JSONObject jObj = new JSONObject(payload);
+					final JSONObject jObj = new JSONObject(payload);
 					if (jObj.getInt("action") == Action.Server.REQUEST) {
 						new AlertDialog.Builder(LobbyActivity.this)
 								.setTitle("Request")
@@ -86,6 +86,13 @@ public class LobbyActivity extends ListActivity {
 												intent.putExtra("myTurn", true);
 												intent.putExtra("username",
 														username);
+												try {
+													intent.putExtra("partnername",
+															jObj.getString("partner"));
+												} catch (JSONException e) {
+													e.printStackTrace();
+													intent.putExtra("partnername","Partner");
+												}
 												startActivity(intent);
 											}
 										})

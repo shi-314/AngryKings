@@ -586,12 +586,20 @@ public class OnlineGameActivity extends BaseGameActivity implements
 												}
 											}));
 
-							ball.setOnRemove(new Runnable() {
-								@Override
-								public void run() {
-									onMyTurnEnd();
-								}
-							});
+							runOnUpdateThread(
+									new Runnable() {
+										@Override
+										public void run() {
+											ball.setOnRemove(new Runnable() {
+												@Override
+												public void run() {
+													onMyTurnEnd();
+												}
+											});
+										}
+									}
+							);
+
 						}
 					});
 
@@ -750,8 +758,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		// send castle block positions
 		//
 
-		ServerJSONBuilder query = new ServerJSONBuilder().create(
-				Action.Client.END_TURN).entities();
+		ServerJSONBuilder query = new ServerJSONBuilder().create(Action.Client.END_TURN).entities();
 		String jsonStr = query.build();
 		this.webSocketConnection.sendTextMessage(jsonStr);
 

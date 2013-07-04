@@ -135,18 +135,14 @@ public class OnlineGameActivity extends BaseGameActivity
 
 					turnSent = false;
 
-				} else if (jObj.getInt("action") == Action.Server.PARTNER_LEFT) {
-
-					// partner has left the game
-
-					Intent intent = new Intent(OnlineGameActivity.this, LobbyActivity.class);
-					startActivity(intent);
-
-				} else if (jObj.getInt("action") == Action.Server.YOU_WIN) {
+				} else if (jObj.getInt("action") == Action.Server.YOU_WIN || jObj.getInt("action") == Action.Server.PARTNER_LEFT) {
 
 					// this client has won the game
 
-					gc.getHud().setStatus(getString(R.string.hasWon));
+					Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
+					intent.putExtra("hasWon", true);
+					intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+					startActivity(intent);
 					wonTheGame = true;
 
 				} else if (jObj.getInt("action") == Action.Server.END_TURN) {
@@ -455,6 +451,10 @@ public class OnlineGameActivity extends BaseGameActivity
 					gc.getHud().setStatus("Du hast verloren!");
 					gc.getHud().setStatus(getString(R.string.hasLost));
 					webSocketConnection.sendTextMessage(OnlineGameActivity.JSON_LOSE);
+					Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
+					intent.putExtra("hasWon", false);
+					intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+					startActivity(intent);
 				}
 			}
 
@@ -645,8 +645,9 @@ public class OnlineGameActivity extends BaseGameActivity
 						hud.setStatus(getString(R.string.youResigned));
 						webSocketConnection.sendTextMessage(OnlineGameActivity.JSON_LOSE);
 						dialog.dismiss();
-						Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
+						intent.putExtra("hasWon", false);
+						intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 						startActivity(intent);
 					}
 				});

@@ -329,6 +329,8 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 		gc = GameContext.getInstance();
 
+		PhysicsManager.getInstance().clearEntities();
+
 		//
 		// initialize network
 		//
@@ -586,20 +588,12 @@ public class OnlineGameActivity extends BaseGameActivity implements
 												}
 											}));
 
-							runOnUpdateThread(
-									new Runnable() {
-										@Override
-										public void run() {
-											ball.setOnRemove(new Runnable() {
-												@Override
-												public void run() {
-													onMyTurnEnd();
-												}
-											});
-										}
-									}
-							);
-
+							ball.setOnRemove(new Runnable() {
+								@Override
+								public void run() {
+									onMyTurnEnd();
+								}
+							});
 						}
 					});
 

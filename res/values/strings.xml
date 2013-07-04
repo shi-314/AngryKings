@@ -16,5 +16,6 @@
     <string name="hasLost">Du hast verloren!</string>
 	<string name="yourTurn">Du bist dran!</string>
 	<string name="enemyTurn">Dein Gegner ist dran!</string>
+	<string name="youResigned">Du hast aufgegeben :(</string>
 
 </resources>

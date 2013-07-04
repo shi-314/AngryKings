@@ -1,13 +1,5 @@
 package com.angrykings.castles;
 
-import static org.andengine.extension.physics.box2d.util.constants.PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
-
-import org.andengine.entity.shape.IAreaShape;
-import org.andengine.entity.sprite.Sprite;
-import org.andengine.extension.physics.box2d.PhysicsFactory;
-import org.andengine.extension.physics.box2d.PhysicsWorld;
-import org.andengine.opengl.texture.region.TextureRegion;
-
 import com.angrykings.GameContext;
 import com.angrykings.PhysicalEntity;
 import com.badlogic.gdx.math.Vector2;
@@ -15,6 +7,13 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import org.andengine.entity.shape.IAreaShape;
+import org.andengine.entity.sprite.Sprite;
+import org.andengine.extension.physics.box2d.PhysicsFactory;
+import org.andengine.extension.physics.box2d.PhysicsWorld;
+import org.andengine.opengl.texture.region.TextureRegion;
+
+import static org.andengine.extension.physics.box2d.util.constants.PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
 
 public class Roof extends PhysicalEntity {
 
@@ -22,7 +21,7 @@ public class Roof extends PhysicalEntity {
 	protected final Sprite roofSprite;
 	protected final Body roofBody;
 
-	public final static FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.7f, 0.2f, 0.5f);
+	public final static FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.4f, 0.2f, 0.5f);
 
 	private final static float LINEAR_DAMPING = 0.1f;
 	private final static float ANGULAR_DAMPING = 0.1f;

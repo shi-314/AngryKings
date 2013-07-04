@@ -1,15 +1,14 @@
 package com.angrykings.castles;
 
-import org.andengine.entity.shape.IAreaShape;
-import org.andengine.entity.sprite.AnimatedSprite;
-import org.andengine.extension.physics.box2d.PhysicsFactory;
-import org.andengine.opengl.texture.region.TiledTextureRegion;
-
 import com.angrykings.GameContext;
 import com.angrykings.PhysicalEntity;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import org.andengine.entity.shape.IAreaShape;
+import org.andengine.entity.sprite.AnimatedSprite;
+import org.andengine.extension.physics.box2d.PhysicsFactory;
+import org.andengine.opengl.texture.region.TiledTextureRegion;
 
 /**
  * CastleBlock
@@ -23,7 +22,7 @@ public class Stone extends PhysicalEntity {
 	protected AnimatedSprite stoneSprite;
 	protected final Body stoneBody;
 
-	public final static FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(1.0f, 0.1f, 0.9f);
+	public final static FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.7f, 0.1f, 0.9f);
 
 	private final static float LINEAR_DAMPING = 0.1f;
 	private final static float ANGULAR_DAMPING = 0.1f;

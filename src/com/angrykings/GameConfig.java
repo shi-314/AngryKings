@@ -29,6 +29,5 @@ public final class GameConfig {
 	public static final int PHYSICS_POSITION_ITERATION = 3;
 
 	public static final float CANNON_FORCE = 300;
-
 	public static final float CANNONBALL_TIME_SEC = 10.0f;
 }

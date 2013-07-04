@@ -115,6 +115,7 @@ public class OnlineGameActivity extends BaseGameActivity
 	boolean receivedEndTurn;
 	int aimX, aimY;
 	String myName, enemyName;
+	boolean wonTheGame = false;
 
 	private class AngryKingsMessageHandler extends ServerConnection.OnMessageHandler {
 		@Override
@@ -146,6 +147,7 @@ public class OnlineGameActivity extends BaseGameActivity
 					// this client has won the game
 
 					gc.getHud().setStatus(getString(R.string.hasWon));
+					wonTheGame = true;
 
 				} else if (jObj.getInt("action") == Action.Server.END_TURN) {
 
@@ -440,11 +442,11 @@ public class OnlineGameActivity extends BaseGameActivity
 		scene.registerUpdateHandler(new IUpdateHandler() {
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
-				float leftLife = leftCastle.getHeight() / initialLeftCastleHeight;
-				float rightLife = rightCastle.getHeight() / initialRightCastleHeight;
+				float leftLife = leftCastle.getHeight() / (initialLeftCastleHeight * 2);
+				float rightLife = rightCastle.getHeight() / (initialRightCastleHeight * 2);
 
-				hud.getLeftLifeBar().setValue(leftLife);
-				hud.getRightLifeBar().setValue(rightLife);
+				hud.getLeftLifeBar().setValue(leftLife * 2);
+				hud.getRightLifeBar().setValue(rightLife * 2);
 
 				if (left && leftLife < 0.3f || !left && rightLife < 0.3f) {
 					gc.getHud().setStatus(getString(R.string.hasLost));
@@ -636,7 +638,7 @@ public class OnlineGameActivity extends BaseGameActivity
 				bResign.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						hud.setStatus("Du hast aufgegeben!");
+						hud.setStatus(getString(R.string.youResigned));
 						webSocketConnection.sendTextMessage(OnlineGameActivity.JSON_LOSE);
 						dialog.dismiss();
 						Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -701,7 +703,8 @@ public class OnlineGameActivity extends BaseGameActivity
 			PhysicsManager.getInstance().updateEntities(jsonEntities);
 			receivedEndTurn = true;
 
-			hud.setStatus(getString(R.string.yourTurn));
+			if(!this.wonTheGame)
+				hud.setStatus(getString(R.string.yourTurn));
 		}
 	}
 

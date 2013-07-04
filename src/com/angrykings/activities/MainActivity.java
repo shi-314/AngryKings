@@ -93,7 +93,7 @@ public class MainActivity extends Activity {
 				Intent intent = new Intent(getApplicationContext(),
 						LobbyActivity.class);
 				intent.putExtra("username", username);
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 				startActivity(intent);
 			}
 

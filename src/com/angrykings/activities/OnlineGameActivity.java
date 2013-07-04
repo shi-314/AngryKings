@@ -114,6 +114,55 @@ public class OnlineGameActivity extends BaseGameActivity
 	boolean turnSent;
 	boolean receivedEndTurn;
 	int aimX, aimY;
+	String myName, enemyName;
+
+	private class AngryKingsMessageHandler extends ServerConnection.OnMessageHandler {
+		@Override
+		public void onMessage(String payload) {
+			try {
+				JSONObject jObj = new JSONObject(payload);
+				if (jObj.getInt("action") == Action.Server.TURN && round % 2 == 1) {
+
+					// partner has made his turn
+
+					round++;
+
+					final int x = Integer.parseInt(jObj.getString("x"));
+					final int y = Integer.parseInt(jObj.getString("y"));
+
+					handlePartnerTurn(x, y);
+
+					turnSent = false;
+
+				} else if (jObj.getInt("action") == Action.Server.PARTNER_LEFT) {
+
+					// partner has left the game
+
+					Intent intent = new Intent(OnlineGameActivity.this, LobbyActivity.class);
+					startActivity(intent);
+
+				} else if (jObj.getInt("action") == Action.Server.YOU_WIN) {
+
+					// this client has won the game
+
+					gc.getHud().setStatus(getString(R.string.hasWon));
+
+				} else if (jObj.getInt("action") == Action.Server.END_TURN) {
+
+					// partner has end his turn -> synchronize physics
+
+					onPartnerTurnEnd(jObj);
+
+				}
+			} catch (JSONException e) {
+
+				// TODO: Handle exceptions?
+
+				Debug.d("JSONException: " + e);
+
+			}
+		}
+	}
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
@@ -169,7 +218,7 @@ public class OnlineGameActivity extends BaseGameActivity
 		//
 
 		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 256, 72, TextureOptions.BILINEAR);
-		this.cannonTexture = BitmapTextureAtlasTextureRegionFactory .createFromAsset(textureAtlas, this, "cannon.png", 0, 0);
+		this.cannonTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(textureAtlas, this, "cannon.png", 0, 0);
 		textureAtlas.load();
 
 		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 128, 128, TextureOptions.BILINEAR);
@@ -194,6 +243,10 @@ public class OnlineGameActivity extends BaseGameActivity
 
 		FontFactory.setAssetBasePath("font/");
 
+		//
+		// fonts
+		//
+
 		final ITexture statusFontTexture = new BitmapTextureAtlas(this.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
 		this.statusFont = FontFactory.createFromAsset(this.getFontManager(), statusFontTexture, this.getAssets(), "Plok.ttf", 22.0f, true, Color.BLACK);
 		this.statusFont.load();
@@ -217,18 +270,18 @@ public class OnlineGameActivity extends BaseGameActivity
 		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 409, 50, TextureOptions.BILINEAR);
 		this.woodTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(textureAtlas, this, "wood.png", 0, 0);
 		textureAtlas.load();
-		
+
 		//
 		// king textures
 		//
+
 		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 350, 325, TextureOptions.BILINEAR);
 		this.kingTexture1 = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAtlas, this, "green_king.png", 0, 0, 2, 1);
 		textureAtlas.load();
-		
+
 		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 480, 327, TextureOptions.BILINEAR);
 		this.kingTexture2 = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAtlas, this, "purple_king.png", 0, 0, 2, 1);
 		textureAtlas.load();
-		
 
 		pOnCreateResourcesCallback.onCreateResourcesFinished();
 	}
@@ -245,72 +298,7 @@ public class OnlineGameActivity extends BaseGameActivity
 
 		this.receivedEndTurn = true;
 
-		ServerConnection.getInstance().setHandler(
-				new ServerConnection.OnMessageHandler() {
-					@Override
-					public void onMessage(String payload) {
-						try {
-							JSONObject jObj = new JSONObject(payload);
-							if (jObj.getInt("action") == Action.Server.TURN && round % 2 == 1) {
-								round++;
-
-								final int x = Integer.parseInt(jObj.getString("x"));
-								final int y = Integer.parseInt(jObj.getString("y"));
-
-								gc.getHud().setStatus("enemy: x="+x+", y="+y);
-
-								OnlineGameActivity.this.runOnUpdateThread(new Runnable() {
-									@Override
-									public void run() {
-										receivedEndTurn = false;
-										PhysicsManager.getInstance().setFreeze(false);
-										OnlineGameActivity.this.enemyCannon.pointAt(x, y);
-
-										final Cannonball ball = OnlineGameActivity.this.enemyCannon.fire(GameConfig.CANNON_FORCE);
-
-										if(GameConfig.USE_FIXED_CANNONBALL_TIME) {
-											getEngine().registerUpdateHandler(new TimerHandler(GameConfig.CANNONBALL_TIME_SEC, new ITimerCallback() {
-												@Override
-												public void onTimePassed(TimerHandler pTimerHandler) {
-													ball.remove();
-												}
-											}));
-										}
-
-										ball.setOnRemove(new Runnable() {
-											@Override
-											public void run() {
-												PhysicsManager.getInstance().setFreeze(true);
-											}
-										});
-									}
-								});
-								turnSent = false;
-							} else if (jObj.getInt("action") == Action.Server.PARTNER_LEFT) {
-								Intent intent = new Intent(
-										OnlineGameActivity.this,
-										LobbyActivity.class);
-								startActivity(intent);
-							} else if (jObj.getInt("action") == Action.Server.YOU_WIN) {
-								gc.getHud().setStatus("Du hast gewonnen!");
-							} else if (jObj.getInt("action") == Action.Server.END_TURN) {
-								JSONArray jsonEntities = jObj.getJSONArray("entities");
-
-								if(jsonEntities == null) {
-									Debug.d("Warning: jsonEntities is null");
-								} else {
-									Debug.d("received end turn from server with " + jsonEntities.length() + " entities");
-
-									PhysicsManager.getInstance().updateEntities(jsonEntities);
-									receivedEndTurn = true;
-								}
-							}
-						} catch (JSONException e) {
-							// TODO: Catch the exception
-						}
-					}
-				}
-		);
+		ServerConnection.getInstance().setHandler(new AngryKingsMessageHandler());
 
 		gc.setVboManager(this.getVertexBufferObjectManager());
 
@@ -371,6 +359,8 @@ public class OnlineGameActivity extends BaseGameActivity
 				enemyY = 890;
 				leftPlayerName = extras.getString("username");
 				rightPlayerName = extras.getString("partnername");
+				this.myName = leftPlayerName;
+				this.enemyName = rightPlayerName;
 			} else {
 				this.receivedEndTurn = false;
 				this.round = 1;
@@ -381,6 +371,8 @@ public class OnlineGameActivity extends BaseGameActivity
 				myY = 890;
 				leftPlayerName = extras.getString("partnername");
 				rightPlayerName = extras.getString("username");
+				this.myName = rightPlayerName;
+				this.enemyName = leftPlayerName;
 			}
 		}
 
@@ -395,12 +387,12 @@ public class OnlineGameActivity extends BaseGameActivity
 		this.leftCastle = new Castle(-1500, BasicMap.GROUND_Y, this.stoneTexture, this.roofTexture, this.woodTexture);
 		this.rightCastle = new Castle(1800, BasicMap.GROUND_Y, this.stoneTexture, this.roofTexture, this.woodTexture);
 
-		this.rightKing = new King(this.kingTexture1, 1650, BasicMap.GROUND_Y - kingTexture1.getHeight()/2);
+		this.rightKing = new King(this.kingTexture1, 1650, BasicMap.GROUND_Y - kingTexture1.getHeight() / 2);
 		scene.attachChild(this.rightKing);
-		
-		this.leftKing = new King(this.kingTexture2, -550, BasicMap.GROUND_Y - kingTexture2.getHeight()/2);
+
+		this.leftKing = new King(this.kingTexture2, -550, BasicMap.GROUND_Y - kingTexture2.getHeight() / 2);
 		scene.attachChild(this.leftKing);
-		
+
 		//
 		// initialize navigation
 		//
@@ -412,29 +404,14 @@ public class OnlineGameActivity extends BaseGameActivity
 		scene.setTouchAreaBindingOnActionDownEnabled(true);
 
 		hud = new GameHUD(this.aimButtonTexture, this.whiteFlagButtonTexture, this.statusFont, this.playerNameFont);
+
 		hud.setOnAimTouched(new Runnable() {
 			@Override
 			public void run() {
 				isAiming = !isAiming;
-
-				ServerJSONBuilder entities = new ServerJSONBuilder().create(Action.Server.END_TURN);
-				try {
-					JSONObject jObj = new JSONObject(entities.entities().build());
-
-					JSONArray jsonEntities = jObj.getJSONArray("entities");
-
-					if(jsonEntities == null) {
-						Debug.d("Warning: jsonEntities is null");
-					} else {
-						Debug.d("received end turn from server with " + jsonEntities.length() + " entities");
-
-						PhysicsManager.getInstance().updateEntities(jsonEntities);
-					}
-				}catch (JSONException e) {
-
-				}
 			}
 		});
+
 		hud.setOnWhiteFlagTouched(new Runnable() {
 			@Override
 			public void run() {
@@ -452,25 +429,24 @@ public class OnlineGameActivity extends BaseGameActivity
 		hud.setLeftPlayerName(leftPlayerName);
 		hud.setRightPlayerName(rightPlayerName);
 
-		Debug.d("left player name: "+leftPlayerName);
+		Debug.d("left player name: " + leftPlayerName);
 		Debug.d("right player name: " + rightPlayerName);
 
-		if(amILeft){
-			hud.setStatus("Du bist dran!");
-		}else{
-			hud.setStatus("Gegner ist dran!");
-		}
+		if (amILeft)
+			hud.setStatus(this.getString(R.string.yourTurn));
+		else
+			hud.setStatus(this.getString(R.string.enemyTurn));
 
 		scene.registerUpdateHandler(new IUpdateHandler() {
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
-				float leftLife = leftCastle.getHeight()/initialLeftCastleHeight;
-				float rightLife = rightCastle.getHeight()/initialRightCastleHeight;
+				float leftLife = leftCastle.getHeight() / initialLeftCastleHeight;
+				float rightLife = rightCastle.getHeight() / initialRightCastleHeight;
 
 				hud.getLeftLifeBar().setValue(leftLife);
 				hud.getRightLifeBar().setValue(rightLife);
 
-				if(left && leftLife < 0.3f || !left && rightLife < 0.3f) {
+				if (left && leftLife < 0.3f || !left && rightLife < 0.3f) {
 					gc.getHud().setStatus("Du hast verloren!");
 					webSocketConnection.sendTextMessage(OnlineGameActivity.JSON_LOSE);
 				}
@@ -483,9 +459,6 @@ public class OnlineGameActivity extends BaseGameActivity
 		});
 
 		scene.registerUpdateHandler(physicsWorld);
-
-		if(!GameConfig.USE_FIXED_CANNONBALL_TIME)
-			scene.registerUpdateHandler(PhysicsManager.getInstance());
 
 		PhysicsManager.getInstance().setFreeze(true);
 
@@ -504,14 +477,13 @@ public class OnlineGameActivity extends BaseGameActivity
 		if (gc.getPhysicsWorld() == null)
 			return false;
 
-		if(this.isAiming) {
+		if (this.isAiming) {
 
 			//
 			// aim and fire
 			//
 
-			if(!PhysicsManager.getInstance().isReady()) {
-				gc.getHud().setStatus("Wait for physics...");
+			if (!PhysicsManager.getInstance().isReady()) {
 				return true;
 			}
 
@@ -521,14 +493,10 @@ public class OnlineGameActivity extends BaseGameActivity
 			int iX = (int) x;
 			int iY = (int) y;
 
-			if(this.cannon.pointAt(iX, iY)) {
+			if (this.cannon.pointAt(iX, iY)) {
 				this.aimX = iX;
 				this.aimY = iY;
 			}
-
-			gc.getHud().setStatus("x="+this.aimX+", y="+this.aimY);
-
-			Debug.d("receivedEndTurn: " + this.receivedEndTurn);
 
 			if (pSceneTouchEvent.isActionUp() && this.receivedEndTurn) {
 				if (!turnSent && round % 2 == 0) {
@@ -541,23 +509,18 @@ public class OnlineGameActivity extends BaseGameActivity
 
 							final Cannonball ball = OnlineGameActivity.this.cannon.fire(GameConfig.CANNON_FORCE);
 
-							if(GameConfig.USE_FIXED_CANNONBALL_TIME) {
-								getEngine().registerUpdateHandler(new TimerHandler(GameConfig.CANNONBALL_TIME_SEC, new ITimerCallback() {
-									@Override
-									public void onTimePassed(TimerHandler pTimerHandler) {
-										ball.remove();
-									}
-								}));
-							}
+
+							getEngine().registerUpdateHandler(new TimerHandler(GameConfig.CANNONBALL_TIME_SEC, new ITimerCallback() {
+								@Override
+								public void onTimePassed(TimerHandler pTimerHandler) {
+									ball.remove();
+								}
+							}));
 
 							ball.setOnRemove(new Runnable() {
 								@Override
 								public void run() {
-									PhysicsManager.getInstance().setFreeze(true);
-									ServerJSONBuilder query = new ServerJSONBuilder().create(Action.Client.END_TURN).entities();
-									String jsonStr = query.build();
-									webSocketConnection.sendTextMessage(jsonStr);
-									Debug.d("send " + PhysicsManager.getInstance().getPhysicalEntities().size() + " entities");
+									onMyTurnEnd();
 								}
 							});
 						}
@@ -574,21 +537,21 @@ public class OnlineGameActivity extends BaseGameActivity
 				}
 			}
 
-		}else{
+		} else {
 
 			//
 			// pinch and zoom
 			//
 
-			if(pSceneTouchEvent.isActionDown()) {
+			if (pSceneTouchEvent.isActionDown()) {
 				this.scrollDetector.setEnabled(true);
 			}
 
 			this.pinchZoomDetector.onTouchEvent(pSceneTouchEvent);
 
-			if(this.pinchZoomDetector.isZooming()) {
+			if (this.pinchZoomDetector.isZooming()) {
 				this.scrollDetector.setEnabled(false);
-			}else{
+			} else {
 				this.scrollDetector.onTouchEvent(pSceneTouchEvent);
 			}
 
@@ -600,34 +563,34 @@ public class OnlineGameActivity extends BaseGameActivity
 	@Override
 	public void onPinchZoomStarted(PinchZoomDetector pPinchZoomDetector, TouchEvent pSceneTouchEvent) {
 		GameContext gc = GameContext.getInstance();
-		ZoomCamera camera = (ZoomCamera)gc.getCamera();
+		ZoomCamera camera = (ZoomCamera) gc.getCamera();
 		this.pinchZoomStartedCameraZoomFactor = camera.getZoomFactor();
 	}
 
 	@Override
 	public void onPinchZoom(PinchZoomDetector pPinchZoomDetector, TouchEvent pTouchEvent, float pZoomFactor) {
 		GameContext gc = GameContext.getInstance();
-		ZoomCamera camera = (ZoomCamera)gc.getCamera();
+		ZoomCamera camera = (ZoomCamera) gc.getCamera();
 
 		float factor = this.pinchZoomStartedCameraZoomFactor * pZoomFactor;
-		if(factor > GameConfig.CAMERA_ZOOM_MIN && factor < GameConfig.CAMERA_ZOOM_MAX)
+		if (factor > GameConfig.CAMERA_ZOOM_MIN && factor < GameConfig.CAMERA_ZOOM_MAX)
 			camera.setZoomFactor(factor);
 	}
 
 	@Override
 	public void onPinchZoomFinished(PinchZoomDetector pPinchZoomDetector, TouchEvent pTouchEvent, float pZoomFactor) {
 		GameContext gc = GameContext.getInstance();
-		ZoomCamera camera = (ZoomCamera)gc.getCamera();
+		ZoomCamera camera = (ZoomCamera) gc.getCamera();
 
 		float factor = this.pinchZoomStartedCameraZoomFactor * pZoomFactor;
-		if(factor > GameConfig.CAMERA_ZOOM_MIN && factor < GameConfig.CAMERA_ZOOM_MAX)
+		if (factor > GameConfig.CAMERA_ZOOM_MIN && factor < GameConfig.CAMERA_ZOOM_MAX)
 			camera.setZoomFactor(factor);
 	}
 
 	@Override
 	public void onScrollStarted(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY) {
 		GameContext gc = GameContext.getInstance();
-		ZoomCamera camera = (ZoomCamera)gc.getCamera();
+		ZoomCamera camera = (ZoomCamera) gc.getCamera();
 		final float zoomFactor = camera.getZoomFactor();
 
 		camera.offsetCenter(-pDistanceX / zoomFactor, -pDistanceY / zoomFactor);
@@ -636,7 +599,7 @@ public class OnlineGameActivity extends BaseGameActivity
 	@Override
 	public void onScroll(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY) {
 		GameContext gc = GameContext.getInstance();
-		ZoomCamera camera = (ZoomCamera)gc.getCamera();
+		ZoomCamera camera = (ZoomCamera) gc.getCamera();
 		final float zoomFactor = camera.getZoomFactor();
 
 		camera.offsetCenter(-pDistanceX / zoomFactor, -pDistanceY / zoomFactor);
@@ -645,7 +608,7 @@ public class OnlineGameActivity extends BaseGameActivity
 	@Override
 	public void onScrollFinished(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY) {
 		GameContext gc = GameContext.getInstance();
-		ZoomCamera camera = (ZoomCamera)gc.getCamera();
+		ZoomCamera camera = (ZoomCamera) gc.getCamera();
 		final float zoomFactor = camera.getZoomFactor();
 
 		camera.offsetCenter(-pDistanceX / zoomFactor, -pDistanceY / zoomFactor);
@@ -657,25 +620,20 @@ public class OnlineGameActivity extends BaseGameActivity
 			public void run() {
 				final Dialog dialog = new Dialog(OnlineGameActivity.this);
 				dialog.setContentView(R.layout.quit_dialog);
-				//dialog.setTitle("Aufgeben?");
 				dialog.setCancelable(true);
 				dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-				//TextView text = (TextView) dialog.findViewById(R.id.lBeendenFrage);
-				Button bCancel = (Button) dialog
-						.findViewById(R.id.bCancel);
-				Button bResign = (Button) dialog
-						.findViewById(R.id.bResign);
+				Button bCancel = (Button) dialog.findViewById(R.id.bCancel);
+				Button bResign = (Button) dialog.findViewById(R.id.bResign);
 
 				bCancel.setOnClickListener(new View.OnClickListener() {
-
 					@Override
 					public void onClick(View v) {
 						dialog.dismiss();
 					}
 				});
-				bResign.setOnClickListener(new View.OnClickListener() {
 
+				bResign.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
 						hud.setStatus("Du hast aufgegeben!");
@@ -692,12 +650,85 @@ public class OnlineGameActivity extends BaseGameActivity
 	}
 
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event)  {
-	    if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-	        resign();
-	        return true;
-	    }
-	    return super.onKeyDown(keyCode, event);
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+			resign();
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 
+	}
+
+	private void onMyTurnEnd() {
+		PhysicsManager.getInstance().setFreeze(true);
+
+		//
+		// send castle block positions
+		//
+
+		ServerJSONBuilder query = new ServerJSONBuilder().create(Action.Client.END_TURN).entities();
+		String jsonStr = query.build();
+		this.webSocketConnection.sendTextMessage(jsonStr);
+
+		Debug.d("send " + PhysicsManager.getInstance().getPhysicalEntities().size() + " entities");
+
+		//
+		// update own castle block position to avoid floating point precision issues
+		//
+
+		try {
+			JSONObject jObj = new JSONObject(jsonStr);
+			JSONArray jsonEntities = jObj.getJSONArray("entities");
+
+			if (jsonEntities != null) {
+				PhysicsManager.getInstance().updateEntities(jsonEntities);
+			}
+		} catch (JSONException e) {
+			Debug.d("JSONException: "+e);
+		}
+
+		this.hud.setStatus(getString(R.string.enemyTurn));
+	}
+
+	private void onPartnerTurnEnd(JSONObject jObj) throws JSONException {
+		JSONArray jsonEntities = jObj.getJSONArray("entities");
+
+		if (jsonEntities == null) {
+			Debug.d("Warning: jsonEntities is null");
+		} else {
+			Debug.d("received end turn from server with " + jsonEntities.length() + " entities");
+
+			PhysicsManager.getInstance().updateEntities(jsonEntities);
+			receivedEndTurn = true;
+
+			hud.setStatus(getString(R.string.yourTurn));
+		}
+	}
+
+	private void handlePartnerTurn(final int x, final int y) {
+		this.runOnUpdateThread(new Runnable() {
+			@Override
+			public void run() {
+				receivedEndTurn = false;
+				PhysicsManager.getInstance().setFreeze(false);
+				enemyCannon.pointAt(x, y);
+
+				final Cannonball ball = enemyCannon.fire(GameConfig.CANNON_FORCE);
+
+				getEngine().registerUpdateHandler(new TimerHandler(GameConfig.CANNONBALL_TIME_SEC, new ITimerCallback() {
+					@Override
+					public void onTimePassed(TimerHandler pTimerHandler) {
+						ball.remove();
+					}
+				}));
+
+				ball.setOnRemove(new Runnable() {
+					@Override
+					public void run() {
+						PhysicsManager.getInstance().setFreeze(true);
+					}
+				});
+			}
+		});
 	}
 }

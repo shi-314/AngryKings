@@ -14,5 +14,7 @@
     <string name="backToLobby">Zurück zur Lobby</string>
     <string name="hasWon">Du hast gewonnen!></string>
     <string name="hasLost">Du hast verloren!></string>
+	<string name="yourTurn">Du bist dran!</string>
+	<string name="enemyTurn">Dein Gegner ist dran!</string>
 
 </resources>

@@ -132,7 +132,7 @@ public class PhysicsManager implements IUpdateHandler {
 	}
 
 	public boolean isReady() {
-		return this.ready && (GameConfig.USE_FIXED_CANNONBALL_TIME ? this.freezed : true);
+		return this.ready && this.freezed;
 	}
 
 	/**

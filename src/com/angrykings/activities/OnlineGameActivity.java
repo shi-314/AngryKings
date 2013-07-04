@@ -416,6 +416,23 @@ public class OnlineGameActivity extends BaseGameActivity
 			@Override
 			public void run() {
 				isAiming = !isAiming;
+
+				ServerJSONBuilder entities = new ServerJSONBuilder().create(Action.Server.END_TURN);
+				try {
+					JSONObject jObj = new JSONObject(entities.entities().build());
+
+					JSONArray jsonEntities = jObj.getJSONArray("entities");
+
+					if(jsonEntities == null) {
+						Debug.d("Warning: jsonEntities is null");
+					} else {
+						Debug.d("received end turn from server with " + jsonEntities.length() + " entities");
+
+						PhysicsManager.getInstance().updateEntities(jsonEntities);
+					}
+				}catch (JSONException e) {
+
+				}
 			}
 		});
 		hud.setOnWhiteFlagTouched(new Runnable() {

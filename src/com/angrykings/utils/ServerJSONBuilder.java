@@ -35,7 +35,7 @@ public class ServerJSONBuilder {
 			json += "\"id\": " + e.getId() + ", ";
 			json += "\"x\": " + e.getAreaShape().getX() + ", ";
 			json += "\"y\": " + e.getAreaShape().getY() + ", ";
-			json += "\"rotation\": " + e.getAreaShape().getRotation() + "";
+			json += "\"rotation\": " + e.getBody().getAngle() + "";
 			json += "}";
 
 			if (i < entities.size() - 1)

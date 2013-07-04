@@ -447,7 +447,7 @@ public class OnlineGameActivity extends BaseGameActivity
 				hud.getRightLifeBar().setValue(rightLife);
 
 				if (left && leftLife < 0.3f || !left && rightLife < 0.3f) {
-					gc.getHud().setStatus("Du hast verloren!");
+					gc.getHud().setStatus(getString(R.string.hasLost));
 					webSocketConnection.sendTextMessage(OnlineGameActivity.JSON_LOSE);
 				}
 			}

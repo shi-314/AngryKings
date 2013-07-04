@@ -469,16 +469,16 @@ public class OnlineGameActivity extends BaseGameActivity
 		scene.registerUpdateHandler(new IUpdateHandler() {
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
-//				float leftLife = ((leftCastle.getHeight() + initialLeftCastleHeight)/initialLeftCastleHeight*2);
-//				float rightLife = ((rightCastle.getHeight() + initialRightCastleHeight)/initialRightCastleHeight*2);
+//				float leftLife = ((leftCastle.getHeight() + initialLeftCastleHeight)/(initialLeftCastleHeight*2))/2;
+//				float rightLife = ((rightCastle.getHeight() + initialRightCastleHeight)/(initialRightCastleHeight*2))/2;
 				
-				float leftLife = leftCastle.getHeight() / (initialLeftCastleHeight * 2);
-				float rightLife = rightCastle.getHeight() / (initialRightCastleHeight * 2);
+				float leftLife = leftCastle.getHeight() / initialLeftCastleHeight;
+				float rightLife = rightCastle.getHeight() / initialRightCastleHeight;
 
-				hud.getLeftLifeBar().setValue(leftLife * 2);
-				hud.getRightLifeBar().setValue(rightLife * 2);
+				hud.getLeftLifeBar().setValue(1.0f - ((1.0f - leftLife) * 2.0f));
+				hud.getRightLifeBar().setValue(1.0f - ((1.0f - rightLife) * 2.0f));
 
-				if(left && leftLife < 0.3f || !left && rightLife < 0.3f) {
+				if(left && leftLife < 0.5f || !left && rightLife < 0.5f) {
 					gc.getHud().setStatus("Du hast verloren!");
 					webSocketConnection.sendTextMessage(OnlineGameActivity.JSON_LOSE);
 					Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);

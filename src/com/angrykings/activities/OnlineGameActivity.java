@@ -54,12 +54,13 @@ import org.json.JSONObject;
 
 /**
  * OnlineGameActivity
- *
+ * 
  * @author Shivan Taher <zn31415926535@gmail.com>
  * @date 06.06.13
  */
-public class OnlineGameActivity extends BaseGameActivity
-		implements IOnSceneTouchListener, IScrollDetectorListener, IPinchZoomDetectorListener {
+public class OnlineGameActivity extends BaseGameActivity implements
+		IOnSceneTouchListener, IScrollDetectorListener,
+		IPinchZoomDetectorListener {
 
 	private GameContext gc;
 	private Handler handler;
@@ -116,13 +117,16 @@ public class OnlineGameActivity extends BaseGameActivity
 	int aimX, aimY;
 	String myName, enemyName;
 	boolean wonTheGame = false;
+	boolean isLeft;
 
-	private class AngryKingsMessageHandler extends ServerConnection.OnMessageHandler {
+	private class AngryKingsMessageHandler extends
+			ServerConnection.OnMessageHandler {
 		@Override
 		public void onMessage(String payload) {
 			try {
 				JSONObject jObj = new JSONObject(payload);
-				if (jObj.getInt("action") == Action.Server.TURN && round % 2 == 1) {
+				if (jObj.getInt("action") == Action.Server.TURN
+						&& round % 2 == 1) {
 
 					// partner has made his turn
 
@@ -135,12 +139,17 @@ public class OnlineGameActivity extends BaseGameActivity
 
 					turnSent = false;
 
-				} else if (jObj.getInt("action") == Action.Server.YOU_WIN || jObj.getInt("action") == Action.Server.PARTNER_LEFT) {
+				} else if (jObj.getInt("action") == Action.Server.YOU_WIN
+						|| jObj.getInt("action") == Action.Server.PARTNER_LEFT) {
 
 					// this client has won the game
 
-					Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
+					Intent intent = new Intent(OnlineGameActivity.this,
+							EndGameActivity.class);
 					intent.putExtra("hasWon", true);
+					intent.putExtra("isLeft", OnlineGameActivity.this.isLeft);
+					intent.putExtra("username", myName);
+					intent.putExtra("partnername", enemyName);
 					intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 					startActivity(intent);
 					wonTheGame = true;
@@ -167,76 +176,87 @@ public class OnlineGameActivity extends BaseGameActivity
 		gc = GameContext.getInstance();
 		handler = new Handler();
 
-		ZoomCamera camera = new ZoomCamera(0, 0, GameConfig.CAMERA_WIDTH, GameConfig.CAMERA_HEIGHT);
+		ZoomCamera camera = new ZoomCamera(0, 0, GameConfig.CAMERA_WIDTH,
+				GameConfig.CAMERA_HEIGHT);
 
 		camera.setZoomFactor(GameConfig.CAMERA_STARTUP_ZOOM);
-		camera.setBounds(
-				GameConfig.CAMERA_MIN_X, GameConfig.CAMERA_MIN_Y,
-				GameConfig.CAMERA_MAX_X, GameConfig.CAMERA_MAX_Y
-		);
+		camera.setBounds(GameConfig.CAMERA_MIN_X, GameConfig.CAMERA_MIN_Y,
+				GameConfig.CAMERA_MAX_X, GameConfig.CAMERA_MAX_Y);
 		camera.setBoundsEnabled(true);
 
 		gc.setCamera(camera);
 
-		OnlineGameActivity.JSON_LOSE = new ServerJSONBuilder().create(Action.Client.LOSE).build();
+		OnlineGameActivity.JSON_LOSE = new ServerJSONBuilder().create(
+				Action.Client.LOSE).build();
 
 		this.serverConnection = ServerConnection.getInstance();
 		this.webSocketConnection = this.serverConnection.getConnection();
 
-		return new EngineOptions(
-				true,
-				ScreenOrientation.LANDSCAPE_FIXED,
-				new RatioResolutionPolicy(GameConfig.CAMERA_WIDTH, GameConfig.CAMERA_HEIGHT),
-				camera
-		);
+		return new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED,
+				new RatioResolutionPolicy(GameConfig.CAMERA_WIDTH,
+						GameConfig.CAMERA_HEIGHT), camera);
 	}
 
 	@Override
-	public void onCreateResources(OnCreateResourcesCallback pOnCreateResourcesCallback) throws Exception {
+	public void onCreateResources(
+			OnCreateResourcesCallback pOnCreateResourcesCallback)
+			throws Exception {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 
 		//
 		// map textures
 		//
 
-		BitmapTextureAtlas textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 50, 393, TextureOptions.BILINEAR);
-		this.grassTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAtlas, this, "grass.png", 0, 0, 1, 1); // 32x32
+		BitmapTextureAtlas textureAtlas = new BitmapTextureAtlas(
+				this.getTextureManager(), 50, 393, TextureOptions.BILINEAR);
+		this.grassTexture = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(textureAtlas, this, "grass.png", 0, 0, 1,
+						1); // 32x32
 		textureAtlas.load();
 
-
-		this.skySprite = new RepeatingSpriteBackground(
-				GameConfig.CAMERA_WIDTH,
+		this.skySprite = new RepeatingSpriteBackground(GameConfig.CAMERA_WIDTH,
 				GameConfig.CAMERA_HEIGHT, this.getTextureManager(),
-				AssetBitmapTextureAtlasSource.create(this.getAssets(), "gfx/sky.png"),
-				this.getVertexBufferObjectManager()
-		);
+				AssetBitmapTextureAtlasSource.create(this.getAssets(),
+						"gfx/sky.png"), this.getVertexBufferObjectManager());
 
 		//
 		// cannon textures
 		//
 
-		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 256, 72, TextureOptions.BILINEAR);
-		this.cannonTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(textureAtlas, this, "cannon.png", 0, 0);
+		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 256,
+				72, TextureOptions.BILINEAR);
+		this.cannonTexture = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(textureAtlas, this, "cannon.png", 0, 0);
 		textureAtlas.load();
 
-		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 128, 128, TextureOptions.BILINEAR);
-		this.wheelTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(textureAtlas, this, "wheel.png", 0, 0);
+		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 128,
+				128, TextureOptions.BILINEAR);
+		this.wheelTexture = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(textureAtlas, this, "wheel.png", 0, 0);
 		textureAtlas.load();
 
-		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 44, 44, TextureOptions.BILINEAR);
-		this.ballTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(textureAtlas, this, "ball.png", 0, 0);
+		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 44, 44,
+				TextureOptions.BILINEAR);
+		this.ballTexture = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(textureAtlas, this, "ball.png", 0, 0);
 		textureAtlas.load();
 
 		//
 		// hud textures
 		//
 
-		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 128, 64, TextureOptions.BILINEAR);
-		this.aimButtonTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAtlas, this, "aim_button.png", 0, 0, 2, 1);
+		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 128,
+				64, TextureOptions.BILINEAR);
+		this.aimButtonTexture = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(textureAtlas, this, "aim_button.png", 0,
+						0, 2, 1);
 		textureAtlas.load();
 
-		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 64, 64, TextureOptions.BILINEAR);
-		this.whiteFlagButtonTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAtlas, this, "white_flag_button.png", 0, 0, 1, 1);
+		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 64, 64,
+				TextureOptions.BILINEAR);
+		this.whiteFlagButtonTexture = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(textureAtlas, this,
+						"white_flag_button.png", 0, 0, 1, 1);
 		textureAtlas.load();
 
 		FontFactory.setAssetBasePath("font/");
@@ -245,40 +265,59 @@ public class OnlineGameActivity extends BaseGameActivity
 		// fonts
 		//
 
-		final ITexture statusFontTexture = new BitmapTextureAtlas(this.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
-		this.statusFont = FontFactory.createFromAsset(this.getFontManager(), statusFontTexture, this.getAssets(), "Plok.ttf", 22.0f, true, Color.BLACK);
+		final ITexture statusFontTexture = new BitmapTextureAtlas(
+				this.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
+		this.statusFont = FontFactory.createFromAsset(this.getFontManager(),
+				statusFontTexture, this.getAssets(), "Plok.ttf", 22.0f, true,
+				Color.BLACK);
 		this.statusFont.load();
 
-		final ITexture playerNameFontTexture = new BitmapTextureAtlas(this.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
-		this.playerNameFont = FontFactory.createFromAsset(this.getFontManager(), playerNameFontTexture, this.getAssets(), "Plok.ttf", 16.0f, true, Color.BLACK);
+		final ITexture playerNameFontTexture = new BitmapTextureAtlas(
+				this.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
+		this.playerNameFont = FontFactory.createFromAsset(
+				this.getFontManager(), playerNameFontTexture, this.getAssets(),
+				"Plok.ttf", 16.0f, true, Color.BLACK);
 		this.playerNameFont.load();
 
 		//
 		// castle textures
 		//
 
-		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 384, 128, TextureOptions.BILINEAR);
-		this.stoneTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAtlas, this, "stones.png", 0, 0, 3, 1);
+		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 384,
+				128, TextureOptions.BILINEAR);
+		this.stoneTexture = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(textureAtlas, this, "stones.png", 0, 0,
+						3, 1);
 		textureAtlas.load();
 
-		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 128, 128, TextureOptions.BILINEAR);
-		this.roofTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(textureAtlas, this, "roof.png", 0, 0);
+		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 128,
+				128, TextureOptions.BILINEAR);
+		this.roofTexture = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(textureAtlas, this, "roof.png", 0, 0);
 		textureAtlas.load();
 
-		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 409, 50, TextureOptions.BILINEAR);
-		this.woodTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(textureAtlas, this, "wood.png", 0, 0);
+		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 409,
+				50, TextureOptions.BILINEAR);
+		this.woodTexture = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(textureAtlas, this, "wood.png", 0, 0);
 		textureAtlas.load();
 
 		//
 		// king textures
 		//
 
-		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 350, 325, TextureOptions.BILINEAR);
-		this.kingTexture1 = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAtlas, this, "green_king.png", 0, 0, 2, 1);
+		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 350,
+				325, TextureOptions.BILINEAR);
+		this.kingTexture1 = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(textureAtlas, this, "green_king.png", 0,
+						0, 2, 1);
 		textureAtlas.load();
 
-		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 480, 327, TextureOptions.BILINEAR);
-		this.kingTexture2 = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAtlas, this, "purple_king.png", 0, 0, 2, 1);
+		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 480,
+				327, TextureOptions.BILINEAR);
+		this.kingTexture2 = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(textureAtlas, this, "purple_king.png", 0,
+						0, 2, 1);
 		textureAtlas.load();
 
 		pOnCreateResourcesCallback.onCreateResourcesFinished();
@@ -296,7 +335,8 @@ public class OnlineGameActivity extends BaseGameActivity
 
 		this.receivedEndTurn = true;
 
-		ServerConnection.getInstance().setHandler(new AngryKingsMessageHandler());
+		ServerConnection.getInstance().setHandler(
+				new AngryKingsMessageHandler());
 
 		gc.setVboManager(this.getVertexBufferObjectManager());
 
@@ -318,12 +358,10 @@ public class OnlineGameActivity extends BaseGameActivity
 		//
 
 		FixedStepPhysicsWorld physicsWorld = new FixedStepPhysicsWorld(
-				GameConfig.PHYSICS_STEPS_PER_SEC,
-				new Vector2(0, SensorManager.GRAVITY_EARTH),
-				false,
+				GameConfig.PHYSICS_STEPS_PER_SEC, new Vector2(0,
+						SensorManager.GRAVITY_EARTH), false,
 				GameConfig.PHYSICS_VELOCITY_ITERATION,
-				GameConfig.PHYSICS_POSITION_ITERATION
-		);
+				GameConfig.PHYSICS_POSITION_ITERATION);
 
 		physicsWorld.setAutoClearForces(true);
 		gc.setPhysicsWorld(physicsWorld);
@@ -374,21 +412,29 @@ public class OnlineGameActivity extends BaseGameActivity
 			}
 		}
 
-		this.cannon = new Cannon(this.cannonTexture, this.wheelTexture, this.ballTexture, amILeft);
+		isLeft = amILeft;
+
+		this.cannon = new Cannon(this.cannonTexture, this.wheelTexture,
+				this.ballTexture, amILeft);
 		this.cannon.setPosition(myX, myY);
 		scene.attachChild(this.cannon);
 
-		this.enemyCannon = new Cannon(this.cannonTexture, this.wheelTexture, this.ballTexture, !amILeft);
+		this.enemyCannon = new Cannon(this.cannonTexture, this.wheelTexture,
+				this.ballTexture, !amILeft);
 		this.enemyCannon.setPosition(enemyX, enemyY);
 		scene.attachChild(this.enemyCannon);
 
-		this.leftCastle = new Castle(-1500, BasicMap.GROUND_Y, this.stoneTexture, this.roofTexture, this.woodTexture);
-		this.rightCastle = new Castle(1800, BasicMap.GROUND_Y, this.stoneTexture, this.roofTexture, this.woodTexture);
+		this.leftCastle = new Castle(-1500, BasicMap.GROUND_Y,
+				this.stoneTexture, this.roofTexture, this.woodTexture);
+		this.rightCastle = new Castle(1800, BasicMap.GROUND_Y,
+				this.stoneTexture, this.roofTexture, this.woodTexture);
 
-		this.rightKing = new King(this.kingTexture1, 1650, BasicMap.GROUND_Y - kingTexture1.getHeight() / 2);
+		this.rightKing = new King(this.kingTexture1, 1650, BasicMap.GROUND_Y
+				- kingTexture1.getHeight() / 2);
 		scene.attachChild(this.rightKing);
 
-		this.leftKing = new King(this.kingTexture2, -550, BasicMap.GROUND_Y - kingTexture2.getHeight() / 2);
+		this.leftKing = new King(this.kingTexture2, -550, BasicMap.GROUND_Y
+				- kingTexture2.getHeight() / 2);
 		scene.attachChild(this.leftKing);
 
 		//
@@ -401,7 +447,8 @@ public class OnlineGameActivity extends BaseGameActivity
 		scene.setOnSceneTouchListener(this);
 		scene.setTouchAreaBindingOnActionDownEnabled(true);
 
-		hud = new GameHUD(this.aimButtonTexture, this.whiteFlagButtonTexture, this.statusFont, this.playerNameFont);
+		hud = new GameHUD(this.aimButtonTexture, this.whiteFlagButtonTexture,
+				this.statusFont, this.playerNameFont);
 
 		hud.setOnAimTouched(new Runnable() {
 			@Override
@@ -438,21 +485,32 @@ public class OnlineGameActivity extends BaseGameActivity
 		scene.registerUpdateHandler(new IUpdateHandler() {
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
-//				float leftLife = ((leftCastle.getHeight() + initialLeftCastleHeight)/(initialLeftCastleHeight*2))/2;
-//				float rightLife = ((rightCastle.getHeight() + initialRightCastleHeight)/(initialRightCastleHeight*2))/2;
-				
-				float leftLife = leftCastle.getHeight() / initialLeftCastleHeight;
-				float rightLife = rightCastle.getHeight() / initialRightCastleHeight;
+				// float leftLife = ((leftCastle.getHeight() +
+				// initialLeftCastleHeight)/(initialLeftCastleHeight*2))/2;
+				// float rightLife = ((rightCastle.getHeight() +
+				// initialRightCastleHeight)/(initialRightCastleHeight*2))/2;
 
-				hud.getLeftLifeBar().setValue(1.0f - ((1.0f - leftLife) * 2.0f));
-				hud.getRightLifeBar().setValue(1.0f - ((1.0f - rightLife) * 2.0f));
+				float leftLife = leftCastle.getHeight()
+						/ initialLeftCastleHeight;
+				float rightLife = rightCastle.getHeight()
+						/ initialRightCastleHeight;
 
-				if(left && leftLife < 0.5f || !left && rightLife < 0.5f) {
+				hud.getLeftLifeBar()
+						.setValue(1.0f - ((1.0f - leftLife) * 2.0f));
+				hud.getRightLifeBar().setValue(
+						1.0f - ((1.0f - rightLife) * 2.0f));
+
+				if (left && leftLife < 0.5f || !left && rightLife < 0.5f) {
 					gc.getHud().setStatus("Du hast verloren!");
 					gc.getHud().setStatus(getString(R.string.hasLost));
-					webSocketConnection.sendTextMessage(OnlineGameActivity.JSON_LOSE);
-					Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
+					webSocketConnection
+							.sendTextMessage(OnlineGameActivity.JSON_LOSE);
+					Intent intent = new Intent(OnlineGameActivity.this,
+							EndGameActivity.class);
 					intent.putExtra("hasWon", false);
+					intent.putExtra("isLeft", OnlineGameActivity.this.isLeft);
+					intent.putExtra("username", myName);
+					intent.putExtra("partnername", enemyName);
 					intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 					startActivity(intent);
 				}
@@ -472,7 +530,8 @@ public class OnlineGameActivity extends BaseGameActivity
 	}
 
 	@Override
-	public void onPopulateScene(Scene pScene, OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception {
+	public void onPopulateScene(Scene pScene,
+			OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception {
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
 	}
 
@@ -513,15 +572,19 @@ public class OnlineGameActivity extends BaseGameActivity
 						public void run() {
 							PhysicsManager.getInstance().setFreeze(false);
 
-							final Cannonball ball = OnlineGameActivity.this.cannon.fire(GameConfig.CANNON_FORCE);
+							final Cannonball ball = OnlineGameActivity.this.cannon
+									.fire(GameConfig.CANNON_FORCE);
 
-
-							getEngine().registerUpdateHandler(new TimerHandler(GameConfig.CANNONBALL_TIME_SEC, new ITimerCallback() {
-								@Override
-								public void onTimePassed(TimerHandler pTimerHandler) {
-									ball.remove();
-								}
-							}));
+							getEngine().registerUpdateHandler(
+									new TimerHandler(
+											GameConfig.CANNONBALL_TIME_SEC,
+											new ITimerCallback() {
+												@Override
+												public void onTimePassed(
+														TimerHandler pTimerHandler) {
+													ball.remove();
+												}
+											}));
 
 							ball.setOnRemove(new Runnable() {
 								@Override
@@ -532,12 +595,12 @@ public class OnlineGameActivity extends BaseGameActivity
 						}
 					});
 
-					this.webSocketConnection.sendTextMessage(
-							new ServerJSONBuilder()
+					this.webSocketConnection
+							.sendTextMessage(new ServerJSONBuilder()
 									.create(Action.Client.TURN)
 									.option("x", String.valueOf(this.aimX))
-									.option("y", String.valueOf(this.aimY)).build()
-					);
+									.option("y", String.valueOf(this.aimY))
+									.build());
 
 					this.turnSent = true;
 				}
@@ -567,34 +630,40 @@ public class OnlineGameActivity extends BaseGameActivity
 	}
 
 	@Override
-	public void onPinchZoomStarted(PinchZoomDetector pPinchZoomDetector, TouchEvent pSceneTouchEvent) {
+	public void onPinchZoomStarted(PinchZoomDetector pPinchZoomDetector,
+			TouchEvent pSceneTouchEvent) {
 		GameContext gc = GameContext.getInstance();
 		ZoomCamera camera = (ZoomCamera) gc.getCamera();
 		this.pinchZoomStartedCameraZoomFactor = camera.getZoomFactor();
 	}
 
 	@Override
-	public void onPinchZoom(PinchZoomDetector pPinchZoomDetector, TouchEvent pTouchEvent, float pZoomFactor) {
+	public void onPinchZoom(PinchZoomDetector pPinchZoomDetector,
+			TouchEvent pTouchEvent, float pZoomFactor) {
 		GameContext gc = GameContext.getInstance();
 		ZoomCamera camera = (ZoomCamera) gc.getCamera();
 
 		float factor = this.pinchZoomStartedCameraZoomFactor * pZoomFactor;
-		if (factor > GameConfig.CAMERA_ZOOM_MIN && factor < GameConfig.CAMERA_ZOOM_MAX)
+		if (factor > GameConfig.CAMERA_ZOOM_MIN
+				&& factor < GameConfig.CAMERA_ZOOM_MAX)
 			camera.setZoomFactor(factor);
 	}
 
 	@Override
-	public void onPinchZoomFinished(PinchZoomDetector pPinchZoomDetector, TouchEvent pTouchEvent, float pZoomFactor) {
+	public void onPinchZoomFinished(PinchZoomDetector pPinchZoomDetector,
+			TouchEvent pTouchEvent, float pZoomFactor) {
 		GameContext gc = GameContext.getInstance();
 		ZoomCamera camera = (ZoomCamera) gc.getCamera();
 
 		float factor = this.pinchZoomStartedCameraZoomFactor * pZoomFactor;
-		if (factor > GameConfig.CAMERA_ZOOM_MIN && factor < GameConfig.CAMERA_ZOOM_MAX)
+		if (factor > GameConfig.CAMERA_ZOOM_MIN
+				&& factor < GameConfig.CAMERA_ZOOM_MAX)
 			camera.setZoomFactor(factor);
 	}
 
 	@Override
-	public void onScrollStarted(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY) {
+	public void onScrollStarted(ScrollDetector pScollDetector, int pPointerID,
+			float pDistanceX, float pDistanceY) {
 		GameContext gc = GameContext.getInstance();
 		ZoomCamera camera = (ZoomCamera) gc.getCamera();
 		final float zoomFactor = camera.getZoomFactor();
@@ -603,7 +672,8 @@ public class OnlineGameActivity extends BaseGameActivity
 	}
 
 	@Override
-	public void onScroll(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY) {
+	public void onScroll(ScrollDetector pScollDetector, int pPointerID,
+			float pDistanceX, float pDistanceY) {
 		GameContext gc = GameContext.getInstance();
 		ZoomCamera camera = (ZoomCamera) gc.getCamera();
 		final float zoomFactor = camera.getZoomFactor();
@@ -612,7 +682,8 @@ public class OnlineGameActivity extends BaseGameActivity
 	}
 
 	@Override
-	public void onScrollFinished(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY) {
+	public void onScrollFinished(ScrollDetector pScollDetector, int pPointerID,
+			float pDistanceX, float pDistanceY) {
 		GameContext gc = GameContext.getInstance();
 		ZoomCamera camera = (ZoomCamera) gc.getCamera();
 		final float zoomFactor = camera.getZoomFactor();
@@ -627,7 +698,8 @@ public class OnlineGameActivity extends BaseGameActivity
 				final Dialog dialog = new Dialog(OnlineGameActivity.this);
 				dialog.setContentView(R.layout.quit_dialog);
 				dialog.setCancelable(true);
-				dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+				dialog.getWindow().setBackgroundDrawable(
+						new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
 				Button bCancel = (Button) dialog.findViewById(R.id.bCancel);
 				Button bResign = (Button) dialog.findViewById(R.id.bResign);
@@ -643,10 +715,15 @@ public class OnlineGameActivity extends BaseGameActivity
 					@Override
 					public void onClick(View v) {
 						hud.setStatus(getString(R.string.youResigned));
-						webSocketConnection.sendTextMessage(OnlineGameActivity.JSON_LOSE);
+						webSocketConnection
+								.sendTextMessage(OnlineGameActivity.JSON_LOSE);
 						dialog.dismiss();
-						Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
+						Intent intent = new Intent(OnlineGameActivity.this,
+								EndGameActivity.class);
 						intent.putExtra("hasWon", false);
+						intent.putExtra("isLeft", OnlineGameActivity.this.isLeft);
+						intent.putExtra("username", myName);
+						intent.putExtra("partnername", enemyName);
 						intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 						startActivity(intent);
 					}
@@ -673,14 +750,18 @@ public class OnlineGameActivity extends BaseGameActivity
 		// send castle block positions
 		//
 
-		ServerJSONBuilder query = new ServerJSONBuilder().create(Action.Client.END_TURN).entities();
+		ServerJSONBuilder query = new ServerJSONBuilder().create(
+				Action.Client.END_TURN).entities();
 		String jsonStr = query.build();
 		this.webSocketConnection.sendTextMessage(jsonStr);
 
-		Debug.d("send " + PhysicsManager.getInstance().getPhysicalEntities().size() + " entities");
+		Debug.d("send "
+				+ PhysicsManager.getInstance().getPhysicalEntities().size()
+				+ " entities");
 
 		//
-		// update own castle block position to avoid floating point precision issues
+		// update own castle block position to avoid floating point precision
+		// issues
 		//
 
 		try {
@@ -691,7 +772,7 @@ public class OnlineGameActivity extends BaseGameActivity
 				PhysicsManager.getInstance().updateEntities(jsonEntities);
 			}
 		} catch (JSONException e) {
-			Debug.d("JSONException: "+e);
+			Debug.d("JSONException: " + e);
 		}
 
 		this.hud.setStatus(getString(R.string.enemyTurn));
@@ -703,12 +784,13 @@ public class OnlineGameActivity extends BaseGameActivity
 		if (jsonEntities == null) {
 			Debug.d("Warning: jsonEntities is null");
 		} else {
-			Debug.d("received end turn from server with " + jsonEntities.length() + " entities");
+			Debug.d("received end turn from server with "
+					+ jsonEntities.length() + " entities");
 
 			PhysicsManager.getInstance().updateEntities(jsonEntities);
 			receivedEndTurn = true;
 
-			if(!this.wonTheGame)
+			if (!this.wonTheGame)
 				hud.setStatus(getString(R.string.yourTurn));
 		}
 	}
@@ -721,14 +803,18 @@ public class OnlineGameActivity extends BaseGameActivity
 				PhysicsManager.getInstance().setFreeze(false);
 				enemyCannon.pointAt(x, y);
 
-				final Cannonball ball = enemyCannon.fire(GameConfig.CANNON_FORCE);
+				final Cannonball ball = enemyCannon
+						.fire(GameConfig.CANNON_FORCE);
 
-				getEngine().registerUpdateHandler(new TimerHandler(GameConfig.CANNONBALL_TIME_SEC, new ITimerCallback() {
-					@Override
-					public void onTimePassed(TimerHandler pTimerHandler) {
-						ball.remove();
-					}
-				}));
+				getEngine().registerUpdateHandler(
+						new TimerHandler(GameConfig.CANNONBALL_TIME_SEC,
+								new ITimerCallback() {
+									@Override
+									public void onTimePassed(
+											TimerHandler pTimerHandler) {
+										ball.remove();
+									}
+								}));
 
 				ball.setOnRemove(new Runnable() {
 					@Override

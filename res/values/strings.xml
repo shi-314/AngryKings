@@ -11,5 +11,8 @@
 	<string name="end_question">Willst du wirklich aufgeben?</string>
 	<string name="weiterSpielenButton">Ich will kämpfen</string>
 	<string name="resignButton">aufgeben :(</string>
+    <string name="backToLobby">Zurück zur Lobby</string>
+    <string name="hasWon">Du hast gewonnen!></string>
+    <string name="hasLost">Du hast verloren!></string>
 
 </resources>

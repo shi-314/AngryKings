@@ -11,6 +11,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import com.angrykings.*;
+import com.angrykings.activities.MainActivity;
 import com.angrykings.cannons.Cannon;
 import com.angrykings.cannons.Cannonball;
 import com.angrykings.castles.Castle;
@@ -282,12 +283,16 @@ public class OnlineGameActivity extends BaseGameActivity
 								});
 								turnSent = false;
 							} else if (jObj.getInt("action") == Action.Server.PARTNER_LEFT) {
-								Intent intent = new Intent(
-										OnlineGameActivity.this,
-										LobbyActivity.class);
+								Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
+								intent.putExtra("hasWon", true);
+								intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 								startActivity(intent);
 							} else if (jObj.getInt("action") == Action.Server.YOU_WIN) {
-								gc.getHud().setStatus("Du hast gewonnen!");
+								Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
+								intent.putExtra("hasWon", true);
+								intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+								startActivity(intent);
+								//gc.getHud().setStatus("Du hast gewonnen!");
 							}
 						} catch (JSONException e) {
 							// TODO: Catch the exception
@@ -429,8 +434,8 @@ public class OnlineGameActivity extends BaseGameActivity
 		scene.registerUpdateHandler(new IUpdateHandler() {
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
-				float leftLife = leftCastle.getHeight()/initialLeftCastleHeight;
-				float rightLife = rightCastle.getHeight()/initialRightCastleHeight;
+				float leftLife = (leftCastle.getHeight() + initialLeftCastleHeight)/initialLeftCastleHeight*2;
+				float rightLife = (rightCastle.getHeight() + initialRightCastleHeight)/initialRightCastleHeight*2;
 
 				hud.getLeftLifeBar().setValue(leftLife);
 				hud.getRightLifeBar().setValue(rightLife);
@@ -438,6 +443,10 @@ public class OnlineGameActivity extends BaseGameActivity
 				if(left && leftLife < 0.3f || !left && rightLife < 0.3f) {
 					gc.getHud().setStatus("Du hast verloren!");
 					webSocketConnection.sendTextMessage(OnlineGameActivity.JSON_LOSE);
+					Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
+					intent.putExtra("hasWon", false);
+					intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+					startActivity(intent);
 				}
 			}
 
@@ -640,8 +649,9 @@ public class OnlineGameActivity extends BaseGameActivity
 						hud.setStatus("Du hast aufgegeben!");
 						webSocketConnection.sendTextMessage(OnlineGameActivity.JSON_LOSE);
 						dialog.dismiss();
-						Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
+						intent.putExtra("hasWon", false);
+						intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 						startActivity(intent);
 					}
 				});

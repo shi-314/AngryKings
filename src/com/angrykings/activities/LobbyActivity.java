@@ -15,6 +15,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -86,6 +87,7 @@ public class LobbyActivity extends ListActivity {
 												intent.putExtra("myTurn", true);
 												intent.putExtra("username",
 														username);
+												intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 												try {
 													intent.putExtra("partnername",
 															jObj.getString("partner"));
@@ -138,6 +140,21 @@ public class LobbyActivity extends ListActivity {
 		});
 	}
 
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+			ServerConnection
+			.getInstance()
+			.getConnection()
+			.sendTextMessage(
+					new ServerJSONBuilder()
+							.create(Action.Client.LEAVE_LOBBY)
+							.build());
+		}
+		return super.onKeyDown(keyCode, event);
+
+	}
+	
 	@Override
 	protected void onListItemClick(final ListView l, final View v, final int position, final long id) {
 		super.onListItemClick(l, v, position, id);

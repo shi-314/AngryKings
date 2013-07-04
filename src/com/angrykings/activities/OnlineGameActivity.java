@@ -469,8 +469,8 @@ public class OnlineGameActivity extends BaseGameActivity
 		scene.registerUpdateHandler(new IUpdateHandler() {
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
-				float leftLife = (leftCastle.getHeight() + initialLeftCastleHeight)/initialLeftCastleHeight*2;
-				float rightLife = (rightCastle.getHeight() + initialRightCastleHeight)/initialRightCastleHeight*2;
+				float leftLife = ((leftCastle.getHeight() + initialLeftCastleHeight)/initialLeftCastleHeight*2)/2;
+				float rightLife = ((rightCastle.getHeight() + initialRightCastleHeight)/initialRightCastleHeight*2)/2;
 
 				hud.getLeftLifeBar().setValue(leftLife);
 				hud.getRightLifeBar().setValue(rightLife);

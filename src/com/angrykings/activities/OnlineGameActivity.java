@@ -14,6 +14,7 @@ import com.angrykings.*;
 import com.angrykings.cannons.Cannon;
 import com.angrykings.cannons.Cannonball;
 import com.angrykings.castles.Castle;
+import com.angrykings.kings.King;
 import com.angrykings.maps.BasicMap;
 import com.angrykings.utils.ServerJSONBuilder;
 import com.badlogic.gdx.math.Vector2;
@@ -75,6 +76,8 @@ public class OnlineGameActivity extends BaseGameActivity
 	private TiledTextureRegion aimButtonTexture;
 	private TiledTextureRegion whiteFlagButtonTexture;
 	private TiledTextureRegion stoneTexture;
+	private TiledTextureRegion kingTexture1;
+	private TiledTextureRegion kingTexture2;
 	private TextureRegion roofTexture;
 	private TextureRegion woodTexture;
 	private Font statusFont;
@@ -88,6 +91,7 @@ public class OnlineGameActivity extends BaseGameActivity
 	private Cannon enemyCannon;
 	private RepeatingSpriteBackground skySprite;
 	private Castle leftCastle, rightCastle;
+	private King leftKing, rightKing;
 
 	//
 	// Navigation Attributes
@@ -211,6 +215,18 @@ public class OnlineGameActivity extends BaseGameActivity
 		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 409, 50, TextureOptions.BILINEAR);
 		this.woodTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(textureAtlas, this, "wood.png", 0, 0);
 		textureAtlas.load();
+		
+		//
+		// king textures
+		//
+		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 350, 325, TextureOptions.BILINEAR);
+		this.kingTexture1 = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAtlas, this, "green_king.png", 0, 0, 2, 1);
+		textureAtlas.load();
+		
+		textureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 480, 327, TextureOptions.BILINEAR);
+		this.kingTexture2 = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAtlas, this, "purple_king.png", 0, 0, 2, 1);
+		textureAtlas.load();
+		
 
 		pOnCreateResourcesCallback.onCreateResourcesFinished();
 	}
@@ -361,6 +377,12 @@ public class OnlineGameActivity extends BaseGameActivity
 		this.leftCastle = new Castle(-1500, BasicMap.GROUND_Y, this.stoneTexture, this.roofTexture, this.woodTexture);
 		this.rightCastle = new Castle(1800, BasicMap.GROUND_Y, this.stoneTexture, this.roofTexture, this.woodTexture);
 
+		this.rightKing = new King(this.kingTexture1, 1650, BasicMap.GROUND_Y - kingTexture1.getHeight()/2);
+		scene.attachChild(this.rightKing);
+		
+		this.leftKing = new King(this.kingTexture2, -550, BasicMap.GROUND_Y - kingTexture2.getHeight()/2);
+		scene.attachChild(this.leftKing);
+		
 		//
 		// initialize navigation
 		//

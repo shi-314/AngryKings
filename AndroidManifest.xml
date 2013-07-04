@@ -53,6 +53,10 @@
             android:name="com.angrykings.activities.OnlineGameActivity"
             android:configChanges="orientation|screenSize" >
         </activity>
+        <activity
+            android:name="com.angrykings.activities.EndGameActivity"
+            android:screenOrientation="landscape" >
+        </activity>
     </application>
 
 </manifest>

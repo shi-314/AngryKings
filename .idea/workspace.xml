@@ -25,6 +25,10 @@
   <component name="AndroidLayoutPreviewToolWindow">
     <option name="state">
       <GlobalState>
+        <option name="device" value="Nexus 4" />
+        <option name="dockMode" value="" />
+        <option name="nightMode" value="notnight" />
+        <option name="targetHashString" value="android-17" />
         <option name="theme" value="AppTheme" />
       </GlobalState>
     </option>
@@ -34,10 +38,14 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="AngryKings" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="275b1836-533f-4cb8-9cf5-d2b281740d87" name="Default" comment="New activity for online gaming">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/angrykings/activities/OnlineGameActivity.java" />
+    <list default="true" id="275b1836-533f-4cb8-9cf5-d2b281740d87" name="Default" comment="physics sync - not finished yet :(">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/drawable-xxhdpi/together.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.classpath" afterPath="$PROJECT_DIR$/.classpath" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidManifest.xml" afterPath="$PROJECT_DIR$/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/angrykings/activities/LobbyActivity.java" afterPath="$PROJECT_DIR$/src/com/angrykings/activities/LobbyActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/angrykings/activities/EndGameActivity.java" afterPath="$PROJECT_DIR$/src/com/angrykings/activities/EndGameActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/angrykings/activities/OnlineGameActivity.java" afterPath="$PROJECT_DIR$/src/com/angrykings/activities/OnlineGameActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/layout/activity_endgame.xml" afterPath="$PROJECT_DIR$/res/layout/activity_endgame.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/values/strings.xml" afterPath="$PROJECT_DIR$/res/values/strings.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="AngryKings.iws" />
@@ -45,47 +53,53 @@
     <ignored path="gen/com/angrykings/R.java" />
     <ignored path="gen/com/angrykings/BuildConfig.java" />
     <ignored path="gen/com/angrykings/Manifest.java" />
-    <file path="/fragment.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372411282411" ignored="false" />
+    <file path="/fragment.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372960681920" ignored="false" />
     <file path="$APPLICATION_HOME_DIR$/plugins/android/lib/android.jar!/org/jetbrains/android/android.xsd" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1369247335056" ignored="false" />
     <file path="/MyActivity.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1368036531129" ignored="false" />
-    <file path="/Dummy.txt" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372411763906" ignored="false" />
-    <file path="/AndroidManifest.xml" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372411238550" ignored="false" />
+    <file path="/Dummy.txt" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372963219132" ignored="false" />
+    <file path="/AndroidManifest.xml" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372936207721" ignored="false" />
     <file path="$PROJECT_DIR$/gen/com/example/AngryKings/Manifest.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1368036179392" ignored="false" />
     <file path="/PhysicsPrototype.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1369247115198" ignored="false" />
     <file path="/PhysicsTest.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1369998467757" ignored="false" />
     <file path="/Player.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1369345547338" ignored="false" />
-    <file path="/strings.xml" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1369349675460" ignored="false" />
-    <file path="/MainActivity.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1369349142398" ignored="false" />
+    <file path="/strings.xml" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372959356058" ignored="false" />
+    <file path="/MainActivity.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372415686658" ignored="false" />
     <file path="/KingServerConnection.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1369348881276" ignored="false" />
-    <file path="/LobbyActivity.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372411269358" ignored="false" />
+    <file path="/LobbyActivity.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372414554360" ignored="false" />
     <file path="/a.dummy" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372169172750" ignored="false" />
     <file path="/File Header.txt.ft" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1369994823653" ignored="false" />
     <file path="/Map.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1370606019761" ignored="false" />
     <file path="/GameContext.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1371922757080" ignored="false" />
     <file path="/GameHUD.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372176560316" ignored="false" />
     <file path="/King.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1370596991572" ignored="false" />
-    <file path="/Castle.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372406910484" ignored="false" />
-    <file path="/Cannon.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1371809112501" ignored="false" />
-    <file path="/PhysicsManager.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372408597268" ignored="false" />
-    <file path="/MapTest.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372095154506" ignored="false" />
-    <file path="/GameConfig.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1371939596951" ignored="false" />
+    <file path="/Castle.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372883930900" ignored="false" />
+    <file path="/Cannon.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372419318405" ignored="false" />
+    <file path="/PhysicsManager.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372951715901" ignored="false" />
+    <file path="/MapTest.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372416815494" ignored="false" />
+    <file path="/GameConfig.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372888973394" ignored="false" />
     <file path="/AutoParallaxBackgroundExample.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1370517301546" ignored="false" />
     <file path="/AngryEntity.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1370602271514" ignored="false" />
     <file path="/BasicMap.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1371940921051" ignored="false" />
     <file path="/CastleBlock.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1370598442664" ignored="false" />
-    <file path="/Cannonball.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372408205393" ignored="false" />
-    <file path="/PhysicalEntity.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372408566376" ignored="false" />
+    <file path="/Cannonball.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372871577953" ignored="false" />
+    <file path="/PhysicalEntity.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372947330690" ignored="false" />
     <file path="/LocalTest.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1371802091504" ignored="false" />
-    <file path="/LocalTestActivity.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372409874130" ignored="false" />
+    <file path="/LocalTestActivity.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372416793043" ignored="false" />
     <file path="/a.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1371920682718" ignored="false" />
     <file path="/sample.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1371920643369" ignored="false" />
     <file path="/a.xml" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1371921173332" ignored="false" />
     <file path="/GLState.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372169255891" ignored="false" />
     <file path="$PROJECT_DIR$/gen/com/angrykings/Manifest.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372176387598" ignored="false" />
-    <file path="/Stone.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372405132579" ignored="false" />
-    <file path="/Wood.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372405380887" ignored="false" />
-    <file path="/Roof.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372404807208" ignored="false" />
-    <file path="/OnlineGameActivity.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372411183368" ignored="false" />
+    <file path="/Stone.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372871885133" ignored="false" />
+    <file path="/Wood.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372871933380" ignored="false" />
+    <file path="/Roof.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372871847366" ignored="false" />
+    <file path="/OnlineGameActivity.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372962517702" ignored="false" />
+    <file path="/ServerConnection.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372412867501" ignored="false" />
+    <file path="/IntroActivity.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372936413129" ignored="false" />
+    <file path="/activity_intro.xml" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372936687641" ignored="false" />
+    <file path="/Castleblock.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372941678600" ignored="false" />
+    <file path="/Action.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372941916101" ignored="false" />
+    <file path="/ServerJSONBuilder.java" changelist="275b1836-533f-4cb8-9cf5-d2b281740d87" time="1372956822723" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -146,28 +160,70 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="LocalTestActivity.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/angrykings/activities/LocalTestActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="68" column="0" selection-start="2657" selection-end="2657" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MapTest.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/angrykings/activities/MapTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="310" column="33" selection-start="9202" selection-end="9513" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="OnlineGameActivity.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/angrykings/activities/OnlineGameActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="420" column="0" selection-start="13063" selection-end="13063" vertical-scroll-proportion="0.028960818">
+            <state line="440" column="21" selection-start="14294" selection-end="14294" vertical-scroll-proportion="0.51895046">
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#13487#13574#0" expanded="true" />
+                <element signature="e#13569#13570#0" expanded="true" />
+                <element signature="e#13606#13681#0" expanded="true" />
+                <element signature="e#13676#13677#0" expanded="true" />
+                <element signature="e#15828#16425#0" expanded="true" />
+                <element signature="e#16128#16274#0" expanded="true" />
+                <element signature="e#16264#16265#0" expanded="true" />
+                <element signature="e#16303#16408#0" expanded="true" />
+                <element signature="e#16398#16399#0" expanded="true" />
+                <element signature="e#16417#16418#0" expanded="true" />
+                <element signature="e#19271#20307#0" expanded="true" />
+                <element signature="e#19732#19847#0" expanded="true" />
+                <element signature="e#19840#19841#0" expanded="true" />
+                <element signature="e#19882#20277#0" expanded="true" />
+                <element signature="e#20270#20271#0" expanded="true" />
+                <element signature="e#20302#20303#0" expanded="true" />
+                <element signature="e#21901#22514#0" expanded="true" />
+                <element signature="e#22225#22356#0" expanded="true" />
+                <element signature="e#22349#22350#0" expanded="true" />
+                <element signature="e#22382#22503#0" expanded="true" />
+                <element signature="e#22496#22497#0" expanded="true" />
+                <element signature="e#22509#22510#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="strings.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/res/values/strings.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="14" column="43" selection-start="720" selection-end="720" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PhysicalEntity.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/angrykings/PhysicalEntity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="34" column="70" selection-start="889" selection-end="889" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Action.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/angrykings/Action.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="8" column="46" selection-start="240" selection-end="240" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GameConfig.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/angrykings/GameConfig.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="31" column="0" selection-start="947" selection-end="947" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -176,25 +232,47 @@
       <file leaf-file-name="PhysicsManager.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/angrykings/PhysicsManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="73" column="38" selection-start="2007" selection-end="2007" vertical-scroll-proportion="0.0">
+            <state line="134" column="42" selection-start="3808" selection-end="3808" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="e#3253#3269#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ServerJSONBuilder.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/angrykings/utils/ServerJSONBuilder.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="35" column="46" selection-start="804" selection-end="816" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Cannon.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/angrykings/cannons/Cannon.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="112" column="8" selection-start="3076" selection-end="3076" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AndroidManifest.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
+      <file leaf-file-name="Roof.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/angrykings/castles/Roof.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="0" selection-start="238" selection-end="238" vertical-scroll-proportion="0.0">
+            <state line="18" column="0" selection-start="725" selection-end="725" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LobbyActivity.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/angrykings/activities/LobbyActivity.java">
+      <file leaf-file-name="Castle.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/angrykings/castles/Castle.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="30" selection-start="193" selection-end="193" vertical-scroll-proportion="0.0">
+            <state line="109" column="83" selection-start="3552" selection-end="3552" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -223,31 +301,31 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/com/angrykings/GameConfig.java" />
-        <option value="$PROJECT_DIR$/src/com/angrykings/activities/MapTest.java" />
-        <option value="$PROJECT_DIR$/../AndEngine/AndEngine-GLES2/src/org/andengine/opengl/view/ConfigChooser.java" />
-        <option value="$PROJECT_DIR$/../AndEngine/AndEngine-GLES2/src/org/andengine/opengl/util/GLState.java" />
-        <option value="$PROJECT_DIR$/src/com/angrykings/GameHUD.java" />
         <option value="$PROJECT_DIR$/src/com/angrykings/castles/Roof.java" />
-        <option value="$PROJECT_DIR$/src/com/angrykings/castles/Stone.java" />
         <option value="$PROJECT_DIR$/src/com/angrykings/castles/Wood.java" />
+        <option value="$PROJECT_DIR$/src/com/angrykings/castles/Stone.java" />
         <option value="$PROJECT_DIR$/src/com/angrykings/castles/Castle.java" />
-        <option value="$PROJECT_DIR$/src/com/angrykings/cannons/Cannonball.java" />
-        <option value="$PROJECT_DIR$/src/com/angrykings/PhysicalEntity.java" />
-        <option value="$PROJECT_DIR$/src/com/angrykings/PhysicsManager.java" />
-        <option value="$PROJECT_DIR$/src/com/angrykings/activities/LocalTestActivity.java" />
-        <option value="$PROJECT_DIR$/src/com/angrykings/activities/OnlineGameActivity.java" />
+        <option value="$PROJECT_DIR$/src/com/angrykings/cannons/Cannon.java" />
         <option value="$PROJECT_DIR$/AndroidManifest.xml" />
-        <option value="$PROJECT_DIR$/src/com/angrykings/activities/LobbyActivity.java" />
+        <option value="$PROJECT_DIR$/res/layout/activity_intro.xml" />
+        <option value="$PROJECT_DIR$/src/com/angrykings/activities/IntroActivity.java" />
+        <option value="$PROJECT_DIR$/src/com/angrykings/castles/Castleblock.java" />
+        <option value="$PROJECT_DIR$/src/com/angrykings/Action.java" />
+        <option value="$PROJECT_DIR$/src/com/angrykings/PhysicalEntity.java" />
+        <option value="$PROJECT_DIR$/src/com/angrykings/utils/ServerJSONBuilder.java" />
+        <option value="$PROJECT_DIR$/src/com/angrykings/GameConfig.java" />
+        <option value="$PROJECT_DIR$/src/com/angrykings/PhysicsManager.java" />
+        <option value="$PROJECT_DIR$/src/com/angrykings/activities/OnlineGameActivity.java" />
+        <option value="$PROJECT_DIR$/res/values/strings.xml" />
       </list>
     </option>
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds">
-    <option name="x" value="54" />
-    <option name="y" value="-8" />
-    <option name="width" value="1320" />
-    <option name="height" value="784" />
+    <option name="x" value="1420" />
+    <option name="y" value="-320" />
+    <option name="width" value="1874" />
+    <option name="height" value="1096" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -320,6 +398,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -353,6 +432,50 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="angrykings" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AngryKings" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AngryKings" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="angrykings" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="utils" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AngryKings" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AngryKings" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="angrykings" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="unused" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -444,10 +567,41 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AngryKings" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AngryKings" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AngryKings" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AngryKings" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="values" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -462,10 +616,11 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../connectMe" />
     <property name="AndroidLayoutSelectedEditor" value="text-editor" />
     <property name="project.structure.side.proportion" value="0.28273463" />
-    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="SH25WW406493" />
+    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="SH25WW406493 emulator-5554" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="WebServerToolWindowFactoryState" value="true" />
+    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_AVD" value="MyHaxmTest" />
     <property name="restartRequiresConfirmation" value="true" />
     <property name="FullScreen" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
@@ -500,6 +655,9 @@
     </option>
   </component>
   <component name="RecentsManager">
+    <key name="MoveMembersDialog.RECENTS_KEY">
+      <recent name="com.angrykings.GameConfig" />
+    </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="com.angrykings" />
       <recent name="com.angrykings.acitivities" />
@@ -636,7 +794,7 @@
       <option name="ACTIVITY_CLASS" value="com.angrykings.activities.MainActivity" />
       <option name="MODE" value="specific_activity" />
       <option name="DEPLOY" value="true" />
-      <option name="TARGET_SELECTION_MODE" value="USB_DEVICE" />
+      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
       <option name="PREFERRED_AVD" value="" />
       <option name="USE_COMMAND_LINE" value="true" />
       <option name="COMMAND_LINE" value="" />
@@ -649,8 +807,25 @@
       <ConfigurationWrapper RunnerId="AndroidDebugRunner" />
       <method />
     </configuration>
-    <list size="1">
+    <configuration default="false" name="AngryKingsEmultator" type="AndroidRunConfigurationType" factoryName="Android Application">
+      <module name="AngryKings" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="DEPLOY" value="true" />
+      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
+      <option name="PREFERRED_AVD" value="MyHaxmTest" />
+      <option name="USE_COMMAND_LINE" value="true" />
+      <option name="COMMAND_LINE" value="" />
+      <option name="WIPE_USER_DATA" value="false" />
+      <option name="DISABLE_BOOT_ANIMATION" value="false" />
+      <option name="NETWORK_SPEED" value="full" />
+      <option name="NETWORK_LATENCY" value="none" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <method />
+    </configuration>
+    <list size="2">
       <item index="0" class="java.lang.String" itemvalue="Android Application.AngryKings" />
+      <item index="1" class="java.lang.String" itemvalue="Android Application.AngryKingsEmultator" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -729,7 +904,47 @@
       <created>1372410345530</created>
       <updated>1372410345530</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="New activity for online gaming">
+      <created>1372411806978</created>
+      <updated>1372411806978</updated>
+    </task>
+    <task id="LOCAL-00014" summary="lobby button is disabled till connection is established, code clean up, second castle, Cannon.pointAt returns true if the rotation has been changed and code cleanup stuff...">
+      <created>1372422633510</created>
+      <updated>1372422633510</updated>
+    </task>
+    <task id="LOCAL-00015" summary="added dumping parameters">
+      <created>1372883158552</created>
+      <updated>1372883158552</updated>
+    </task>
+    <task id="LOCAL-00016" summary="code cleanup">
+      <created>1372883187845</created>
+      <updated>1372883187845</updated>
+    </task>
+    <task id="LOCAL-00017" summary="added optional onRemove callback">
+      <created>1372883219849</created>
+      <updated>1372883219849</updated>
+    </task>
+    <task id="LOCAL-00018" summary="fixed castle block positions that caused bouncing in the beginning">
+      <created>1372889338415</created>
+      <updated>1372889338415</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Added a new approach to synchronize the physics.&#10;This seems to work much better but it has a few negative aspects like flying blocks when the cannonball timeout is passed. You can deactivate that approach in GameConfig. I know it's still out of sync, but that was the best I could do for today.">
+      <created>1372889615656</created>
+      <updated>1372889615656</updated>
+    </task>
+    <task id="LOCAL-00020" summary="physics sync - not finished yet :(">
+      <created>1372952047801</created>
+      <updated>1372952047801</updated>
+    </task>
+    <task id="LOCAL-00021" summary="physics sync :)">
+      <created>1372957332212</created>
+      <updated>1372957332212</updated>
+    </task>
+    <task id="LOCAL-00022" summary="removed debugging hud status and code cleanup">
+      <created>1372962874286</created>
+      <updated>1372962874286</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -753,10 +968,11 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="54" y="-8" width="1320" height="784" extended-state="6" />
+    <frame x="1420" y="-320" width="1874" height="1096" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24200426" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24093817" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32961783" sideWeight="0.7284345" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -766,24 +982,23 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.278157" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23880596" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32428116" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2153518" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32409382" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3283582" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32962137" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3283582" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2497332" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21224165" sideWeight="0.67571884" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27316293" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14569536" sideWeight="0.7590618" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2707889" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977587" sideWeight="0.72049" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="REST Client" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32942432" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2497332" sideWeight="0.6714922" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977587" sideWeight="0.72049" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977587" sideWeight="0.72049" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3283582" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -831,9 +1046,9 @@
     <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="New activity for online gaming" />
+    <option name="LAST_COMMIT_MESSAGE" value="added strings for hud" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
-    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="REFORMAT_BEFORE_FILE_COMMIT" value="false" />
@@ -858,6 +1073,17 @@
     <MESSAGE value="resized buttons, added player names and status texts to GameHUD, cleaned up Roof, Stone and Wood and set friction values" />
     <MESSAGE value="fixed step physics, reworked physics manager and PhysicalEntity, changed castle block position to center, added autoRemove and cleanup methods to physics" />
     <MESSAGE value="New activity for online gaming" />
+    <MESSAGE value="lobby button is disabled till connection is established, code clean up, second castle, Cannon.pointAt returns true if the rotation has been changed and code cleanup stuff..." />
+    <MESSAGE value="added dumping parameters" />
+    <MESSAGE value="code cleanup" />
+    <MESSAGE value="added optional onRemove callback" />
+    <MESSAGE value="fixed castle block positions that caused bouncing in the beginning" />
+    <MESSAGE value="Added a new approach to synchronize the physics.&#10;This seems to work much better but it has a few negative aspects like flying blocks when the cannonball timeout is passed. You can deactivate that approach in GameConfig. I know it's still out of sync, but that was the best I could do for today." />
+    <MESSAGE value="physics sync - not finished yet :(" />
+    <MESSAGE value="physics sync :)" />
+    <MESSAGE value="removed debugging hud status and code cleanup" />
+    <MESSAGE value="added strings for win, lose and players turn" />
+    <MESSAGE value="added strings for hud" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -867,109 +1093,146 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../AndEngine/AndEngine-GLES2/src/org/andengine/opengl/view/EngineRenderer.java">
+    <entry file="file://$PROJECT_DIR$/src/com/angrykings/activities/LobbyActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="70" column="29" selection-start="2607" selection-end="2607" vertical-scroll-proportion="0.51450384" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../AndEngine/AndEngine-GLES2/src/org/andengine/engine/Engine.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="610" column="0" selection-start="19936" selection-end="19936" vertical-scroll-proportion="0.4657321" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../AndEngine/AndEngineExamples-GLES2/src/org/andengine/examples/CustomFontExample.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="84" column="8" selection-start="3718" selection-end="3888" vertical-scroll-proportion="0.4349277" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/angrykings/GameHUD.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="111" column="60" selection-start="3489" selection-end="3489" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/angrykings/castles/Roof.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="38" column="0" selection-start="1398" selection-end="1398" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/angrykings/castles/Stone.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="51" selection-start="1124" selection-end="1124" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/angrykings/castles/Wood.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="52" selection-start="1031" selection-end="1031" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/angrykings/castles/Castle.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="53" column="8" selection-start="1443" selection-end="1443" vertical-scroll-proportion="0.0">
+        <state line="166" column="60" selection-start="5140" selection-end="5151" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/angrykings/cannons/Cannonball.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="32" column="31" selection-start="1122" selection-end="1122" vertical-scroll-proportion="0.75">
+        <state line="32" column="135" selection-start="1170" selection-end="1170" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/angrykings/cannons/Cannon.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="112" column="8" selection-start="3076" selection-end="3076" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/layout/activity_intro.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="8" selection-start="255" selection-end="435" vertical-scroll-proportion="0.34">
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="41" column="50" selection-start="1502" selection-end="1502" vertical-scroll-proportion="0.87530565">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/angrykings/activities/IntroActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="0" selection-start="340" selection-end="340" vertical-scroll-proportion="0.20782396">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/angrykings/castles/Roof.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="0" selection-start="725" selection-end="725" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/angrykings/Action.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="46" selection-start="240" selection-end="240" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/angrykings/castles/Castle.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="109" column="83" selection-start="3552" selection-end="3552" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/angrykings/PhysicalEntity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="41" selection-start="612" selection-end="612" vertical-scroll-proportion="0.0">
+        <state line="34" column="70" selection-start="889" selection-end="889" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/angrykings/activities/MapTest.java">
+    <entry file="file://$PROJECT_DIR$/src/com/angrykings/utils/ServerJSONBuilder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="310" column="33" selection-start="9202" selection-end="9513" vertical-scroll-proportion="0.0">
+        <state line="35" column="46" selection-start="804" selection-end="816" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/angrykings/GameContext.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="60" column="23" selection-start="1386" selection-end="1386" vertical-scroll-proportion="0.63829786">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
+    <entry file="file://$PROJECT_DIR$/src/com/angrykings/GameConfig.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="0" selection-start="238" selection-end="238" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/angrykings/activities/LobbyActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="30" selection-start="193" selection-end="193" vertical-scroll-proportion="0.0">
+        <state line="31" column="0" selection-start="947" selection-end="947" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/angrykings/PhysicsManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="73" column="38" selection-start="2007" selection-end="2007" vertical-scroll-proportion="0.0">
-          <folding />
+        <state line="134" column="42" selection-start="3808" selection-end="3808" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#3253#3269#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/angrykings/activities/LocalTestActivity.java">
+    <entry file="file://$PROJECT_DIR$/res/values/strings.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="68" column="0" selection-start="2657" selection-end="2657" vertical-scroll-proportion="0.0">
+        <state line="14" column="43" selection-start="720" selection-end="720" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/angrykings/activities/OnlineGameActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="420" column="0" selection-start="13063" selection-end="13063" vertical-scroll-proportion="0.028960818">
-          <folding />
+        <state line="440" column="21" selection-start="14294" selection-end="14294" vertical-scroll-proportion="0.51895046">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#13487#13574#0" expanded="true" />
+            <element signature="e#13569#13570#0" expanded="true" />
+            <element signature="e#13606#13681#0" expanded="true" />
+            <element signature="e#13676#13677#0" expanded="true" />
+            <element signature="e#15828#16425#0" expanded="true" />
+            <element signature="e#16128#16274#0" expanded="true" />
+            <element signature="e#16264#16265#0" expanded="true" />
+            <element signature="e#16303#16408#0" expanded="true" />
+            <element signature="e#16398#16399#0" expanded="true" />
+            <element signature="e#16417#16418#0" expanded="true" />
+            <element signature="e#19271#20307#0" expanded="true" />
+            <element signature="e#19732#19847#0" expanded="true" />
+            <element signature="e#19840#19841#0" expanded="true" />
+            <element signature="e#19882#20277#0" expanded="true" />
+            <element signature="e#20270#20271#0" expanded="true" />
+            <element signature="e#20302#20303#0" expanded="true" />
+            <element signature="e#21901#22514#0" expanded="true" />
+            <element signature="e#22225#22356#0" expanded="true" />
+            <element signature="e#22349#22350#0" expanded="true" />
+            <element signature="e#22382#22503#0" expanded="true" />
+            <element signature="e#22496#22497#0" expanded="true" />
+            <element signature="e#22509#22510#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -5,34 +5,45 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.andengine.opengl.font.FontFactory;
+import org.andengine.opengl.texture.ITexture;
+import org.andengine.opengl.texture.TextureOptions;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.angrykings.Action;
+import com.angrykings.R;
 import com.angrykings.ServerConnection;
 import com.angrykings.ServerConnection.OnMessageHandler;
 import com.angrykings.utils.ServerJSONBuilder;
 
-public class LobbyActivity extends ListActivity {
+public class LobbyActivity extends Activity {
 
 	private String username;
 	private List<String> users;
 	private Map<String, String> listItemToName = new HashMap<String, String>();
+	private ListView listView;
+	private Object statusFont;
 
 	private void updateLobby(List<String> user) {
-		setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, user));
+		listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, user));
 	}
 
 	/** Called when the activity is first created. */
@@ -50,12 +61,62 @@ public class LobbyActivity extends ListActivity {
 				.sendTextMessage(
 						new ServerJSONBuilder().create(
 								Action.Client.GO_TO_LOBBY).build());
+		setContentView(R.layout.activity_lobby);
+		listView = (ListView) findViewById(R.id.lobbyListe);
+		listView.setOnItemClickListener(new OnItemClickListener(){
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View v, int position,
+					long id) {
+				final String partnerName = listItemToName.get(
+						listView.getItemAtPosition(
+								position).toString());
+				
+				final AlertDialog dialog = new AlertDialog.Builder(LobbyActivity.this)
+						.setTitle("Please Wait").setMessage("Waiting for partner")
+						.show();
+
+				ServerConnection.getInstance().setHandler(new OnMessageHandler() {
+
+					@Override
+					public void onMessage(final String payload) {
+						try {
+							final JSONObject jObj = new JSONObject(payload);
+							if (jObj.getInt("action") == Action.Server.DENIED) {
+								dialog.cancel();
+								displayLobby();
+							} else {
+								dialog.dismiss();
+								Intent intent = new Intent(LobbyActivity.this, OnlineGameActivity.class);
+								intent.putExtra("myTurn", false)
+								.putExtra("username", username)
+								.putExtra("partnername", partnerName)
+								.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+								startActivity(intent);
+							}
+						} catch (final JSONException e) {
+							e.printStackTrace();
+						}
+					}
+				});
+
+				ServerConnection
+						.getInstance()
+						.getConnection()
+						.sendTextMessage(
+								new ServerJSONBuilder()
+										.create(Action.Client.PAIR)
+										.option("partner",partnerName).build());
+			}
+			
+		});
+			
 		displayLobby();
 	}
 
 	private void displayLobby() {
 		updateLobby(users);
-		getListView().setTextFilterEnabled(true);
+		listView.setTextFilterEnabled(true);
 		ServerConnection.getInstance().setHandler(new OnMessageHandler() {
 
 			@Override
@@ -155,49 +216,4 @@ public class LobbyActivity extends ListActivity {
 
 	}
 	
-	@Override
-	protected void onListItemClick(final ListView l, final View v, final int position, final long id) {
-		super.onListItemClick(l, v, position, id);
-
-		final String partnerName = listItemToName.get(
-				getListView().getItemAtPosition(
-						position).toString());
-		
-		final AlertDialog dialog = new AlertDialog.Builder(this)
-				.setTitle("Please Wait").setMessage("Waiting for partner")
-				.show();
-
-		ServerConnection.getInstance().setHandler(new OnMessageHandler() {
-
-			@Override
-			public void onMessage(final String payload) {
-				try {
-					final JSONObject jObj = new JSONObject(payload);
-					if (jObj.getInt("action") == Action.Server.DENIED) {
-						dialog.cancel();
-						displayLobby();
-					} else {
-						dialog.dismiss();
-						Intent intent = new Intent(LobbyActivity.this, OnlineGameActivity.class);
-						intent.putExtra("myTurn", false)
-						.putExtra("username", username)
-						.putExtra("partnername", partnerName)
-						.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-						startActivity(intent);
-					}
-				} catch (final JSONException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-
-		ServerConnection
-				.getInstance()
-				.getConnection()
-				.sendTextMessage(
-						new ServerJSONBuilder()
-								.create(Action.Client.PAIR)
-								.option("partner",partnerName).build());
-
-	}
 }

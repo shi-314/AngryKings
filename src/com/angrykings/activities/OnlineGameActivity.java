@@ -331,6 +331,8 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		
 		PhysicsManager.getInstance().setContext(this);
 
+		PhysicsManager.getInstance().clearEntities();
+
 		//
 		// initialize network
 		//
@@ -752,8 +754,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		// send castle block positions
 		//
 
-		ServerJSONBuilder query = new ServerJSONBuilder().create(
-				Action.Client.END_TURN).entities();
+		ServerJSONBuilder query = new ServerJSONBuilder().create(Action.Client.END_TURN).entities();
 		String jsonStr = query.build();
 		this.webSocketConnection.sendTextMessage(jsonStr);
 

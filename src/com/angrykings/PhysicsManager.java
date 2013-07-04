@@ -118,6 +118,7 @@ public class PhysicsManager implements IUpdateHandler {
 		ArrayList<PhysicalEntity> entities = new ArrayList<PhysicalEntity>();
 
 		Iterator<PhysicalEntity> it = this.physicalEntities.iterator();
+		int count =0;
 		while(it.hasNext()) {
 			PhysicalEntity entity = it.next();
 
@@ -180,6 +181,10 @@ public class PhysicsManager implements IUpdateHandler {
 		} catch (JSONException e) {
 
 		}
+	}
+
+	public void clearEntities() {
+		this.physicalEntities.clear();
 	}
 
 	@Override

@@ -1,9 +1,8 @@
 package com.angrykings;
 
+import com.badlogic.gdx.physics.box2d.Body;
 import org.andengine.entity.shape.IAreaShape;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
-
-import com.badlogic.gdx.physics.box2d.Body;
 
 /**
  * AngryKings
@@ -12,8 +11,17 @@ import com.badlogic.gdx.physics.box2d.Body;
  * @date 14.06.13
  */
 public abstract class PhysicalEntity {
+	private static int CURRENT_ID = 0;
+
+	public final int id;
 	private Runnable onRemove = null;
 	protected boolean autoRemove = false;
+
+	private PhysicsConnector connector = null;
+
+	protected PhysicalEntity() {
+		this.id = PhysicalEntity.CURRENT_ID++;
+	}
 
 	public abstract Body getBody();
 
@@ -22,9 +30,18 @@ public abstract class PhysicalEntity {
 	public void registerPhysicsConnector() {
 		GameContext gc = GameContext.getInstance();
 
-		gc.getPhysicsWorld().registerPhysicsConnector(
-				new PhysicsConnector(this.getAreaShape(), this.getBody(), true,
-						true));
+		this.connector = new PhysicsConnector(this.getAreaShape(), this.getBody(), true, true);
+
+		gc.getPhysicsWorld().registerPhysicsConnector(this.connector);
+	}
+
+	public void unregisterPhysicsConnector() {
+		GameContext gc = GameContext.getInstance();
+		gc.getPhysicsWorld().unregisterPhysicsConnector(this.connector);
+	}
+
+	public PhysicsConnector getPhysicsConnector() {
+		return connector;
 	}
 
 	public boolean isAutoRemoveEnabled() {
@@ -50,5 +67,9 @@ public abstract class PhysicalEntity {
 						.findPhysicsConnectorByShape(this.getAreaShape()));
 		gc.getPhysicsWorld().destroyBody(this.getBody());
 		this.getAreaShape().dispose();
+	}
+
+	public int getId() {
+		return this.id;
 	}
 }

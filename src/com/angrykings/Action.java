@@ -14,6 +14,7 @@ public class Action {
 		public static final int YOU_WIN = 1009;
 		public static final int KNOWN_USER = 1010;
 		public static final int SEND_NAME = 1011;
+		public static final int END_TURN = 1012;
 	}
 
 	public class Client {
@@ -26,6 +27,6 @@ public class Action {
 		public static final int SET_ID = 2007;
 		public static final int LOSE = 2008;
 		public static final int GET_NAME = 2009;
-
+		public static final int END_TURN = 2010;
 	}
 }

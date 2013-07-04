@@ -47,6 +47,7 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.debug.Debug;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -107,6 +108,7 @@ public class OnlineGameActivity extends BaseGameActivity
 	private WebSocketConnection webSocketConnection;
 	private int round;
 	boolean turnSent;
+	boolean receivedEndTurn;
 	int aimX, aimY;
 
 	@Override
@@ -225,6 +227,8 @@ public class OnlineGameActivity extends BaseGameActivity
 		// initialize network
 		//
 
+		this.receivedEndTurn = true;
+
 		ServerConnection.getInstance().setHandler(
 				new ServerConnection.OnMessageHandler() {
 					@Override
@@ -242,6 +246,7 @@ public class OnlineGameActivity extends BaseGameActivity
 								OnlineGameActivity.this.runOnUpdateThread(new Runnable() {
 									@Override
 									public void run() {
+										receivedEndTurn = false;
 										PhysicsManager.getInstance().setFreeze(false);
 										OnlineGameActivity.this.enemyCannon.pointAt(x, y);
 
@@ -272,6 +277,17 @@ public class OnlineGameActivity extends BaseGameActivity
 								startActivity(intent);
 							} else if (jObj.getInt("action") == Action.Server.YOU_WIN) {
 								gc.getHud().setStatus("Du hast gewonnen!");
+							} else if (jObj.getInt("action") == Action.Server.END_TURN) {
+								JSONArray jsonEntities = jObj.getJSONArray("entities");
+
+								if(jsonEntities == null) {
+									Debug.d("Warning: jsonEntities is null");
+								} else {
+									Debug.d("received end turn from server with " + jsonEntities.length() + " entities");
+
+									PhysicsManager.getInstance().updateEntities(jsonEntities);
+									receivedEndTurn = true;
+								}
 							}
 						} catch (JSONException e) {
 							// TODO: Catch the exception
@@ -330,6 +346,7 @@ public class OnlineGameActivity extends BaseGameActivity
 		if (extras != null) {
 			Boolean myTurn = extras.getBoolean("myTurn");
 			if (myTurn) {
+				this.receivedEndTurn = true;
 				this.round = 0;
 				amILeft = true;
 				myX = -400;
@@ -339,6 +356,7 @@ public class OnlineGameActivity extends BaseGameActivity
 				leftPlayerName = extras.getString("username");
 				rightPlayerName = extras.getString("partnername");
 			} else {
+				this.receivedEndTurn = false;
 				this.round = 1;
 				amILeft = false;
 				enemyX = -400;
@@ -471,7 +489,9 @@ public class OnlineGameActivity extends BaseGameActivity
 
 			gc.getHud().setStatus("x="+this.aimX+", y="+this.aimY);
 
-			if (pSceneTouchEvent.isActionUp()) {
+			Debug.d("receivedEndTurn: " + this.receivedEndTurn);
+
+			if (pSceneTouchEvent.isActionUp() && this.receivedEndTurn) {
 				if (!turnSent && round % 2 == 0) {
 					this.round++;
 					this.runOnUpdateThread(new Runnable() {
@@ -495,6 +515,10 @@ public class OnlineGameActivity extends BaseGameActivity
 								@Override
 								public void run() {
 									PhysicsManager.getInstance().setFreeze(true);
+									ServerJSONBuilder query = new ServerJSONBuilder().create(Action.Client.END_TURN).entities();
+									String jsonStr = query.build();
+									webSocketConnection.sendTextMessage(jsonStr);
+									Debug.d("send " + PhysicsManager.getInstance().getPhysicalEntities().size() + " entities");
 								}
 							});
 						}

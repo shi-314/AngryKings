@@ -1,9 +1,15 @@
 package com.angrykings;
 
 import com.angrykings.maps.BasicMap;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import org.andengine.engine.handler.IUpdateHandler;
+import org.andengine.extension.physics.box2d.util.Vector2Pool;
+import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.util.debug.Debug;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -98,15 +104,75 @@ public class PhysicsManager implements IUpdateHandler {
 		this.freezed = freeze;
 	}
 
+	/**
+	 * @param ignoreAutoRemovables	If true the entities with autoRemove enabled will be ignored
+	 * @return	Returns a list of physical entities.
+	 */
+	public ArrayList<PhysicalEntity> getPhysicalEntities(boolean ignoreAutoRemovables) {
+		ArrayList<PhysicalEntity> entities = new ArrayList<PhysicalEntity>();
+
+		Iterator<PhysicalEntity> it = this.physicalEntities.iterator();
+		while(it.hasNext()) {
+			PhysicalEntity entity = it.next();
+
+			if(ignoreAutoRemovables && entity.isAutoRemoveEnabled())
+				continue;
+
+			entities.add(entity);
+		}
+
+		return entities;
+	}
+
+	/**
+	 * @return Returns a list of all physical entities except of the ones where autoRemove ist enabled
+	 */
+	public ArrayList<PhysicalEntity> getPhysicalEntities() {
+		return this.getPhysicalEntities(true);
+	}
+
 	public boolean isReady() {
 		return this.ready && (GameConfig.USE_FIXED_CANNONBALL_TIME ? this.freezed : true);
 	}
 
-	public void setEntitiesActive(boolean status) {
-		Iterator<PhysicalEntity> it = this.physicalEntities.iterator();
-		while(it.hasNext()) {
-			PhysicalEntity entity = it.next();
-			entity.getBody().setActive(status);
+	/**
+	 * @param id	Id of the entity.
+	 * @return		Returns the physical entity or null if not found.
+	 */
+	public PhysicalEntity getEntityById(int id) {
+		for(PhysicalEntity e : this.physicalEntities)
+			if(e.getId() == id)
+				return e;
+
+		return null;
+	}
+
+	public void updateEntities(JSONArray jsonEntities) {
+		GameContext gc = GameContext.getInstance();
+
+		try {
+			for(int i=0; i < jsonEntities.length(); i++) {
+				JSONObject jsonEntity = jsonEntities.getJSONObject(i);
+
+				final int id = jsonEntity.getInt("id");
+				final float x = (float) jsonEntity.getDouble("x");
+				final float y = (float) jsonEntity.getDouble("y");
+				final float rotation = (float) jsonEntity.getDouble("rotation");
+
+				PhysicalEntity e = this.getEntityById(id);
+
+				final float widthD2 = e.getAreaShape().getWidth() / 2;
+				final float heightD2 = e.getAreaShape().getHeight() / 2;
+				final Vector2 v2 = Vector2Pool.obtain(
+						(x + widthD2) / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
+						(y + heightD2) / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT
+				);
+
+				e.getBody().setTransform(v2, rotation);
+				Vector2Pool.recycle(v2);
+			}
+		} catch (JSONException e) {
+
 		}
 	}
 

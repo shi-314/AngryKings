@@ -328,6 +328,8 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			throws Exception {
 
 		gc = GameContext.getInstance();
+		
+		PhysicsManager.getInstance().setContext(this);
 
 		//
 		// initialize network
@@ -582,7 +584,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 												@Override
 												public void onTimePassed(
 														TimerHandler pTimerHandler) {
-													ball.remove();
+													ball.remove(OnlineGameActivity.this);
 												}
 											}));
 
@@ -812,7 +814,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 									@Override
 									public void onTimePassed(
 											TimerHandler pTimerHandler) {
-										ball.remove();
+										ball.remove(OnlineGameActivity.this);
 									}
 								}));
 

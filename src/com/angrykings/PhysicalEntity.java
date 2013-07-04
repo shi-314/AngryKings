@@ -1,8 +1,10 @@
 package com.angrykings;
 
-import com.badlogic.gdx.physics.box2d.Body;
 import org.andengine.entity.shape.IAreaShape;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
+import org.andengine.ui.activity.BaseGameActivity;
+
+import com.badlogic.gdx.physics.box2d.Body;
 
 /**
  * AngryKings
@@ -27,6 +29,7 @@ public abstract class PhysicalEntity {
 
 	public abstract IAreaShape getAreaShape();
 
+	
 	public void registerPhysicsConnector() {
 		GameContext gc = GameContext.getInstance();
 
@@ -52,21 +55,27 @@ public abstract class PhysicalEntity {
 		this.onRemove = onRemove;
 	}
 
-	public void remove() {
-		if(this.onRemove != null)
-			this.onRemove.run();
+	public void remove(BaseGameActivity context) {
+		context.runOnUpdateThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				if(PhysicalEntity.this.onRemove != null)
+					PhysicalEntity.this.onRemove.run();
 
-		// TODO this needs to be run in runOnUpdateThread(), dont know why it is not crashing right now
-		GameContext gc = GameContext.getInstance();
+				// TODO this needs to be run in runOnUpdateThread(), dont know why it is not crashing right now
+				GameContext gc = GameContext.getInstance();
 
-		this.getAreaShape().setVisible(false);
-		this.getAreaShape().detachSelf();
-		this.getAreaShape().clearUpdateHandlers();
-		gc.getPhysicsWorld().unregisterPhysicsConnector(
-				gc.getPhysicsWorld().getPhysicsConnectorManager()
-						.findPhysicsConnectorByShape(this.getAreaShape()));
-		gc.getPhysicsWorld().destroyBody(this.getBody());
-		this.getAreaShape().dispose();
+				PhysicalEntity.this.getAreaShape().setVisible(false);
+				PhysicalEntity.this.getAreaShape().detachSelf();
+				PhysicalEntity.this.getAreaShape().clearUpdateHandlers();
+				gc.getPhysicsWorld().unregisterPhysicsConnector(
+						gc.getPhysicsWorld().getPhysicsConnectorManager()
+								.findPhysicsConnectorByShape(PhysicalEntity.this.getAreaShape()));
+				gc.getPhysicsWorld().destroyBody(PhysicalEntity.this.getBody());
+				PhysicalEntity.this.getAreaShape().dispose();				
+			}
+		});
 	}
 
 	public int getId() {

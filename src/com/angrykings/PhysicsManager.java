@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
+import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.debug.Debug;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,12 +27,17 @@ public class PhysicsManager implements IUpdateHandler {
 	private static PhysicsManager instance = null;
 	private boolean ready;
 	private boolean freezed;
-
+	protected BaseGameActivity context;
+	
 	public static PhysicsManager getInstance() {
 		if(instance == null)
 			instance = new PhysicsManager();
 
 		return instance;
+	}
+	
+	public void setContext(BaseGameActivity context){
+		this.context = context;
 	}
 
 	private static final float MIN_LINEAR_VELOCITY = 1e-2f;
@@ -68,7 +74,7 @@ public class PhysicsManager implements IUpdateHandler {
 
 			if(linearVelocity < PhysicsManager.MIN_LINEAR_VELOCITY && angularVelocity < PhysicsManager.MIN_ANGULAR_VELOCITY) {
 				Debug.d("remove physical entity: lin: " + b.getLinearVelocity().len() + " angular: " + b.getAngularVelocity());
-				entity.remove();
+				entity.remove(context);
 				it.remove();
 			}else{
 				Debug.d("not ready: lin="+linearVelocity+", ang="+angularVelocity);
@@ -77,7 +83,7 @@ public class PhysicsManager implements IUpdateHandler {
 
 			if(entity.getAreaShape().getY() > BasicMap.GROUND_Y + 100) {
 				Debug.d("remove physical entity (seems to have fallen down of the 'ground'): y " + entity.getAreaShape().getY());
-				entity.remove();
+				entity.remove(context);
 				it.remove();
 			}
 		}

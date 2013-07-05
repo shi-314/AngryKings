@@ -146,7 +146,7 @@ public class PhysicsManager implements IUpdateHandler {
 	 * @param id	Id of the entity.
 	 * @return		Returns the physical entity or null if not found.
 	 */
-	public PhysicalEntity getEntityById(int id) {
+	public PhysicalEntity getEntityById(final int id) {
 		for(PhysicalEntity e : this.physicalEntities)
 			if(e.getId() == id)
 				return e;
@@ -154,33 +154,37 @@ public class PhysicsManager implements IUpdateHandler {
 		return null;
 	}
 
-	public void updateEntities(JSONArray jsonEntities) {
-		GameContext gc = GameContext.getInstance();
+	public void updateEntities(final JSONArray jsonEntities) {
+		context.runOnUpdateThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				try {
+					for(int i=0; i < jsonEntities.length(); i++) {
+						JSONObject jsonEntity = jsonEntities.getJSONObject(i);
 
-		try {
-			for(int i=0; i < jsonEntities.length(); i++) {
-				JSONObject jsonEntity = jsonEntities.getJSONObject(i);
+						final int id = jsonEntity.getInt("id");
+						final float x = (float) jsonEntity.getDouble("x");
+						final float y = (float) jsonEntity.getDouble("y");
+						final float rotation = (float) jsonEntity.getDouble("rotation");
 
-				final int id = jsonEntity.getInt("id");
-				final float x = (float) jsonEntity.getDouble("x");
-				final float y = (float) jsonEntity.getDouble("y");
-				final float rotation = (float) jsonEntity.getDouble("rotation");
+						PhysicalEntity e = PhysicsManager.this.getEntityById(id);
 
-				PhysicalEntity e = this.getEntityById(id);
+						final float widthD2 = e.getAreaShape().getWidth() / 2;
+						final float heightD2 = e.getAreaShape().getHeight() / 2;
+						final Vector2 v2 = Vector2Pool.obtain(
+								(x + widthD2) / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
+								(y + heightD2) / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT
+						);
 
-				final float widthD2 = e.getAreaShape().getWidth() / 2;
-				final float heightD2 = e.getAreaShape().getHeight() / 2;
-				final Vector2 v2 = Vector2Pool.obtain(
-						(x + widthD2) / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
-						(y + heightD2) / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT
-				);
+						e.getBody().setTransform(v2, rotation);
+						Vector2Pool.recycle(v2);
+					}
+				} catch (JSONException e) {
 
-				e.getBody().setTransform(v2, rotation);
-				Vector2Pool.recycle(v2);
+				}				
 			}
-		} catch (JSONException e) {
-
-		}
+		});
 	}
 
 	public void clearEntities() {

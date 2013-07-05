@@ -1,10 +1,9 @@
 package com.angrykings;
 
+import com.badlogic.gdx.physics.box2d.Body;
 import org.andengine.entity.shape.IAreaShape;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.ui.activity.BaseGameActivity;
-
-import com.badlogic.gdx.physics.box2d.Body;
 
 /**
  * AngryKings
@@ -13,7 +12,7 @@ import com.badlogic.gdx.physics.box2d.Body;
  * @date 14.06.13
  */
 public abstract class PhysicalEntity {
-	private static int CURRENT_ID = 0;
+	public static int CURRENT_ID = 0;
 
 	public final int id;
 	private Runnable onRemove = null;

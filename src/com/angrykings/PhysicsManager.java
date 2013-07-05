@@ -151,6 +151,8 @@ public class PhysicsManager implements IUpdateHandler {
 			if(e.getId() == id)
 				return e;
 
+		Debug.d("Warning: entity with id=" + id + " not found!");
+
 		return null;
 	}
 
@@ -191,6 +193,7 @@ public class PhysicsManager implements IUpdateHandler {
 
 	public void clearEntities() {
 		this.physicalEntities.clear();
+		PhysicalEntity.CURRENT_ID = 0;
 	}
 
 	@Override

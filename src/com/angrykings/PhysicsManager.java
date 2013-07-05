@@ -170,15 +170,17 @@ public class PhysicsManager implements IUpdateHandler {
 
 						PhysicalEntity e = PhysicsManager.this.getEntityById(id);
 
-						final float widthD2 = e.getAreaShape().getWidth() / 2;
-						final float heightD2 = e.getAreaShape().getHeight() / 2;
-						final Vector2 v2 = Vector2Pool.obtain(
-								(x + widthD2) / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
-								(y + heightD2) / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT
-						);
-
-						e.getBody().setTransform(v2, rotation);
-						Vector2Pool.recycle(v2);
+						if(e != null){
+							final float widthD2 = e.getAreaShape().getWidth() / 2;
+							final float heightD2 = e.getAreaShape().getHeight() / 2;
+							final Vector2 v2 = Vector2Pool.obtain(
+									(x + widthD2) / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
+									(y + heightD2) / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT
+							);
+	
+							e.getBody().setTransform(v2, rotation);
+							Vector2Pool.recycle(v2);
+						}
 					}
 				} catch (JSONException e) {
 

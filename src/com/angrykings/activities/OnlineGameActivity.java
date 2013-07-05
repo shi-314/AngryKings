@@ -440,6 +440,9 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		this.leftKing = new King(this.kingTexture2, -550, BasicMap.GROUND_Y
 				- kingTexture2.getHeight() / 2);
 		scene.attachChild(this.leftKing);
+		
+		leftKing.getSprite().setCurrentTileIndex(1);
+		rightKing.getSprite().setCurrentTileIndex(0);
 
 		//
 		// initialize navigation
@@ -480,7 +483,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 		Debug.d("left player name: " + leftPlayerName);
 		Debug.d("right player name: " + rightPlayerName);
-
+		
 		if (amILeft)
 			hud.setStatus(this.getString(R.string.yourTurn));
 		else
@@ -489,10 +492,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		scene.registerUpdateHandler(new IUpdateHandler() {
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
-				// float leftLife = ((leftCastle.getHeight() +
-				// initialLeftCastleHeight)/(initialLeftCastleHeight*2))/2;
-				// float rightLife = ((rightCastle.getHeight() +
-				// initialRightCastleHeight)/(initialRightCastleHeight*2))/2;
 
 				float leftLife = leftCastle.getHeight()
 						/ initialLeftCastleHeight;
@@ -779,6 +778,13 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		}
 
 		this.hud.setStatus(getString(R.string.enemyTurn));
+		if(isLeft){
+			leftKing.getSprite().setCurrentTileIndex(0);
+			rightKing.getSprite().setCurrentTileIndex(1);
+		}else{
+			leftKing.getSprite().setCurrentTileIndex(1);
+			rightKing.getSprite().setCurrentTileIndex(0);
+		}
 	}
 
 	private void onPartnerTurnEnd(JSONObject jObj) throws JSONException {
@@ -793,8 +799,16 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			PhysicsManager.getInstance().updateEntities(jsonEntities);
 			receivedEndTurn = true;
 
-			if (!this.wonTheGame)
+			if (!this.wonTheGame){
 				hud.setStatus(getString(R.string.yourTurn));
+				if(isLeft){
+					leftKing.getSprite().setCurrentTileIndex(1);
+					rightKing.getSprite().setCurrentTileIndex(0);
+				}else{
+					leftKing.getSprite().setCurrentTileIndex(0);
+					rightKing.getSprite().setCurrentTileIndex(1);
+				}
+			}
 		}
 	}
 

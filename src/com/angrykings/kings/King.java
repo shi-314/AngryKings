@@ -1,6 +1,7 @@
 package com.angrykings.kings;
 
 import org.andengine.entity.Entity;
+import org.andengine.entity.shape.IAreaShape;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 
@@ -32,6 +33,10 @@ public class King extends Entity{
 		//kingSprite.setCurrentTileIndex(1);
 		
 		this.attachChild(kingSprite);
+	}
+	
+	public AnimatedSprite getSprite() {
+		return this.kingSprite;
 	}
 
 }

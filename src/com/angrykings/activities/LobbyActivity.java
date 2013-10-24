@@ -1,14 +1,5 @@
 package com.angrykings.activities;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
@@ -19,11 +10,18 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
 import com.angrykings.Action;
 import com.angrykings.ServerConnection;
 import com.angrykings.ServerConnection.OnMessageHandler;
-import com.angrykings.utils.ServerJSONBuilder;
+import com.angrykings.utils.ServerMessage;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class LobbyActivity extends ListActivity {
 
@@ -47,9 +45,7 @@ public class LobbyActivity extends ListActivity {
 		ServerConnection
 				.getInstance()
 				.getConnection()
-				.sendTextMessage(
-						new ServerJSONBuilder().create(
-								Action.Client.GO_TO_LOBBY).build());
+				.sendTextMessage(ServerMessage.gotoLobby());
 		displayLobby();
 	}
 
@@ -77,10 +73,7 @@ public class LobbyActivity extends ListActivity {
 												ServerConnection
 														.getInstance()
 														.getConnection()
-														.sendTextMessage(
-																new ServerJSONBuilder()
-																		.create(Action.Client.ACCEPT)
-																		.build());
+														.sendTextMessage(ServerMessage.acceptChallenge());
 												Intent intent = new Intent(
 														LobbyActivity.this,
 														OnlineGameActivity.class);
@@ -107,10 +100,7 @@ public class LobbyActivity extends ListActivity {
 												ServerConnection
 														.getInstance()
 														.getConnection()
-														.sendTextMessage(
-																new ServerJSONBuilder()
-																		.create(Action.Client.DENY)
-																		.build());
+														.sendTextMessage(ServerMessage.denyChallenge());
 											}
 										}).show();
 					} else if (jObj.getInt("action") == Action.Server.LOBBY_UPDATE) {
@@ -146,13 +136,10 @@ public class LobbyActivity extends ListActivity {
 			ServerConnection
 			.getInstance()
 			.getConnection()
-			.sendTextMessage(
-					new ServerJSONBuilder()
-							.create(Action.Client.LEAVE_LOBBY)
-							.build());
+			.sendTextMessage(ServerMessage.leaveLobby());
 		}
-		return super.onKeyDown(keyCode, event);
 
+		return super.onKeyDown(keyCode, event);
 	}
 	
 	@Override
@@ -196,10 +183,7 @@ public class LobbyActivity extends ListActivity {
 		ServerConnection
 				.getInstance()
 				.getConnection()
-				.sendTextMessage(
-						new ServerJSONBuilder()
-								.create(Action.Client.PAIR)
-								.option("partner",partnerName).build());
+				.sendTextMessage(ServerMessage.pair(partnerName));
 
 	}
 }

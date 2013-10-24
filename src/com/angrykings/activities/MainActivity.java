@@ -1,8 +1,5 @@
 package com.angrykings.activities;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -12,13 +9,14 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-
 import com.angrykings.Action;
 import com.angrykings.R;
 import com.angrykings.ServerConnection;
 import com.angrykings.ServerConnection.OnMessageHandler;
 import com.angrykings.ServerConnection.OnStartHandler;
-import com.angrykings.utils.ServerJSONBuilder;
+import com.angrykings.utils.ServerMessage;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends Activity {
 
@@ -70,14 +68,14 @@ public class MainActivity extends Activity {
 					ServerConnection
 					.getInstance()
 					.getConnection()
-					.sendTextMessage(new ServerJSONBuilder().create(Action.Client.SET_ID).option("id", getImei()).build());				
+					.sendTextMessage(ServerMessage.setId(getImei()));
 				}
 			});
 		}else{
 			ServerConnection
 			.getInstance()
 			.getConnection()
-			.sendTextMessage(new ServerJSONBuilder().create(Action.Client.GET_NAME).build());				
+			.sendTextMessage(ServerMessage.getName());
 		}
 
 

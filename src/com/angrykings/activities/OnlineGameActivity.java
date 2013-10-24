@@ -15,7 +15,7 @@ import com.angrykings.cannons.Cannonball;
 import com.angrykings.castles.Castle;
 import com.angrykings.kings.King;
 import com.angrykings.maps.BasicMap;
-import com.angrykings.utils.ServerJSONBuilder;
+import com.angrykings.utils.ServerMessage;
 import com.badlogic.gdx.math.Vector2;
 import de.tavendo.autobahn.WebSocketConnection;
 import org.andengine.engine.camera.ZoomCamera;
@@ -78,7 +78,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	// Network
 	//
 
-	private static String JSON_LOSE;
 	private ServerConnection serverConnection;
 	private WebSocketConnection webSocketConnection;
 	private int round;
@@ -148,13 +147,13 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		ZoomCamera camera = new ZoomCamera(0, 0, GameConfig.CAMERA_WIDTH, GameConfig.CAMERA_HEIGHT);
 
 		camera.setZoomFactor(GameConfig.CAMERA_STARTUP_ZOOM);
-		camera.setBounds(GameConfig.CAMERA_MIN_X, GameConfig.CAMERA_MIN_Y,
-			GameConfig.CAMERA_MAX_X, GameConfig.CAMERA_MAX_Y);
+		camera.setBounds(
+				GameConfig.CAMERA_MIN_X, GameConfig.CAMERA_MIN_Y,
+				GameConfig.CAMERA_MAX_X, GameConfig.CAMERA_MAX_Y
+		);
 		camera.setBoundsEnabled(true);
 
 		gc.setCamera(camera);
-
-		OnlineGameActivity.JSON_LOSE = new ServerJSONBuilder().create(Action.Client.LOSE).build();
 
 		this.serverConnection = ServerConnection.getInstance();
 		this.webSocketConnection = this.serverConnection.getConnection();
@@ -210,10 +209,12 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		//
 
 		FixedStepPhysicsWorld physicsWorld = new FixedStepPhysicsWorld(
-				GameConfig.PHYSICS_STEPS_PER_SEC, new Vector2(0,
-				SensorManager.GRAVITY_EARTH), false,
+				GameConfig.PHYSICS_STEPS_PER_SEC,
+				new Vector2(0, SensorManager.GRAVITY_EARTH),
+				false,
 				GameConfig.PHYSICS_VELOCITY_ITERATION,
-				GameConfig.PHYSICS_POSITION_ITERATION);
+				GameConfig.PHYSICS_POSITION_ITERATION
+		);
 
 		physicsWorld.setAutoClearForces(true);
 		gc.setPhysicsWorld(physicsWorld);
@@ -344,7 +345,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 				if (left && leftLife < 0.5f || !left && rightLife < 0.5f) {
 					gc.getHud().setStatus("Du hast verloren!");
 					gc.getHud().setStatus(getString(R.string.hasLost));
-					webSocketConnection .sendTextMessage(OnlineGameActivity.JSON_LOSE);
+					webSocketConnection.sendTextMessage(ServerMessage.lose());
 					Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
 					intent.putExtra("hasWon", false);
 					intent.putExtra("isLeft", OnlineGameActivity.this.isLeft);
@@ -431,12 +432,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 						}
 					});
 
-					this.webSocketConnection
-							.sendTextMessage(new ServerJSONBuilder()
-									.create(Action.Client.TURN)
-									.option("x", String.valueOf(this.aimX))
-									.option("y", String.valueOf(this.aimY))
-									.build());
+					this.webSocketConnection.sendTextMessage(ServerMessage.turn(this.aimX, this.aimY));
 
 					this.turnSent = true;
 				}
@@ -551,11 +547,9 @@ public class OnlineGameActivity extends BaseGameActivity implements
 					@Override
 					public void onClick(View v) {
 						hud.setStatus(getString(R.string.youResigned));
-						webSocketConnection
-								.sendTextMessage(OnlineGameActivity.JSON_LOSE);
+						webSocketConnection.sendTextMessage(ServerMessage.lose());
 						dialog.dismiss();
-						Intent intent = new Intent(OnlineGameActivity.this,
-								EndGameActivity.class);
+						Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
 						intent.putExtra("hasWon", false);
 						intent.putExtra("isLeft", OnlineGameActivity.this.isLeft);
 						intent.putExtra("username", myName);
@@ -575,8 +569,8 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			resign();
 			return true;
 		}
-		return super.onKeyDown(keyCode, event);
 
+		return super.onKeyDown(keyCode, event);
 	}
 
 	private void onMyTurnEnd() {
@@ -586,9 +580,8 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		// send castle block positions
 		//
 
-		ServerJSONBuilder query = new ServerJSONBuilder().create(Action.Client.END_TURN).entities();
-		String jsonStr = query.build();
-		this.webSocketConnection.sendTextMessage(jsonStr);
+		String jsonStr = ServerMessage.endTurn();
+		this.webSocketConnection.sendTextMessage(ServerMessage.endTurn());
 
 		Debug.d("send "
 				+ PhysicsManager.getInstance().getPhysicalEntities().size()
@@ -652,15 +645,13 @@ public class OnlineGameActivity extends BaseGameActivity implements
 				PhysicsManager.getInstance().setFreeze(false);
 				enemyCannon.pointAt(x, y);
 
-				final Cannonball ball = enemyCannon
-						.fire(GameConfig.CANNON_FORCE);
+				final Cannonball ball = enemyCannon.fire(GameConfig.CANNON_FORCE);
 
 				getEngine().registerUpdateHandler(
 						new TimerHandler(GameConfig.CANNONBALL_TIME_SEC,
 								new ITimerCallback() {
 									@Override
-									public void onTimePassed(
-											TimerHandler pTimerHandler) {
+									public void onTimePassed(TimerHandler pTimerHandler) {
 										ball.remove(OnlineGameActivity.this);
 									}
 								}));

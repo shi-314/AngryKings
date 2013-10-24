@@ -1,8 +1,5 @@
 package com.angrykings.activities;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,12 +7,13 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
 import com.angrykings.Action;
 import com.angrykings.R;
 import com.angrykings.ServerConnection;
 import com.angrykings.ServerConnection.OnMessageHandler;
-import com.angrykings.utils.ServerJSONBuilder;
+import com.angrykings.utils.ServerMessage;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class LogInActivity extends Activity {
 
@@ -53,7 +51,7 @@ public class LogInActivity extends Activity {
 				ServerConnection
 						.getInstance()
 						.getConnection()
-						.sendTextMessage(new ServerJSONBuilder().create(Action.Client.SET_NAME).option("name", nameText.getText().toString()).build());
+						.sendTextMessage(ServerMessage.setName(nameText.getText().toString()));
 			}
 		});
 	}

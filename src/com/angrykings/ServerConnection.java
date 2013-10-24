@@ -40,10 +40,17 @@ public class ServerConnection {
 		return handler;
 	}
 
+	// TODO implement so that activities don't have to override handlers
 	public void setHandler(OnMessageHandler handler) {
 		this.handler = handler;
 	}
 
+	/**
+	 * Connects to our WebSocket Server. Only needs to be called ONCE in the whole app lifecycle.
+	 * 
+	 * @param startHandler
+	 */
+	//TODO As long the connection persists, do not restart
 	public void start(final OnStartHandler startHandler) {
 		final String wsuri = "ws://spaeti.pavo.uberspace.de:61224";
 

@@ -23,8 +23,8 @@ import com.angrykings.utils.ServerJSONBuilder;
 public class MainActivity extends Activity {
 
 	private String username;
-	private Button bLobby;
-	private Button bIntro;
+	private Button lobbyButton;
+	private Button introButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,12 +32,12 @@ public class MainActivity extends Activity {
 
 		setContentView(R.layout.activity_main);
 
-		bIntro = (Button) findViewById(R.id.introButton);
+		introButton = (Button) findViewById(R.id.introButton);
 
-		bLobby = (Button) findViewById(R.id.lobbyButton);
-		bLobby.setBackgroundResource(R.drawable.verbinde_button);
-		//bLobby.setText(this.getString(R.string.waitForConnection));
-		bLobby.setEnabled(false);
+		lobbyButton = (Button) findViewById(R.id.lobbyButton);
+		lobbyButton.setBackgroundResource(R.drawable.verbinde_button);
+
+		lobbyButton.setEnabled(false);
 
 		ServerConnection.getInstance().setHandler(new OnMessageHandler() {
 
@@ -47,9 +47,9 @@ public class MainActivity extends Activity {
 					JSONObject jObj = new JSONObject(payload);
 					if (jObj.getInt("action") == Action.Server.KNOWN_USER || jObj.getInt("action") == Action.Server.SEND_NAME) {
 						username = jObj.getString("name");
-						bLobby.setBackgroundResource(R.drawable.lobby_button);
+						lobbyButton.setBackgroundResource(R.drawable.lobby_button);
 						//bLobby.setText(getString(R.string.lobbyButton));
-						bLobby.setEnabled(true);
+						lobbyButton.setEnabled(true);
 					} else if (jObj.getInt("action") == Action.Server.UNKNOWN_USER) {
 						Intent intent = new Intent(MainActivity.this,
 								LogInActivity.class);
@@ -86,7 +86,7 @@ public class MainActivity extends Activity {
 			username = extras.getString("username");
 		}
 
-		bLobby.setOnClickListener(new OnClickListener() {
+		lobbyButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
@@ -99,7 +99,7 @@ public class MainActivity extends Activity {
 
 		});
 
-		bIntro.setOnClickListener(new OnClickListener() {
+		introButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {

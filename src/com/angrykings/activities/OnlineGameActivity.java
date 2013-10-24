@@ -489,6 +489,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		else
 			hud.setStatus(this.getString(R.string.enemyTurn));
 
+		// TODO in HUD auslagern
 		scene.registerUpdateHandler(new IUpdateHandler() {
 			@Override
 			public void onUpdate(float pSecondsElapsed) {

@@ -116,7 +116,7 @@ public class LobbyActivity extends ListActivity {
 					} else if (jObj.getInt("action") == Action.Server.LOBBY_UPDATE) {
 						Log.d("AngryKings", "received lobby update: "+jObj.get("names"));
 
-						JSONArray userArray = new JSONArray(jObj .getString("names"));
+						JSONArray userArray = new JSONArray(jObj.getString("names"));
 						users.clear();
 
 						for (int i = 0; i < userArray.length(); i++) {
@@ -173,6 +173,7 @@ public class LobbyActivity extends ListActivity {
 			public void onMessage(final String payload) {
 				try {
 					final JSONObject jObj = new JSONObject(payload);
+					// TODO revert logic: if confirmed
 					if (jObj.getInt("action") == Action.Server.DENIED) {
 						dialog.cancel();
 						displayLobby();
@@ -191,6 +192,7 @@ public class LobbyActivity extends ListActivity {
 			}
 		});
 
+		// TODO use mongoid
 		ServerConnection
 				.getInstance()
 				.getConnection()

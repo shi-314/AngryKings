@@ -2,6 +2,7 @@ package com.angrykings.castles;
 
 import com.angrykings.GameContext;
 import com.angrykings.PhysicalEntity;
+import com.angrykings.ResourceManager;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -27,8 +28,9 @@ public class Stone extends PhysicalEntity {
 	private final static float LINEAR_DAMPING = 0.1f;
 	private final static float ANGULAR_DAMPING = 0.1f;
 
-	public Stone(TiledTextureRegion stoneTexture, float x, float y) {
-		this.stoneTexture = stoneTexture;
+	public Stone(float x, float y) {
+		ResourceManager rm = ResourceManager.getInstance();
+		this.stoneTexture = rm.getStoneTexture();
 		GameContext gc = GameContext.getInstance();
 
 		this.stoneSprite = new AnimatedSprite(

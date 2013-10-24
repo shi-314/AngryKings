@@ -1,5 +1,16 @@
 package com.angrykings.unused;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.hardware.SensorManager;
+import android.os.Handler;
+import android.view.View;
+import android.widget.Button;
+import com.angrykings.*;
+import com.angrykings.cannons.Cannon;
+import com.angrykings.castles.Castle;
+import com.angrykings.maps.BasicMap;
+import com.badlogic.gdx.math.Vector2;
 import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.options.EngineOptions;
@@ -27,25 +38,6 @@ import org.andengine.opengl.texture.atlas.bitmap.source.AssetBitmapTextureAtlasS
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.ui.activity.BaseGameActivity;
-
-import android.app.Dialog;
-import android.graphics.Color;
-import android.hardware.SensorManager;
-import android.os.Handler;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.angrykings.GameConfig;
-import com.angrykings.GameContext;
-import com.angrykings.GameHUD;
-import com.angrykings.PhysicsManager;
-import com.angrykings.R;
-import com.angrykings.cannons.Cannon;
-import com.angrykings.castles.Castle;
-import com.angrykings.maps.BasicMap;
-import com.badlogic.gdx.math.Vector2;
 
 /**
  * MapTest
@@ -256,7 +248,7 @@ public class LocalTestActivity extends BaseGameActivity implements
 		// initialize the entities
 		//
 
-		BasicMap map = new BasicMap(this.grassTexture, this.skyTexture);
+		BasicMap map = new BasicMap();
 		scene.attachChild(map);
 
 		Boolean amILeft = false;
@@ -266,18 +258,15 @@ public class LocalTestActivity extends BaseGameActivity implements
 		int enemyX = -400;
 		int enemyY = 890;
 
-		this.cannon = new Cannon(this.cannonTexture, this.wheelTexture,
-				this.ballTexture, amILeft);
+		this.cannon = new Cannon(amILeft);
 		this.cannon.setPosition(myX, myY);
 		scene.attachChild(this.cannon);
 
-		this.enemyCannon = new Cannon(this.cannonTexture, this.wheelTexture,
-				this.ballTexture, !amILeft);
+		this.enemyCannon = new Cannon(!amILeft);
 		this.enemyCannon.setPosition(enemyX, enemyY);
 		scene.attachChild(this.enemyCannon);
 
-		castle = new Castle(400, BasicMap.GROUND_Y, this.stoneTexture,
-				this.roofTexture, this.woodTexture);
+		castle = new Castle(400, BasicMap.GROUND_Y);
 
 		// castle = new Castle(100, BasicMap.GROUND_Y, this.stoneTexture,
 		// this.roofTexture, this.woodTexture);

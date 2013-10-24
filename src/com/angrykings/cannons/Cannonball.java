@@ -1,15 +1,15 @@
 package com.angrykings.cannons;
 
+import com.angrykings.GameContext;
+import com.angrykings.PhysicalEntity;
+import com.angrykings.ResourceManager;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import org.andengine.entity.shape.IAreaShape;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
-
-import com.angrykings.GameContext;
-import com.angrykings.PhysicalEntity;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 /**
  * Cannonball
@@ -19,7 +19,6 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
  */
 public class Cannonball extends PhysicalEntity {
 
-	private final TextureRegion ballTexture;
 	private final Body ballBody;
 	private final FixtureDef ballFixture;
 	private final Sprite ballSprite;
@@ -29,19 +28,20 @@ public class Cannonball extends PhysicalEntity {
 
 	private static final FixtureDef DEFAULT_FIXTURE_DEF = PhysicsFactory.createFixtureDef(5.5f, 0.1f, 0.9f);
 
-	public Cannonball(TextureRegion ballTexture, float x, float y) {
-		this(ballTexture, x, y, Cannonball.DEFAULT_FIXTURE_DEF, Cannonball.DEFAULT_LINEAR_DAMPING, Cannonball.DEFAULT_ANGULAR_DAMPING);
+	public Cannonball(float x, float y) {
+		this(x, y, Cannonball.DEFAULT_FIXTURE_DEF, Cannonball.DEFAULT_LINEAR_DAMPING, Cannonball.DEFAULT_ANGULAR_DAMPING);
 		this.autoRemove = true;
 	}
 
-	public Cannonball(TextureRegion ballTexture, float x, float y, FixtureDef fixtureDef, float linearDamping, float angularDamping) {
+	public Cannonball(float x, float y, FixtureDef fixtureDef, float linearDamping, float angularDamping) {
 		GameContext gc = GameContext.getInstance();
+		ResourceManager rm = ResourceManager.getInstance();
 
-		this.ballTexture = ballTexture;
+		TextureRegion ballTexture = rm.getBallTexture();
 
 		this.ballSprite = new Sprite(
-				x - this.ballTexture.getWidth() / 2,
-				y - this.ballTexture.getHeight() / 2,
+				x - ballTexture.getWidth() / 2,
+				y - ballTexture.getHeight() / 2,
 				ballTexture,
 				gc.getVboManager()
 		);

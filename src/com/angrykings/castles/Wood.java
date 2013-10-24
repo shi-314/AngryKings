@@ -2,6 +2,7 @@ package com.angrykings.castles;
 
 import com.angrykings.GameContext;
 import com.angrykings.PhysicalEntity;
+import com.angrykings.ResourceManager;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -21,8 +22,10 @@ public class Wood extends PhysicalEntity {
 	private final static float LINEAR_DAMPING = 0.1f;
 	private final static float ANGULAR_DAMPING = 0.1f;
 
-	public Wood(TextureRegion woodTexture, float x, float y) {
-		this.woodTexture = woodTexture;
+	public Wood(float x, float y) {
+		ResourceManager rm = ResourceManager.getInstance();
+
+		this.woodTexture = rm.getWoodTexture();
 
 		GameContext gc = GameContext.getInstance();
 

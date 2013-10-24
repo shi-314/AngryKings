@@ -1,12 +1,11 @@
 package com.angrykings.cannons;
 
-import org.andengine.entity.Entity;
-import org.andengine.entity.sprite.Sprite;
-import org.andengine.opengl.texture.region.TextureRegion;
-
 import com.angrykings.GameContext;
 import com.angrykings.PhysicsManager;
+import com.angrykings.ResourceManager;
 import com.badlogic.gdx.math.Vector2;
+import org.andengine.entity.Entity;
+import org.andengine.entity.sprite.Sprite;
 
 /**
  * Cannon
@@ -15,28 +14,20 @@ import com.badlogic.gdx.math.Vector2;
  * @date 31.05.13
  */
 public class Cannon extends Entity {
-	protected final TextureRegion cannonTexture;
-	protected final TextureRegion wheelTexture;
-	protected final TextureRegion cannonballTexture;
-
 	protected Sprite barrelSprite, wheelSprite;
 
 	protected final boolean isLeft;
 	protected final float minAngle, maxAngle;
 
-	public Cannon(TextureRegion cannonTexture, TextureRegion wheelTexture,
-				  TextureRegion cannonballTexture, boolean isLeft) {
-		this.cannonTexture = cannonTexture;
-		this.wheelTexture = wheelTexture;
-		this.cannonballTexture = cannonballTexture;
+	public Cannon(boolean isLeft) {
+		ResourceManager rm = ResourceManager.getInstance();
+
 		this.isLeft = isLeft;
 
 		GameContext gc = GameContext.getInstance();
 
-		this.wheelSprite = new Sprite(0, 0, this.wheelTexture,
-				gc.getVboManager());
-		this.barrelSprite = new Sprite(0, 0, this.cannonTexture,
-				gc.getVboManager());
+		this.wheelSprite = new Sprite(0, 0, rm.getWheelTexture(), gc.getVboManager());
+		this.barrelSprite = new Sprite(0, 0, rm.getCannonTexture(), gc.getVboManager());
 		this.barrelSprite.setRotationCenter(60.0f, 72.0f);
 
 		this.attachChild(this.barrelSprite);
@@ -102,7 +93,7 @@ public class Cannon extends Entity {
 
 		Vector2 ballPosition = this.getBarrelEndPosition();
 
-		Cannonball ball = new Cannonball(this.cannonballTexture, ballPosition.x, ballPosition.y);
+		Cannonball ball = new Cannonball(ballPosition.x, ballPosition.y);
 		ball.registerPhysicsConnector();
 
 		ball.getBody().applyLinearImpulse(this.getDirection().mul(force), ball.getBody().getPosition());

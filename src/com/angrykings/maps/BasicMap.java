@@ -1,14 +1,14 @@
 package com.angrykings.maps;
 
-import org.andengine.entity.primitive.Rectangle;
-import org.andengine.entity.sprite.TiledSprite;
-import org.andengine.extension.physics.box2d.PhysicsFactory;
-import org.andengine.opengl.texture.region.TiledTextureRegion;
-
 import com.angrykings.GameContext;
+import com.angrykings.ResourceManager;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import org.andengine.entity.Entity;
+import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.sprite.TiledSprite;
+import org.andengine.extension.physics.box2d.PhysicsFactory;
 
 /**
  * AngryKings
@@ -16,32 +16,37 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
  * @author Shivan Taher <zn31415926535@gmail.com>
  * @date 07.06.13
  */
-public class BasicMap extends Map {
+public class BasicMap extends Entity {
 
 	public static final float GROUND_X = -2500;
 	public static final float GROUND_Y = 1000;
 	public static final float GRASS_TILES = 150;
 	public static final float GRASS_ENDING_HEIGHT = 4000;
 
-	public BasicMap(TiledTextureRegion textureRegion, TiledTextureRegion skyTexture) {
-		super(textureRegion);
-
+	public BasicMap() {
 		GameContext gc = GameContext.getInstance();
+		ResourceManager rm = ResourceManager.getInstance();
 
 		//
 		// Grass Texture
 		//
 
-		float grassWidth = textureRegion.getWidth();
+		float grassWidth = rm.getGrassTexture().getWidth();
 
 		for(int i=0; i<BasicMap.GRASS_TILES; i++) {
-			TiledSprite groundSprite = new TiledSprite(i*grassWidth + BasicMap.GROUND_X, BasicMap.GROUND_Y, this.textureRegion, gc.getVboManager());
+			TiledSprite groundSprite = new TiledSprite(
+					i*grassWidth + BasicMap.GROUND_X,
+					BasicMap.GROUND_Y,
+					rm.getGrassTexture(),
+					gc.getVboManager()
+			);
+
 			this.attachChild(groundSprite);
 		}
 
 		Rectangle groundEnding = new Rectangle(
 				BasicMap.GROUND_X,
-				BasicMap.GROUND_Y + textureRegion.getHeight(),
+				BasicMap.GROUND_Y + rm.getGrassTexture().getHeight(),
 				BasicMap.GRASS_TILES*grassWidth,
 				GRASS_ENDING_HEIGHT,
 				gc.getVboManager()

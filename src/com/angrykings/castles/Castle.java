@@ -1,14 +1,14 @@
 package com.angrykings.castles;
 
-import java.util.ArrayList;
-
+import com.angrykings.GameContext;
+import com.angrykings.PhysicalEntity;
 import com.angrykings.PhysicsManager;
+import com.angrykings.ResourceManager;
+import com.angrykings.maps.BasicMap;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 
-import com.angrykings.GameContext;
-import com.angrykings.PhysicalEntity;
-import com.angrykings.maps.BasicMap;
+import java.util.ArrayList;
 
 /**
  * Castle
@@ -28,13 +28,15 @@ public class Castle {
 
 	private final float initialHeight;
 
-	public Castle(float x, float y, TiledTextureRegion stoneTexture, TextureRegion roofTexture, TextureRegion woodTexture) {
+	public Castle(float x, float y) {
 		this.x = x;
 		this.y = y;
 
-		this.stoneTexture = stoneTexture;
-		this.roofTexture = roofTexture;
-		this.woodTexture = woodTexture;
+		ResourceManager rm = ResourceManager.getInstance();
+
+		this.stoneTexture = rm.getStoneTexture();
+		this.roofTexture = rm.getRoofTexture();
+		this.woodTexture = rm.getWoodTexture();
 
 		this.blocks = new ArrayList<PhysicalEntity>();
 
@@ -46,7 +48,7 @@ public class Castle {
 	private void addWood(float x, float y) {
 		GameContext gc = GameContext.getInstance();
 
-		Wood wood = new Wood(this.woodTexture, x, y);
+		Wood wood = new Wood(x, y);
 
 		wood.registerPhysicsConnector();
 		gc.getScene().attachChild(wood.getAreaShape());
@@ -58,7 +60,7 @@ public class Castle {
 	private void addStone(float x, float y) {
 		GameContext gc = GameContext.getInstance();
 
-		Stone stone = new Stone(this.stoneTexture, x, y);
+		Stone stone = new Stone(x, y);
 		stone.registerPhysicsConnector();
 		gc.getScene().attachChild(stone.getAreaShape());
 
@@ -69,7 +71,7 @@ public class Castle {
 	private void addRoof(float x, float y) {
 		GameContext gc = GameContext.getInstance();
 
-		Roof roof = new Roof(this.roofTexture, x, y);
+		Roof roof = new Roof(x, y);
 		roof.registerPhysicsConnector();
 		gc.getScene().attachChild(roof.getAreaShape());
 

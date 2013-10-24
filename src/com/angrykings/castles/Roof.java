@@ -2,6 +2,7 @@ package com.angrykings.castles;
 
 import com.angrykings.GameContext;
 import com.angrykings.PhysicalEntity;
+import com.angrykings.ResourceManager;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -26,8 +27,10 @@ public class Roof extends PhysicalEntity {
 	private final static float LINEAR_DAMPING = 0.1f;
 	private final static float ANGULAR_DAMPING = 0.1f;
 
-	public Roof(TextureRegion roofTexture, float x, float y) {
-		this.roofTexture = roofTexture;
+	public Roof(float x, float y) {
+		ResourceManager rm = ResourceManager.getInstance();
+
+		this.roofTexture = rm.getRoofTexture();
 
 		GameContext gc = GameContext.getInstance();
 

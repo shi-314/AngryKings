@@ -296,7 +296,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		scene.setOnSceneTouchListener(this);
 		scene.setTouchAreaBindingOnActionDownEnabled(true);
 
-		hud = new GameHUD(rm.getAimButtonTexture(), rm.getWhiteFlagButtonTexture(), rm.getStatusFont(), rm.getPlayerNameFont());
+		hud = new GameHUD();
 
 		hud.setOnAimTouched(new Runnable() {
 			@Override

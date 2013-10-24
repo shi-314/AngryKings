@@ -283,9 +283,7 @@ public class LocalTestActivity extends BaseGameActivity implements
 		scene.setOnSceneTouchListener(this);
 		scene.setTouchAreaBindingOnActionDownEnabled(true);
 
-		final GameHUD hud = new GameHUD(this.aimButtonTexture,
-				this.whiteFlagButtonTexture, this.statusFont,
-				this.playerNameFont);
+		final GameHUD hud = new GameHUD();
 		hud.setOnAimTouched(new Runnable() {
 			@Override
 			public void run() {

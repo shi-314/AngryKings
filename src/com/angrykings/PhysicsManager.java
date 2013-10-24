@@ -44,7 +44,7 @@ public class PhysicsManager implements IUpdateHandler {
 	private static final float MIN_ANGULAR_VELOCITY = 1e-1f;
 	private ArrayList<PhysicalEntity> physicalEntities;
 
-	public PhysicsManager() {
+	private PhysicsManager() {
 		this.ready = true;
 		this.physicalEntities = new ArrayList<PhysicalEntity>();
 	}

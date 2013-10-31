@@ -27,7 +27,17 @@ public class LobbyActivity extends ListActivity {
 
 	private String username;
 	private List<String> users;
-	private Map<String, String> listItemToName = new HashMap<String, String>();
+	private Map<String, Player> listItemToName = new HashMap<String, Player>();
+	
+	private class Player{
+		final String name;
+		final String id;
+		
+		Player(String name, String id){
+			this.name = name;
+			this.id = id;
+		}
+	}
 
 	private void updateLobby(List<String> user) {
 		setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, user));
@@ -113,12 +123,14 @@ public class LobbyActivity extends ListActivity {
 							String eingabe = userArray.getJSONArray(i)
 									.getString(0)
 									+ "   Gewonnen: "
-									+ userArray.getJSONArray(i).getString(1)
+									+ userArray.getJSONArray(i).getString(2)
 									+ "   Verloren: "
-									+ userArray.getJSONArray(i).getString(2);
+									+ userArray.getJSONArray(i).getString(3);
 
 							users.add(eingabe);
-							listItemToName.put(eingabe, userArray.getJSONArray(i).getString(0));
+							listItemToName.put(eingabe, 
+									new Player(userArray.getJSONArray(i).getString(0),
+											userArray.getJSONArray(i).getString(1)));
 						}
 
 						updateLobby(users);
@@ -146,7 +158,7 @@ public class LobbyActivity extends ListActivity {
 	protected void onListItemClick(final ListView l, final View v, final int position, final long id) {
 		super.onListItemClick(l, v, position, id);
 
-		final String partnerName = listItemToName.get(
+		final Player partner = listItemToName.get(
 				getListView().getItemAtPosition(
 						position).toString());
 		
@@ -169,7 +181,7 @@ public class LobbyActivity extends ListActivity {
 						Intent intent = new Intent(LobbyActivity.this, OnlineGameActivity.class);
 						intent.putExtra("myTurn", false)
 						.putExtra("username", username)
-						.putExtra("partnername", partnerName)
+						.putExtra("partnername", partner.name)
 						.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 						startActivity(intent);
 					}
@@ -183,7 +195,7 @@ public class LobbyActivity extends ListActivity {
 		ServerConnection
 				.getInstance()
 				.getConnection()
-				.sendTextMessage(ServerMessage.pair(partnerName));
+				.sendTextMessage(ServerMessage.pair(partner.id));
 
 	}
 }

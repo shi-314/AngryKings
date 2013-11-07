@@ -65,10 +65,25 @@
         android:textColor="#FFFFFF"
         android:textSize="32sp" />
 
-    <Button
-        android:id="@+id/backToLobby"
-        android:layout_width="190dp"
+    <LinearLayout
         android:layout_height="70dp"
-        android:background="@drawable/lobby_button" />
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/backToLobby"
+            android:layout_width="190dp"
+            android:layout_height="70dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/lobby_button" />
+
+        <Button
+            android:id="@+id/revengeButton"
+            android:layout_width="190dp"
+            android:layout_height="70dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/play_again_button" />
+    </LinearLayout>
 
 </LinearLayout>

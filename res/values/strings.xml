@@ -17,5 +17,6 @@
 	<string name="yourTurn">Du bist dran!</string>
 	<string name="enemyTurn">Dein Gegner ist dran!</string>
 	<string name="youResigned">Du hast aufgegeben :(</string>
+	<string name="revengeButton">Erneut Spielen</string>
 
 </resources>

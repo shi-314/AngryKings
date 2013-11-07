@@ -13,6 +13,7 @@ import android.widget.ListView;
 import com.angrykings.Action;
 import com.angrykings.ServerConnection;
 import com.angrykings.ServerConnection.OnMessageHandler;
+import com.angrykings.utils.ServerJSONBuilder;
 import com.angrykings.utils.ServerMessage;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -197,5 +198,14 @@ public class LobbyActivity extends ListActivity {
 				.getConnection()
 				.sendTextMessage(ServerMessage.pair(partner.id));
 
+	}
+	
+	@Override
+	protected void onStop(){
+		ServerConnection
+		.getInstance()
+		.getConnection()
+		.sendTextMessage(new ServerJSONBuilder().create(Action.Client.LEAVE_LOBBY).build());
+		super.onStop();
 	}
 }

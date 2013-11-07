@@ -84,7 +84,7 @@ public class GameHUD extends HUD {
 
 		this.statusFont = rm.getStatusFont();
 		this.playerNameFont = rm.getPlayerNameFont();
-
+		
 		//
 		// aim button
 		//

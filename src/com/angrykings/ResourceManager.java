@@ -38,6 +38,7 @@ public class ResourceManager {
 	private TextureRegion cannonTexture;
 	private TextureRegion wheelTexture;
 	private TextureRegion ballTexture;
+	private TextureRegion aimCircleTexture;
 	private TiledTextureRegion skyTexture;
 	private TiledTextureRegion aimButtonTexture;
 	private TiledTextureRegion whiteFlagButtonTexture;
@@ -91,6 +92,10 @@ public class ResourceManager {
 				TextureOptions.BILINEAR);
 		this.ballTexture = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(textureAtlas, gameActivity, "ball.png", 0, 0);
+		textureAtlas.load();
+		
+		textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 140, 151, TextureOptions.BILINEAR);
+		this.aimCircleTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(textureAtlas, gameActivity, "aimCircle.png", 0, 0);
 		textureAtlas.load();
 
 		//
@@ -192,6 +197,10 @@ public class ResourceManager {
 
 	public TextureRegion getBallTexture() {
 		return ballTexture;
+	}
+	
+	public TextureRegion getAimCircleTexture() {
+		return aimCircleTexture;
 	}
 
 	public TiledTextureRegion getSkyTexture() {

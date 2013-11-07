@@ -14,7 +14,7 @@ import org.andengine.entity.sprite.Sprite;
  * @date 31.05.13
  */
 public class Cannon extends Entity {
-	protected Sprite barrelSprite, wheelSprite;
+	protected Sprite barrelSprite, wheelSprite, aimCircleSprite;
 
 	protected final boolean isLeft;
 	protected final float minAngle, maxAngle;
@@ -29,9 +29,12 @@ public class Cannon extends Entity {
 		this.wheelSprite = new Sprite(0, 0, rm.getWheelTexture(), gc.getVboManager());
 		this.barrelSprite = new Sprite(0, 0, rm.getCannonTexture(), gc.getVboManager());
 		this.barrelSprite.setRotationCenter(60.0f, 72.0f);
-
+		this.aimCircleSprite = new Sprite(rm.getAimCircleTexture().getHeight()*2.5f, -rm.getAimCircleTexture().getWidth()*2.5f, rm.getAimCircleTexture(), gc.getVboManager());
+		this.aimCircleSprite.setScale(5, 5);
+		
 		this.attachChild(this.barrelSprite);
 		this.attachChild(this.wheelSprite);
+		
 
 		if (!isLeft) {
 			this.setScale(-1.0f, 1.0f);
@@ -104,5 +107,13 @@ public class Cannon extends Entity {
 		PhysicsManager.getInstance().addPhysicalEntity(ball);
 
 		return ball;
+	}
+	
+	public void showAimCircle(){
+		this.attachChild(aimCircleSprite);
+	}
+	
+	public void hideAimCircle(){
+		this.detachChild(aimCircleSprite);
 	}
 }

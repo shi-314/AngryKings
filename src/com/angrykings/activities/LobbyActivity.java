@@ -13,6 +13,7 @@ import android.widget.ListView;
 import com.angrykings.Action;
 import com.angrykings.ServerConnection;
 import com.angrykings.ServerConnection.OnMessageHandler;
+import com.angrykings.utils.ServerJSONBuilder;
 import com.angrykings.utils.ServerMessage;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -88,7 +89,8 @@ public class LobbyActivity extends ListActivity {
 												intent.putExtra("myTurn", true);
 												intent.putExtra("username",
 														username);
-												intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+												//intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+												intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY);
 												try {
 													intent.putExtra("partnername",
 															jObj.getString("partner"));
@@ -192,5 +194,13 @@ public class LobbyActivity extends ListActivity {
 				.getInstance()
 				.sendTextMessage(ServerMessage.pair(partner.id));
 
+	}
+	
+	@Override
+	protected void onStop(){
+		ServerConnection
+		.getInstance()
+		.sendTextMessage(new ServerJSONBuilder().create(Action.Client.LEAVE_LOBBY).build());
+		super.onStop();
 	}
 }

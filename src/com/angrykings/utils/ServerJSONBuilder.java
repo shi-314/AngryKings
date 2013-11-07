@@ -3,6 +3,7 @@ package com.angrykings.utils;
 import com.angrykings.PhysicalEntity;
 import com.angrykings.PhysicsManager;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class ServerJSONBuilder {
@@ -33,9 +34,9 @@ public class ServerJSONBuilder {
 
 			json += "{";
 			json += "\"id\": " + e.getId() + ", ";
-			json += "\"x\": " + e.getAreaShape().getX() + ", ";
-			json += "\"y\": " + e.getAreaShape().getY() + ", ";
-			json += "\"rotation\": " + e.getBody().getAngle() + "";
+			json += "\"x\": " + precision(2, e.getAreaShape().getX()) + ", ";
+			json += "\"y\": " + precision(2, e.getAreaShape().getY()) + ", ";
+			json += "\"rotation\": " + precision(3, e.getBody().getAngle()) + "";
 			json += "}";
 
 			if (i < entities.size() - 1)
@@ -45,6 +46,16 @@ public class ServerJSONBuilder {
 		json += "]";
 
 		return this;
+	}
+
+	//
+	// TODO: remove this function when the physics is perfectly synchronized?
+	//
+
+	public static Float precision(int decimalPlace, Float d) {
+		BigDecimal bd = new BigDecimal(Float.toString(d));
+		bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+		return bd.floatValue();
 	}
 
 }

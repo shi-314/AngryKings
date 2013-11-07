@@ -295,7 +295,6 @@ public class MapTest extends BaseGameActivity implements IOnSceneTouchListener {
 				this.cannon.fire(200);
 				ServerConnection
 						.getInstance()
-						.getConnection()
 						.sendTextMessage(
 								new ServerJSONBuilder()
 										.create(Action.Client.TURN)

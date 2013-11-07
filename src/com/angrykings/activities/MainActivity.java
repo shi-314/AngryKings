@@ -60,21 +60,19 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		if(!ServerConnection.getInstance().getConnection().isConnected()){
+		if(!ServerConnection.getInstance().isConnected()){
 			ServerConnection.getInstance().start(new OnStartHandler() {
 				
 				@Override
 				public void onStart() {
 					ServerConnection
 					.getInstance()
-					.getConnection()
 					.sendTextMessage(ServerMessage.setId(getImei()));
 				}
 			});
 		}else{
 			ServerConnection
 			.getInstance()
-			.getConnection()
 			.sendTextMessage(ServerMessage.getName());
 		}
 

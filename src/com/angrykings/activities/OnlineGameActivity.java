@@ -17,7 +17,6 @@ import com.angrykings.kings.King;
 import com.angrykings.maps.BasicMap;
 import com.angrykings.utils.ServerMessage;
 import com.badlogic.gdx.math.Vector2;
-import de.tavendo.autobahn.WebSocketConnection;
 import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.handler.timer.ITimerCallback;
@@ -79,7 +78,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	//
 
 	private ServerConnection serverConnection;
-	private WebSocketConnection webSocketConnection;
 	private int round;
 	boolean turnSent;
 	boolean receivedEndTurn;
@@ -156,7 +154,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		gc.setCamera(camera);
 
 		this.serverConnection = ServerConnection.getInstance();
-		this.webSocketConnection = this.serverConnection.getConnection();
 
 		return new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED,
 				new RatioResolutionPolicy(GameConfig.CAMERA_WIDTH,
@@ -345,7 +342,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 				if (left && leftLife < 0.5f || !left && rightLife < 0.5f) {
 					gc.getHud().setStatus("Du hast verloren!");
 					gc.getHud().setStatus(getString(R.string.hasLost));
-					webSocketConnection.sendTextMessage(ServerMessage.lose());
+					serverConnection.sendTextMessage(ServerMessage.lose());
 					Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
 					intent.putExtra("hasWon", false);
 					intent.putExtra("isLeft", OnlineGameActivity.this.isLeft);
@@ -432,7 +429,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 						}
 					});
 
-					this.webSocketConnection.sendTextMessage(ServerMessage.turn(this.aimX, this.aimY));
+					this.serverConnection.sendTextMessage(ServerMessage.turn(this.aimX, this.aimY));
 
 					this.turnSent = true;
 				}
@@ -547,7 +544,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 					@Override
 					public void onClick(View v) {
 						hud.setStatus(getString(R.string.youResigned));
-						webSocketConnection.sendTextMessage(ServerMessage.lose());
+						serverConnection.sendTextMessage(ServerMessage.lose());
 						dialog.dismiss();
 						Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
 						intent.putExtra("hasWon", false);
@@ -581,7 +578,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		//
 
 		String jsonStr = ServerMessage.endTurn();
-		this.webSocketConnection.sendTextMessage(ServerMessage.endTurn());
+		this.serverConnection.sendTextMessage(ServerMessage.endTurn());
 
 		Debug.d("send "
 				+ PhysicsManager.getInstance().getPhysicalEntities().size()

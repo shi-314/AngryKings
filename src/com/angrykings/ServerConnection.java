@@ -7,7 +7,7 @@ import de.tavendo.autobahn.WebSocketHandler;
 
 public class ServerConnection {
 
-	private static final String TAG = "com.angrykings";
+	private static final String TAG = "com.angrykings.ServerConnection";
 
 	public static abstract class OnMessageHandler {
 		public abstract void onMessage(String payload);
@@ -32,8 +32,8 @@ public class ServerConnection {
 		return instance;
 	}
 
-	public WebSocketConnection getConnection() {
-		return connection;
+	public boolean isConnected() {
+		return this.connection.isConnected();
 	}
 
 	public OnMessageHandler getHandler() {
@@ -63,6 +63,7 @@ public class ServerConnection {
 
 				@Override
 				public void onTextMessage(String payload) {
+					Log.d(TAG, "Message received: "+payload);
 					handler.onMessage(payload);
 				}
 
@@ -74,6 +75,15 @@ public class ServerConnection {
 		} catch (WebSocketException e) {
 			Log.d(TAG, e.toString());
 		}
+	}
+
+	/**
+	 * Sends a text message to the server.
+	 * @param payload
+	 */
+	public void sendTextMessage(String payload) {
+		Log.d(TAG, "Message sent: "+payload);
+		this.connection.sendTextMessage(payload);
 	}
 
 }

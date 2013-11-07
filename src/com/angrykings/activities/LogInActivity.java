@@ -50,7 +50,6 @@ public class LogInActivity extends Activity {
 			public void onClick(View v) {
 				ServerConnection
 						.getInstance()
-						.getConnection()
 						.sendTextMessage(ServerMessage.setName(nameText.getText().toString()));
 			}
 		});

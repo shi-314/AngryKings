@@ -63,7 +63,7 @@ public class ServerConnection {
 
 				@Override
 				public void onTextMessage(String payload) {
-					Log.d(TAG, "Message received: "+payload);
+					Log.d(TAG, "received: "+payload);
 					handler.onMessage(payload);
 				}
 
@@ -82,7 +82,7 @@ public class ServerConnection {
 	 * @param payload
 	 */
 	public void sendTextMessage(String payload) {
-		Log.d(TAG, "Message sent: "+payload);
+		Log.d(TAG, "sent: "+payload);
 		this.connection.sendTextMessage(payload);
 	}
 

@@ -44,7 +44,6 @@ public class LobbyActivity extends ListActivity {
 		}
 		ServerConnection
 				.getInstance()
-				.getConnection()
 				.sendTextMessage(ServerMessage.gotoLobby());
 		displayLobby();
 	}
@@ -72,7 +71,6 @@ public class LobbyActivity extends ListActivity {
 													int which) {
 												ServerConnection
 														.getInstance()
-														.getConnection()
 														.sendTextMessage(ServerMessage.acceptChallenge());
 												Intent intent = new Intent(
 														LobbyActivity.this,
@@ -99,7 +97,6 @@ public class LobbyActivity extends ListActivity {
 													int which) {
 												ServerConnection
 														.getInstance()
-														.getConnection()
 														.sendTextMessage(ServerMessage.denyChallenge());
 											}
 										}).show();
@@ -135,7 +132,6 @@ public class LobbyActivity extends ListActivity {
 		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
 			ServerConnection
 			.getInstance()
-			.getConnection()
 			.sendTextMessage(ServerMessage.leaveLobby());
 		}
 
@@ -182,7 +178,6 @@ public class LobbyActivity extends ListActivity {
 		// TODO use mongoid
 		ServerConnection
 				.getInstance()
-				.getConnection()
 				.sendTextMessage(ServerMessage.pair(partnerName));
 
 	}

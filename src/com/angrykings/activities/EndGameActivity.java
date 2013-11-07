@@ -100,7 +100,6 @@ public class EndGameActivity extends Activity {
 													int which) {
 												ServerConnection
 														.getInstance()
-														.getConnection()
 														.sendTextMessage(ServerMessage.acceptChallenge());
 												Intent intent = new Intent(
 														EndGameActivity.this,
@@ -127,7 +126,6 @@ public class EndGameActivity extends Activity {
 													int which) {
 												ServerConnection
 														.getInstance()
-														.getConnection()
 														.sendTextMessage(ServerMessage.denyChallenge());
 											}
 										}).show();
@@ -160,7 +158,6 @@ public class EndGameActivity extends Activity {
 				dialog.show();
 				ServerConnection
 				.getInstance()
-				.getConnection()
 				.sendTextMessage(new ServerJSONBuilder().create(Action.Client.REVENGE).build());
 			}
 
@@ -171,7 +168,6 @@ public class EndGameActivity extends Activity {
 	protected void onStop(){
 		ServerConnection
 		.getInstance()
-		.getConnection()
 		.sendTextMessage(new ServerJSONBuilder().create(Action.Client.LEAVE_GAME_OVER).build());
 		super.onStop();
 	}

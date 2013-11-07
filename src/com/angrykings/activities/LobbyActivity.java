@@ -199,7 +199,6 @@ public class LobbyActivity extends ListActivity {
 	protected void onStop(){
 		ServerConnection
 		.getInstance()
-		.getConnection()
 		.sendTextMessage(new ServerJSONBuilder().create(Action.Client.LEAVE_LOBBY).build());
 		super.onStop();
 	}

@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -371,15 +372,23 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
 	}
 
+	
+	
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
 		gc = GameContext.getInstance();
 
 		if (gc.getPhysicsWorld() == null)
 			return false;
-
-		if (this.isAiming) {
-
+		
+		float radiusX = pSceneTouchEvent.getX() - this.cannon.getX();
+		float radiusY = pSceneTouchEvent.getY() - this.cannon.getY();
+		String hallo = radiusX + " " + radiusY;
+		
+		Log.d("touch", hallo);
+		
+		//if (this.isAiming) {
+		if ((radiusX > -700 && radiusX < 700) && (radiusY > -700 && radiusY < 700)){
 			//
 			// aim and fire
 			//
@@ -393,7 +402,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 			int iX = (int) x;
 			int iY = (int) y;
-
+			
 			if (this.cannon.pointAt(iX, iY)) {
 				this.aimX = iX;
 				this.aimY = iY;
@@ -407,7 +416,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 						@Override
 						public void run() {
 							PhysicsManager.getInstance().setFreeze(false);
-
+							
 							final Cannonball ball = OnlineGameActivity.this.cannon .fire(GameConfig.CANNON_FORCE);
 
 							getEngine().registerUpdateHandler(
@@ -430,7 +439,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 					});
 
 					this.serverConnection.sendTextMessage(ServerMessage.turn(this.aimX, this.aimY));
-
 					this.turnSent = true;
 				}
 			}
@@ -440,7 +448,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			//
 			// pinch and zoom
 			//
-
+			
 			if (pSceneTouchEvent.isActionDown()) {
 				this.scrollDetector.setEnabled(true);
 			}
@@ -452,7 +460,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			} else {
 				this.scrollDetector.onTouchEvent(pSceneTouchEvent);
 			}
-
+			
 		}
 
 		return true;
@@ -600,6 +608,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			Debug.d("JSONException: " + e);
 		}
 
+		this.cannon.hideAimCircle();
 		this.hud.setStatus(getString(R.string.enemyTurn));
 		if (isLeft) {
 			leftKing.getSprite().setCurrentTileIndex(0);
@@ -620,6 +629,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 			PhysicsManager.getInstance().updateEntities(jsonEntities);
 			receivedEndTurn = true;
+			this.cannon.showAimCircle();
 
 			if (!this.wonTheGame) {
 				hud.setStatus(getString(R.string.yourTurn));
@@ -662,4 +672,13 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			}
 		});
 	}
+	
+	@Override
+	public synchronized void onPauseGame() {
+		super.onPauseGame();
+		if(BuildConfig.DEBUG) {
+			Debug.d(this.getClass().getSimpleName() + ".onPauseGame lalala" + " @(Thread: '" + Thread.currentThread().getName() + "')");
+		}
+	}
+	
 }

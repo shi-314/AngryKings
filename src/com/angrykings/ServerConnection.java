@@ -52,10 +52,9 @@ public class ServerConnection {
 	 */
 	//TODO As long the connection persists, do not restart
 	public void start(final OnStartHandler startHandler) {
-		final String wsuri = "ws://spaeti.pavo.uberspace.de:61224";
 
 		try {
-			connection.connect(wsuri, new WebSocketHandler() {
+			connection.connect(GameConfig.WEBSERVICE_URI, new WebSocketHandler() {
 				@Override
 				public void onOpen() {
 					Log.d(TAG, "Status: Connected");

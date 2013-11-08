@@ -1,14 +1,15 @@
 package com.angrykings.castles;
 
+import java.util.ArrayList;
+
+import org.andengine.opengl.texture.region.TextureRegion;
+import org.andengine.opengl.texture.region.TiledTextureRegion;
+
 import com.angrykings.GameContext;
 import com.angrykings.PhysicalEntity;
 import com.angrykings.PhysicsManager;
 import com.angrykings.ResourceManager;
 import com.angrykings.maps.BasicMap;
-import org.andengine.opengl.texture.region.TextureRegion;
-import org.andengine.opengl.texture.region.TiledTextureRegion;
-
-import java.util.ArrayList;
 
 /**
  * Castle

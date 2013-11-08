@@ -1,6 +1,5 @@
 package com.angrykings;
 
-import android.graphics.Color;
 import org.andengine.entity.scene.background.RepeatingSpriteBackground;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
@@ -12,6 +11,8 @@ import org.andengine.opengl.texture.atlas.bitmap.source.AssetBitmapTextureAtlasS
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.ui.activity.BaseGameActivity;
+
+import android.graphics.Color;
 
 /**
  * AngryKings

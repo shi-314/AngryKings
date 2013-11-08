@@ -1,8 +1,8 @@
 package com.angrykings;
 
-import com.angrykings.maps.BasicMap;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
@@ -12,8 +12,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import com.angrykings.maps.BasicMap;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 
 /**
  * PhysicsManager

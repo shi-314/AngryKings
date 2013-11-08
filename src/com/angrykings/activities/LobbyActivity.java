@@ -77,6 +77,7 @@ public class LobbyActivity extends ListActivity {
 								.setPositiveButton("Okay",
 										new DialogInterface.OnClickListener() {
 
+											@Override
 											public void onClick(
 													DialogInterface dialog,
 													int which) {
@@ -104,6 +105,7 @@ public class LobbyActivity extends ListActivity {
 								.setNegativeButton("Deny",
 										new DialogInterface.OnClickListener() {
 
+											@Override
 											public void onClick(
 													DialogInterface dialog,
 													int which) {

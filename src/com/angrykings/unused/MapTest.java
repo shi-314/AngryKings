@@ -1,18 +1,5 @@
 package com.angrykings.unused;
 
-import android.content.Intent;
-import android.hardware.SensorManager;
-import android.os.Bundle;
-import com.angrykings.*;
-import com.angrykings.activities.LobbyActivity;
-import com.angrykings.cannons.Cannon;
-import com.angrykings.castles.Castle;
-import com.angrykings.maps.BasicMap;
-import com.angrykings.utils.ServerJSONBuilder;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
@@ -32,10 +19,32 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.atlas.bitmap.source.AssetBitmapTextureAtlasSource;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
+import org.andengine.ui.IGameInterface.OnCreateResourcesCallback;
+import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
+import org.andengine.ui.IGameInterface.OnPopulateSceneCallback;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.debug.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.content.Intent;
+import android.hardware.SensorManager;
+import android.os.Bundle;
+
+import com.angrykings.Action;
+import com.angrykings.GameConfig;
+import com.angrykings.GameContext;
+import com.angrykings.PhysicsManager;
+import com.angrykings.ServerConnection;
+import com.angrykings.activities.LobbyActivity;
+import com.angrykings.cannons.Cannon;
+import com.angrykings.castles.Castle;
+import com.angrykings.maps.BasicMap;
+import com.angrykings.utils.ServerJSONBuilder;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 /**
  * MapTest

@@ -1,16 +1,5 @@
 package com.angrykings.unused;
 
-import android.app.Dialog;
-import android.graphics.Color;
-import android.hardware.SensorManager;
-import android.os.Handler;
-import android.view.View;
-import android.widget.Button;
-import com.angrykings.*;
-import com.angrykings.cannons.Cannon;
-import com.angrykings.castles.Castle;
-import com.angrykings.maps.BasicMap;
-import com.badlogic.gdx.math.Vector2;
 import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.options.EngineOptions;
@@ -37,7 +26,27 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.atlas.bitmap.source.AssetBitmapTextureAtlasSource;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
+import org.andengine.ui.IGameInterface.OnCreateResourcesCallback;
+import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
+import org.andengine.ui.IGameInterface.OnPopulateSceneCallback;
 import org.andengine.ui.activity.BaseGameActivity;
+
+import android.app.Dialog;
+import android.graphics.Color;
+import android.hardware.SensorManager;
+import android.os.Handler;
+import android.view.View;
+import android.widget.Button;
+
+import com.angrykings.GameConfig;
+import com.angrykings.GameContext;
+import com.angrykings.GameHUD;
+import com.angrykings.PhysicsManager;
+import com.angrykings.R;
+import com.angrykings.cannons.Cannon;
+import com.angrykings.castles.Castle;
+import com.angrykings.maps.BasicMap;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * MapTest

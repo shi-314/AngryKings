@@ -1,9 +1,10 @@
 package com.angrykings;
 
-import com.badlogic.gdx.physics.box2d.Body;
 import org.andengine.entity.shape.IAreaShape;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.ui.activity.BaseGameActivity;
+
+import com.badlogic.gdx.physics.box2d.Body;
 
 /**
  * AngryKings

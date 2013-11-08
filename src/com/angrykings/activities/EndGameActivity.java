@@ -95,6 +95,7 @@ public class EndGameActivity extends Activity {
 								.setPositiveButton("Okay",
 										new DialogInterface.OnClickListener() {
 
+											@Override
 											public void onClick(
 													DialogInterface dialog,
 													int which) {
@@ -121,6 +122,7 @@ public class EndGameActivity extends Activity {
 								.setNegativeButton("Deny",
 										new DialogInterface.OnClickListener() {
 
+											@Override
 											public void onClick(
 													DialogInterface dialog,
 													int which) {

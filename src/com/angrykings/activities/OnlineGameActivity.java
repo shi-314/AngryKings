@@ -1,5 +1,23 @@
 package com.angrykings.activities;
 
+import android.app.Dialog;
+import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.hardware.SensorManager;
+import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.Button;
+import com.angrykings.*;
+import com.angrykings.cannons.Cannon;
+import com.angrykings.cannons.Cannonball;
+import com.angrykings.castles.Castle;
+import com.angrykings.kings.King;
+import com.angrykings.maps.BasicMap;
+import com.angrykings.utils.ServerMessage;
+import com.badlogic.gdx.math.Vector2;
 import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.handler.timer.ITimerCallback;
@@ -12,7 +30,6 @@ import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
-import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.detector.PinchZoomDetector;
 import org.andengine.input.touch.detector.PinchZoomDetector.IPinchZoomDetectorListener;
@@ -25,35 +42,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Dialog;
-import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.hardware.SensorManager;
-import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Button;
-
-import com.angrykings.Action;
-import com.angrykings.BuildConfig;
-import com.angrykings.GameConfig;
-import com.angrykings.GameContext;
-import com.angrykings.GameHUD;
-import com.angrykings.PhysicsManager;
-import com.angrykings.R;
-import com.angrykings.ResourceManager;
-import com.angrykings.ServerConnection;
-import com.angrykings.cannons.Cannon;
-import com.angrykings.cannons.Cannonball;
-import com.angrykings.castles.Castle;
-import com.angrykings.kings.King;
-import com.angrykings.maps.BasicMap;
-import com.angrykings.utils.ServerMessage;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-
 /**
  * OnlineGameActivity
  *
@@ -64,6 +52,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		IOnSceneTouchListener, IScrollDetectorListener,
 		IPinchZoomDetectorListener {
 
+	private static final String TAG = "com.angrykings.OnlineGameActivity";
 	private GameContext gc;
 	private Handler handler;
 	private GameHUD hud;
@@ -111,14 +100,10 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 					// partner has made his turn
 
-					round++;
-
 					final int x = Integer.parseInt(jObj.getString("x"));
 					final int y = Integer.parseInt(jObj.getString("y"));
 
 					handlePartnerTurn(x, y);
-
-					turnSent = false;
 
 				} else if (jObj.getInt("action") == Action.Server.YOU_WIN
 						|| jObj.getInt("action") == Action.Server.PARTNER_LEFT) {
@@ -338,10 +323,12 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		Debug.d("left player name: " + leftPlayerName);
 		Debug.d("right player name: " + rightPlayerName);
 
-		if (amILeft)
+		if (amILeft) {
 			hud.setStatus(this.getString(R.string.yourTurn));
-		else
+			this.cannon.showAimCircle();
+		} else {
 			hud.setStatus(this.getString(R.string.enemyTurn));
+		}
 
 		// TODO in HUD auslagern
 		scene.registerUpdateHandler(new IUpdateHandler() {
@@ -394,15 +381,18 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 		if (gc.getPhysicsWorld() == null)
 			return false;
+
+		double cannonDistanceX = pSceneTouchEvent.getX() - this.cannon.getX();
+		double cannonDistanceY = pSceneTouchEvent.getY() - this.cannon.getY();
+		double cannonDistanceR = Math.sqrt(cannonDistanceX*cannonDistanceX + cannonDistanceY*cannonDistanceY);
 		
-		float radiusX = pSceneTouchEvent.getX() - this.cannon.getX();
-		float radiusY = pSceneTouchEvent.getY() - this.cannon.getY();
-		String hallo = radiusX + " " + radiusY;
-		
-		Log.d("touch", hallo);
-		
+		Log.d(TAG, "Distance: " + cannonDistanceX + " " + cannonDistanceY);
+		Log.d(TAG, "DistanceR: " + cannonDistanceR);
+
+		// TODO: refactor constant
 		//if (this.isAiming) {
-		if ((radiusX > -1200 && radiusX < 0) && (radiusY > -1200 && radiusY < 100)){
+		if (cannonDistanceR < 1200) {
+
 			//
 			// aim and fire
 			//
@@ -424,36 +414,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 			if (pSceneTouchEvent.isActionUp() && this.receivedEndTurn) {
 				if (!turnSent && round % 2 == 0) {
-					this.round++;
-					this.runOnUpdateThread(new Runnable() {
-
-						@Override
-						public void run() {
-							PhysicsManager.getInstance().setFreeze(false);
-							
-							final Cannonball ball = OnlineGameActivity.this.cannon .fire(GameConfig.CANNON_FORCE);
-
-							getEngine().registerUpdateHandler(
-									new TimerHandler(
-											GameConfig.CANNONBALL_TIME_SEC,
-											new ITimerCallback() {
-												@Override
-												public void onTimePassed(TimerHandler pTimerHandler) {
-													ball.remove(OnlineGameActivity.this);
-												}
-											}));
-
-							ball.setOnRemove(new Runnable() {
-								@Override
-								public void run() {
-									onMyTurnEnd();
-								}
-							});
-						}
-					});
-
-					this.serverConnection.sendTextMessage(ServerMessage.turn(this.aimX, this.aimY));
-					this.turnSent = true;
+					this.handleMyTurn();
 				}
 			}
 
@@ -658,7 +619,43 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		}
 	}
 
+	private void handleMyTurn() {
+		this.round++;
+
+		this.runOnUpdateThread(new Runnable() {
+
+			@Override
+			public void run() {
+				PhysicsManager.getInstance().setFreeze(false);
+
+				final Cannonball ball = OnlineGameActivity.this.cannon .fire(GameConfig.CANNON_FORCE);
+
+				getEngine().registerUpdateHandler(
+						new TimerHandler(
+								GameConfig.CANNONBALL_TIME_SEC,
+								new ITimerCallback() {
+									@Override
+									public void onTimePassed(TimerHandler pTimerHandler) {
+										ball.remove(OnlineGameActivity.this);
+									}
+								}));
+
+				ball.setOnRemove(new Runnable() {
+					@Override
+					public void run() {
+						onMyTurnEnd();
+					}
+				});
+			}
+		});
+
+		this.serverConnection.sendTextMessage(ServerMessage.turn(this.aimX, this.aimY));
+		this.turnSent = true;
+	}
+
 	private void handlePartnerTurn(final int x, final int y) {
+		round++;
+
 		this.runOnUpdateThread(new Runnable() {
 			@Override
 			public void run() {
@@ -685,6 +682,8 @@ public class OnlineGameActivity extends BaseGameActivity implements
 				});
 			}
 		});
+
+		turnSent = false;
 	}
 	
 	@Override

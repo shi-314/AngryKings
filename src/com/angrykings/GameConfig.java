@@ -29,7 +29,7 @@ public final class GameConfig {
 	public static final int PHYSICS_POSITION_ITERATION = 3;
 
 	public static final float CANNON_FORCE = 400;
-	public static final float CANNONBALL_TIME_SEC = 10.0f;
+	public static final float CANNONBALL_TIME_SEC = 5.0f;
 
 	public static final String WEBSERVICE_URI = "ws://spaeti.pavo.uberspace.de:61224";
 }

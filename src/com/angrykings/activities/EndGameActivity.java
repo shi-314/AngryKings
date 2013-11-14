@@ -23,7 +23,7 @@ import com.angrykings.utils.ServerMessage;
 
 public class EndGameActivity extends Activity {
 	
-	private Button backToLobbyButton;
+	private Button revengeButton;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -134,8 +134,8 @@ public class EndGameActivity extends Activity {
 											}
 										}).show();
 					}else if (jObj.getInt("action") == Action.Server.PARTNER_LEFT_GAME_OVER) {
-						backToLobbyButton.setEnabled(false);
-						backToLobbyButton.setBackgroundResource(R.drawable.play_again_button_inaktiv);
+						revengeButton.setEnabled(false);
+						revengeButton.setBackgroundResource(R.drawable.play_again_button_inaktiv);
 					}
 				} catch (final JSONException e) {
 					e.printStackTrace();
@@ -143,7 +143,7 @@ public class EndGameActivity extends Activity {
 			}
 		});
 
-		backToLobbyButton = (Button) findViewById(R.id.backToLobby);
+		final Button backToLobbyButton = (Button) findViewById(R.id.backToLobby);
 		backToLobbyButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -156,7 +156,7 @@ public class EndGameActivity extends Activity {
 
 		});
 		
-		final Button revengeButton = (Button) findViewById(R.id.revengeButton);
+		revengeButton = (Button) findViewById(R.id.revengeButton);
 		revengeButton.setOnClickListener(new OnClickListener() {
 
 			@Override

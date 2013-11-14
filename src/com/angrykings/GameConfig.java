@@ -12,8 +12,8 @@ package com.angrykings;
 public final class GameConfig {
 	public static final int CAMERA_WIDTH = 960;
 	public static final int CAMERA_HEIGHT = 540;
-	public static final int CAMERA_X = -500;
-	public static final int CAMERA_Y = 500;
+	public static final int CAMERA_X = -520;
+	public static final int CAMERA_Y = 420;
 
 	public static final float CAMERA_STARTUP_ZOOM = 0.6f;
 	public static final float CAMERA_ZOOM_MIN = 0.5f;
@@ -26,11 +26,12 @@ public final class GameConfig {
 
 	public static final boolean LOG_FPS = false;
 
-	public static final int PHYSICS_STEPS_PER_SEC = 30;
-	public static final int PHYSICS_VELOCITY_ITERATION = 1;
-	public static final int PHYSICS_POSITION_ITERATION = 1;
+	public static final int PHYSICS_STEPS_PER_SEC = 60;
+	public static final int PHYSICS_VELOCITY_ITERATION = 25;
+	public static final int PHYSICS_POSITION_ITERATION = 10;
+	public static final int PHYSICS_MAX_STEPS_PER_UPDATE = 1;
 
-	public static final float CANNON_FORCE = 10;
+	public static final float CANNON_FORCE = 12;
 	public static final float CANNONBALL_TIME_SEC = 5.0f;
 
 	public static final String WEBSERVICE_URI = "ws://spaeti.pavo.uberspace.de:61224";

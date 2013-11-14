@@ -207,6 +207,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 		FixedStepPhysicsWorld physicsWorld = new FixedStepPhysicsWorld(
 				GameConfig.PHYSICS_STEPS_PER_SEC,
+				GameConfig.PHYSICS_MAX_STEPS_PER_UPDATE,
 				new Vector2(0, SensorManager.GRAVITY_EARTH),
 				false,
 				GameConfig.PHYSICS_VELOCITY_ITERATION,

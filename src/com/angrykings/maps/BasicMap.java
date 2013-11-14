@@ -19,7 +19,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
  */
 public class BasicMap extends Entity {
 
-	public static final float GROUND_X = -2500;
+	public static final float GROUND_X = -1000;
 	public static final float GROUND_Y = 1000;
 	public static final float GRASS_TILES = 150;
 	public static final float GRASS_ENDING_HEIGHT = 4000;

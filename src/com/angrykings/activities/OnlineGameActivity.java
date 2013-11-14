@@ -157,7 +157,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		gc = GameContext.getInstance();
 		handler = new Handler();
 
-		ZoomCamera camera = new ZoomCamera(0, 0, GameConfig.CAMERA_WIDTH, GameConfig.CAMERA_HEIGHT);
+		ZoomCamera camera = new ZoomCamera(GameConfig.CAMERA_X, GameConfig.CAMERA_Y, GameConfig.CAMERA_WIDTH, GameConfig.CAMERA_HEIGHT);
 
 		camera.setZoomFactor(GameConfig.CAMERA_STARTUP_ZOOM);
 		camera.setBounds(
@@ -255,9 +255,9 @@ public class OnlineGameActivity extends BaseGameActivity implements
 				this.round = 0;
 				amILeft = true;
 				myX = -400;
-				myY = 890;
-				enemyX = 1500;
-				enemyY = 890;
+				myY = (int) BasicMap.GROUND_Y - (int) rm.getWheelTexture().getHeight();
+				enemyX = 300;
+				enemyY = (int) BasicMap.GROUND_Y - (int) rm.getWheelTexture().getHeight();
 				leftPlayerName = extras.getString("username");
 				rightPlayerName = extras.getString("partnername");
 				this.myName = leftPlayerName;
@@ -267,9 +267,9 @@ public class OnlineGameActivity extends BaseGameActivity implements
 				this.round = 1;
 				amILeft = false;
 				enemyX = -400;
-				enemyY = 890;
-				myX = 1500;
-				myY = 890;
+				enemyY = (int) BasicMap.GROUND_Y - (int) rm.getWheelTexture().getHeight();
+				myX = 300;
+				myY = (int) BasicMap.GROUND_Y - (int) rm.getWheelTexture().getHeight();
 				leftPlayerName = extras.getString("partnername");
 				rightPlayerName = extras.getString("username");
 				this.myName = rightPlayerName;
@@ -287,10 +287,10 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		this.enemyCannon.setPosition(enemyX, enemyY);
 		scene.attachChild(this.enemyCannon);
 
-		this.leftCastle = new Castle(-1500, BasicMap.GROUND_Y);
-		this.rightCastle = new Castle(1800, BasicMap.GROUND_Y);
+		this.leftCastle = new Castle(-800, BasicMap.GROUND_Y);
+		this.rightCastle = new Castle(500, BasicMap.GROUND_Y);
 
-		this.rightKing = new King(rm.getKingTexture1(), 1650, BasicMap.GROUND_Y - rm.getKingTexture1().getHeight() / 2);
+		this.rightKing = new King(rm.getKingTexture1(), 400, BasicMap.GROUND_Y - rm.getKingTexture1().getHeight() / 2);
 		scene.attachChild(this.rightKing);
 
 		this.leftKing = new King(rm.getKingTexture2(), -550, BasicMap.GROUND_Y - rm.getKingTexture2().getHeight() / 2);

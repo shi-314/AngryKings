@@ -1,5 +1,16 @@
 package com.angrykings.unused;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.hardware.SensorManager;
+import android.os.Handler;
+import android.view.View;
+import android.widget.Button;
+import com.angrykings.*;
+import com.angrykings.cannons.Cannon;
+import com.angrykings.castles.Castle;
+import com.angrykings.maps.BasicMap;
+import com.badlogic.gdx.math.Vector2;
 import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.options.EngineOptions;
@@ -26,27 +37,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.atlas.bitmap.source.AssetBitmapTextureAtlasSource;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
-import org.andengine.ui.IGameInterface.OnCreateResourcesCallback;
-import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
-import org.andengine.ui.IGameInterface.OnPopulateSceneCallback;
 import org.andengine.ui.activity.BaseGameActivity;
-
-import android.app.Dialog;
-import android.graphics.Color;
-import android.hardware.SensorManager;
-import android.os.Handler;
-import android.view.View;
-import android.widget.Button;
-
-import com.angrykings.GameConfig;
-import com.angrykings.GameContext;
-import com.angrykings.GameHUD;
-import com.angrykings.PhysicsManager;
-import com.angrykings.R;
-import com.angrykings.cannons.Cannon;
-import com.angrykings.castles.Castle;
-import com.angrykings.maps.BasicMap;
-import com.badlogic.gdx.math.Vector2;
 
 /**
  * MapTest
@@ -186,7 +177,7 @@ public class LocalTestActivity extends BaseGameActivity implements
 		final ITexture statusFontTexture = new BitmapTextureAtlas(
 				this.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
 		this.statusFont = FontFactory.createFromAsset(this.getFontManager(),
-				statusFontTexture, this.getAssets(), "Plok.ttf", 22.0f, true,
+				statusFontTexture, this.getAssets(), "CherrySwash-Bold.ttf", 22.0f, true,
 				Color.BLACK);
 		this.statusFont.load();
 
@@ -194,7 +185,7 @@ public class LocalTestActivity extends BaseGameActivity implements
 				this.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
 		this.playerNameFont = FontFactory.createFromAsset(
 				this.getFontManager(), playerNameFontTexture, this.getAssets(),
-				"Plok.ttf", 16.0f, true, Color.BLACK);
+				"CherrySwash-Bold.ttf", 16.0f, true, Color.BLACK);
 		this.playerNameFont.load();
 
 		//

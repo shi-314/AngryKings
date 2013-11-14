@@ -1,5 +1,6 @@
 package com.angrykings;
 
+import android.graphics.Color;
 import org.andengine.entity.scene.background.RepeatingSpriteBackground;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
@@ -11,8 +12,6 @@ import org.andengine.opengl.texture.atlas.bitmap.source.AssetBitmapTextureAtlasS
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.ui.activity.BaseGameActivity;
-
-import android.graphics.Color;
 
 /**
  * AngryKings
@@ -94,7 +93,7 @@ public class ResourceManager {
 		this.ballTexture = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(textureAtlas, gameActivity, "ball.png", 0, 0);
 		textureAtlas.load();
-		
+
 		textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 140, 151, TextureOptions.BILINEAR);
 		this.aimCircleTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(textureAtlas, gameActivity, "aimCircle.png", 0, 0);
 		textureAtlas.load();
@@ -126,7 +125,7 @@ public class ResourceManager {
 		final ITexture statusFontTexture = new BitmapTextureAtlas(
 				gameActivity.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
 		this.statusFont = FontFactory.createFromAsset(gameActivity.getFontManager(),
-				statusFontTexture, gameActivity.getAssets(), "Plok.ttf", 22.0f, true,
+				statusFontTexture, gameActivity.getAssets(), "CherrySwash-Bold.ttf", 22.0f, true,
 				Color.BLACK);
 		this.statusFont.load();
 
@@ -134,7 +133,7 @@ public class ResourceManager {
 				gameActivity.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
 		this.playerNameFont = FontFactory.createFromAsset(
 				gameActivity.getFontManager(), playerNameFontTexture, gameActivity.getAssets(),
-				"Plok.ttf", 16.0f, true, Color.BLACK);
+				"CherrySwash-Bold.ttf", 16.0f, true, Color.BLACK);
 		this.playerNameFont.load();
 
 		//
@@ -199,7 +198,7 @@ public class ResourceManager {
 	public TextureRegion getBallTexture() {
 		return ballTexture;
 	}
-	
+
 	public TextureRegion getAimCircleTexture() {
 		return aimCircleTexture;
 	}

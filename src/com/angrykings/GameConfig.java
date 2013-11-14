@@ -25,8 +25,8 @@ public final class GameConfig {
 	public static final boolean LOG_FPS = false;
 
 	public static final int PHYSICS_STEPS_PER_SEC = 30;
-	public static final int PHYSICS_VELOCITY_ITERATION = 3;
-	public static final int PHYSICS_POSITION_ITERATION = 3;
+	public static final int PHYSICS_VELOCITY_ITERATION = 1;
+	public static final int PHYSICS_POSITION_ITERATION = 1;
 
 	public static final float CANNON_FORCE = 400;
 	public static final float CANNONBALL_TIME_SEC = 5.0f;

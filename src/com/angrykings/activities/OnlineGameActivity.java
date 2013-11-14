@@ -584,7 +584,9 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		}
 
 		this.cannon.hideAimCircle();
+
 		this.hud.setStatus(getString(R.string.enemyTurn));
+
 		if (isLeft) {
 			leftKing.getSprite().setCurrentTileIndex(0);
 			rightKing.getSprite().setCurrentTileIndex(1);
@@ -595,6 +597,8 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	}
 
 	private void onPartnerTurnEnd(JSONObject jObj) throws JSONException {
+		PhysicsManager.getInstance().setFreeze(true);
+
 		JSONArray jsonEntities = jObj.getJSONArray("entities");
 
 		if (jsonEntities == null) {

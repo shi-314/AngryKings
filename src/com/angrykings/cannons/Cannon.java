@@ -29,9 +29,9 @@ public class Cannon extends Entity {
 
 		this.wheelSprite = new Sprite(0, 0, rm.getWheelTexture(), gc.getVboManager());
 		this.barrelSprite = new Sprite(0, 0, rm.getCannonTexture(), gc.getVboManager());
-		this.barrelSprite.setRotationCenter(60.0f, 72.0f);
-		this.aimCircleSprite = new Sprite(rm.getAimCircleTexture().getHeight()*4f, -rm.getAimCircleTexture().getWidth()*4f, rm.getAimCircleTexture(), gc.getVboManager());
-		this.aimCircleSprite.setScale(8, 8);
+		this.barrelSprite.setRotationCenter(15.0f, 18.0f);
+		this.aimCircleSprite = new Sprite(rm.getAimCircleTexture().getHeight(), -rm.getAimCircleTexture().getWidth(), rm.getAimCircleTexture(), gc.getVboManager());
+		this.aimCircleSprite.setScale(2, 2);
 		
 		this.attachChild(this.barrelSprite);
 		this.attachChild(this.wheelSprite);
@@ -46,7 +46,7 @@ public class Cannon extends Entity {
 			this.maxAngle = 0;
 		}
 
-		this.setPosition(100, 300);
+		this.setPosition(25, 75);
 	}
 
 	/**
@@ -84,11 +84,11 @@ public class Cannon extends Entity {
 
 	private Vector2 getBarrelEndPosition() {
 		if (this.isLeft) {
-			return new Vector2(this.getX(), this.getY() + 36).add(this
-					.getDirection().mul(256));
+			return new Vector2(this.getX(), this.getY() + 9).add(this
+					.getDirection().mul(64));
 		} else {
-			return new Vector2(this.getX(), this.getY() + 36).add(this
-					.getDirection().mul(256));
+			return new Vector2(this.getX(), this.getY() + 9).add(this
+					.getDirection().mul(64));
 		}
 	}
 

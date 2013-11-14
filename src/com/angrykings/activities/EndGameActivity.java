@@ -157,7 +157,6 @@ public class EndGameActivity extends Activity {
 		});
 		
 		final Button revengeButton = (Button) findViewById(R.id.revengeButton);
-		revengeButton.setText("Nochmal");
 		revengeButton.setOnClickListener(new OnClickListener() {
 
 			@Override

@@ -72,7 +72,7 @@ public class GameHUD extends HUD {
 		}
 
 		public void setValue(float value) {
-			this.barFilled.setWidth((isLeft ? 1 : -1) * LifeBar.BAR_WIDTH * Math.min(value, 1.0f));
+			this.barFilled.setWidth((isLeft ? 1 : -1) * LifeBar.BAR_WIDTH * Math.min(Math.max(value, 0.0f), 1.0f));
 		}
 	}
 

@@ -1,12 +1,11 @@
 package com.angrykings.cannons;
 
-import org.andengine.entity.Entity;
-import org.andengine.entity.sprite.Sprite;
-
 import com.angrykings.GameContext;
 import com.angrykings.PhysicsManager;
 import com.angrykings.ResourceManager;
 import com.badlogic.gdx.math.Vector2;
+import org.andengine.entity.Entity;
+import org.andengine.entity.sprite.Sprite;
 
 /**
  * Cannon
@@ -30,8 +29,12 @@ public class Cannon extends Entity {
 		this.wheelSprite = new Sprite(0, 0, rm.getWheelTexture(), gc.getVboManager());
 		this.barrelSprite = new Sprite(0, 0, rm.getCannonTexture(), gc.getVboManager());
 		this.barrelSprite.setRotationCenter(15.0f, 18.0f);
-		this.aimCircleSprite = new Sprite(rm.getAimCircleTexture().getHeight(), -rm.getAimCircleTexture().getWidth(), rm.getAimCircleTexture(), gc.getVboManager());
-		this.aimCircleSprite.setScale(2, 2);
+		this.aimCircleSprite = new Sprite(
+				0,
+				-rm.getAimCircleTexture().getHeight() + rm.getWheelTexture().getHeight(),
+				rm.getAimCircleTexture(),
+				gc.getVboManager()
+		);
 		
 		this.attachChild(this.barrelSprite);
 		this.attachChild(this.wheelSprite);

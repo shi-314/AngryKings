@@ -31,7 +31,7 @@ public final class GameConfig {
 	public static final int PHYSICS_POSITION_ITERATION = 10;
 	public static final int PHYSICS_MAX_STEPS_PER_UPDATE = 1;
 
-	public static final float CANNON_FORCE = 12;
+	public static final float CANNON_FORCE = 14;
 	public static final float CANNONBALL_TIME_SEC = 5.0f;
 
 	public static final String WEBSERVICE_URI = "ws://spaeti.pavo.uberspace.de:61224";

@@ -1,9 +1,11 @@
 package com.angrykings;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
+import android.hardware.SensorManager;
+import com.angrykings.maps.BasicMap;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import org.andengine.engine.handler.IUpdateHandler;
+import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.ui.activity.BaseGameActivity;
@@ -12,9 +14,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.angrykings.maps.BasicMap;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * PhysicsManager
@@ -28,7 +29,10 @@ public class PhysicsManager implements IUpdateHandler {
 	private static PhysicsManager instance = null;
 	private boolean ready;
 	private boolean freezed;
+
 	protected BaseGameActivity context;
+
+	FixedStepPhysicsWorld physicsWorld;
 	
 	public static PhysicsManager getInstance() {
 		if(instance == null)
@@ -46,8 +50,23 @@ public class PhysicsManager implements IUpdateHandler {
 	private ArrayList<PhysicalEntity> physicalEntities;
 
 	private PhysicsManager() {
+
 		this.ready = true;
 		this.physicalEntities = new ArrayList<PhysicalEntity>();
+
+		this.physicsWorld = new FixedStepPhysicsWorld(
+				GameConfig.PHYSICS_STEPS_PER_SEC,
+				GameConfig.PHYSICS_MAX_STEPS_PER_UPDATE,
+				new Vector2(0, SensorManager.GRAVITY_EARTH),
+				false,
+				GameConfig.PHYSICS_VELOCITY_ITERATION,
+				GameConfig.PHYSICS_POSITION_ITERATION
+		);
+
+		physicsWorld.setAutoClearForces(true);
+
+		GameContext.getInstance().setPhysicsWorld(physicsWorld);
+
 	}
 
 	public void addPhysicalEntity(PhysicalEntity entity) {
@@ -159,7 +178,6 @@ public class PhysicsManager implements IUpdateHandler {
 
 	public void updateEntities(final JSONArray jsonEntities) {
 		context.runOnUpdateThread(new Runnable() {
-			
 			@Override
 			public void run() {
 				try {
@@ -199,5 +217,9 @@ public class PhysicsManager implements IUpdateHandler {
 
 	@Override
 	public void reset() {
+	}
+
+	public FixedStepPhysicsWorld getPhysicsWorld() {
+		return physicsWorld;
 	}
 }

@@ -3,7 +3,6 @@ package com.angrykings.activities;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -17,7 +16,6 @@ import com.angrykings.castles.Castle;
 import com.angrykings.kings.King;
 import com.angrykings.maps.BasicMap;
 import com.angrykings.utils.ServerMessage;
-import com.badlogic.gdx.math.Vector2;
 import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.handler.timer.ITimerCallback;
@@ -29,7 +27,6 @@ import org.andengine.entity.primitive.Line;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.util.FPSLogger;
-import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.detector.PinchZoomDetector;
 import org.andengine.input.touch.detector.PinchZoomDetector.IPinchZoomDetectorListener;
@@ -174,9 +171,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 		gc = GameContext.getInstance();
 
-		PhysicsManager.getInstance().setContext(this);
-
-		PhysicsManager.getInstance().clearEntities();
 
 		//
 		// initialize network
@@ -205,17 +199,9 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		// initialize the physics engine
 		//
 
-		FixedStepPhysicsWorld physicsWorld = new FixedStepPhysicsWorld(
-				GameConfig.PHYSICS_STEPS_PER_SEC,
-				GameConfig.PHYSICS_MAX_STEPS_PER_UPDATE,
-				new Vector2(0, SensorManager.GRAVITY_EARTH),
-				false,
-				GameConfig.PHYSICS_VELOCITY_ITERATION,
-				GameConfig.PHYSICS_POSITION_ITERATION
-		);
-
-		physicsWorld.setAutoClearForces(true);
-		gc.setPhysicsWorld(physicsWorld);
+		PhysicsManager pm = PhysicsManager.getInstance();
+		pm.setContext(this);
+		pm.clearEntities();
 
 		//
 		// initialize the entities
@@ -362,9 +348,9 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			}
 		});
 
-		scene.registerUpdateHandler(physicsWorld);
+		scene.registerUpdateHandler(pm.getPhysicsWorld());
 
-		PhysicsManager.getInstance().setFreeze(true);
+		pm.setFreeze(true);
 
 		pOnCreateSceneCallback.onCreateSceneFinished(scene);
 	}

@@ -2,12 +2,15 @@ package com.angrykings;
 
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.Entity;
+import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.*;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.font.Font;
 import org.andengine.util.color.Color;
+import org.andengine.util.modifier.IModifier;
 
 /**
  * GameHUD
@@ -195,7 +198,7 @@ public class GameHUD extends HUD {
 		this.leftPlayerNameText.setText(name);
 		this.leftPlayerNameText.setPosition(
 				GameHUD.HUD_MARGIN,
-				GameHUD.HUD_MARGIN //GameConfig.CAMERA_HEIGHT - this.playerNameFont.getLineHeight() - GameHUD.HUD_MARGIN
+				GameHUD.HUD_MARGIN
 		);
 	}
 
@@ -203,15 +206,23 @@ public class GameHUD extends HUD {
 		this.rightPlayerNameText.setText(name);
 		this.rightPlayerNameText.setPosition(
 				GameConfig.CAMERA_WIDTH - this.rightPlayerNameText.getWidth() - GameHUD.HUD_MARGIN,
-				GameHUD.HUD_MARGIN //GameConfig.CAMERA_HEIGHT - this.playerNameFont.getLineHeight() - GameHUD.HUD_MARGIN
+				GameHUD.HUD_MARGIN
 		);
 	}
 
 	public void setStatus(String status) {
+		this.statusText.registerEntityModifier(
+				new SequenceEntityModifier(
+						new AlphaModifier(0.3f, 0.0f, 1.0f),
+						new DelayModifier(1.5f),
+						new AlphaModifier(0.5f, 1.0f, 0.0f)
+				)
+		);
+
 		this.statusText.setText(status);
 		this.statusText.setPosition(
 				GameConfig.CAMERA_WIDTH / 2 - statusText.getWidth() / 2,
-				GameHUD.HUD_MARGIN
+				GameConfig.CAMERA_HEIGHT / 2 - statusText.getHeight() / 2
 		);
 	}
 }

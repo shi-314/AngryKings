@@ -123,10 +123,24 @@ public class ResourceManager {
 		//
 
 		final ITexture statusFontTexture = new BitmapTextureAtlas(
-				gameActivity.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
-		this.statusFont = FontFactory.createFromAsset(gameActivity.getFontManager(),
-				statusFontTexture, gameActivity.getAssets(), "CherrySwash-Bold.ttf", 22.0f, true,
-				Color.BLACK);
+				gameActivity.getTextureManager(),
+				256,
+				256,
+				TextureOptions.BILINEAR
+		);
+
+		this.statusFont = FontFactory.createStrokeFromAsset(
+				gameActivity.getFontManager(),
+				statusFontTexture,
+				gameActivity.getAssets(),
+				"CherrySwash-Bold.ttf",
+				32.0f,
+				true,
+				Color.WHITE,
+				2.0f,
+				Color.BLACK
+		);
+
 		this.statusFont.load();
 
 		final ITexture playerNameFontTexture = new BitmapTextureAtlas(

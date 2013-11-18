@@ -43,8 +43,8 @@ public class King extends Entity{
 		this.registerEntityModifier(
 				new LoopEntityModifier(
 						new SequenceEntityModifier(
-								new MoveByModifier(0.15f, 0, -42),
-								new MoveByModifier(0.15f, 0, 42)
+								new MoveByModifier(0.1f, 0, -42),
+								new MoveByModifier(0.1f, 0, 42)
 						),
 						3
 				)

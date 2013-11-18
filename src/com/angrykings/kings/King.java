@@ -1,6 +1,9 @@
 package com.angrykings.kings;
 
 import org.andengine.entity.Entity;
+import org.andengine.entity.modifier.LoopEntityModifier;
+import org.andengine.entity.modifier.MoveByModifier;
+import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 
@@ -29,13 +32,23 @@ public class King extends Entity{
 				gc.getVboManager()
 		);
 		
-		//kingSprite.setCurrentTileIndex(1);
-		
 		this.attachChild(kingSprite);
 	}
 	
 	public AnimatedSprite getSprite() {
 		return this.kingSprite;
+	}
+
+	public void jump() {
+		this.registerEntityModifier(
+				new LoopEntityModifier(
+						new SequenceEntityModifier(
+								new MoveByModifier(0.15f, 0, -42),
+								new MoveByModifier(0.15f, 0, 42)
+						),
+						3
+				)
+		);
 	}
 
 }

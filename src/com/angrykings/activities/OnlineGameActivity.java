@@ -23,6 +23,7 @@ import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
+import org.andengine.entity.modifier.*;
 import org.andengine.entity.primitive.Line;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
@@ -72,7 +73,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	private PinchZoomDetector pinchZoomDetector;
 	private float pinchZoomStartedCameraZoomFactor;
 	boolean isAiming = true;
-	private Line line;
 
 	//
 	// Network
@@ -581,6 +581,11 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			leftKing.getSprite().setCurrentTileIndex(1);
 			rightKing.getSprite().setCurrentTileIndex(0);
 		}
+
+		if(this.isLeft)
+			this.rightKing.jump();
+		else
+			this.leftKing.jump();
 	}
 
 	private void onPartnerTurnEnd(JSONObject jObj) throws JSONException {
@@ -608,10 +613,15 @@ public class OnlineGameActivity extends BaseGameActivity implements
 				}
 			}
 		}
+
+		if(this.isLeft)
+			this.leftKing.jump();
+		else
+			this.rightKing.jump();
 	}
 
 	private void handleMyTurn() {
-		this.round++;
+		this.turn();
 
 		this.runOnUpdateThread(new Runnable() {
 
@@ -645,7 +655,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	}
 
 	private void handlePartnerTurn(final int x, final int y) {
-		round++;
+		this.turn();
 
 		this.runOnUpdateThread(new Runnable() {
 			@Override
@@ -675,6 +685,10 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		});
 
 		turnSent = false;
+	}
+
+	private void turn() {
+		this.round++;
 	}
 	
 	@Override

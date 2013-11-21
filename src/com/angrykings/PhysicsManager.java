@@ -103,27 +103,6 @@ public class PhysicsManager implements IUpdateHandler {
 		}
 	}
 
-	public void setFreeze(boolean freeze) {
-		Debug.d((freeze ? "" : "un") + "freeze");
-
-		Iterator<PhysicalEntity> it = this.physicalEntities.iterator();
-		while(it.hasNext()) {
-			PhysicalEntity entity = it.next();
-			Body b = entity.getBody();
-
-			// ignore auto removable entities like cannon balls -> just freeze the castle blocks
-
-			if(entity.isAutoRemoveEnabled())
-				continue;
-
-			b.setActive(!freeze);
-		}
-
-		GameContext.getInstance().getPhysicsWorld().clearForces();
-
-		this.freezed = freeze;
-	}
-
 	/**
 	 * @param ignoreAutoRemovables	If true the entities with autoRemove enabled will be ignored
 	 * @return	Returns a list of physical entities.
@@ -150,10 +129,6 @@ public class PhysicsManager implements IUpdateHandler {
 	 */
 	public ArrayList<PhysicalEntity> getPhysicalEntities() {
 		return this.getPhysicalEntities(true);
-	}
-
-	public boolean isReady() {
-		return this.ready && this.freezed;
 	}
 
 	/**

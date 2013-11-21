@@ -16,6 +16,7 @@ public class Action {
 		public static final int SEND_NAME = 1011;
 		public static final int END_TURN = 1012;
 		public static final int PARTNER_LEFT_GAME_OVER = 1013;
+		public static final int DRAW = 1014;
 	}
 
 	public class Client {

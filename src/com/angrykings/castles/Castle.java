@@ -1,7 +1,10 @@
 package com.angrykings.castles;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
+import android.util.Log;
+import com.badlogic.gdx.physics.box2d.Body;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 
@@ -10,6 +13,7 @@ import com.angrykings.PhysicalEntity;
 import com.angrykings.PhysicsManager;
 import com.angrykings.ResourceManager;
 import com.angrykings.maps.BasicMap;
+import org.andengine.util.debug.Debug;
 
 /**
  * Castle
@@ -137,8 +141,26 @@ public class Castle {
 		this.addRoof(row4Stone2X, row10roof1Y);
 	}
 
-	public ArrayList<PhysicalEntity> getBlocks() {
-		return blocks;
+	private void setFreeze(boolean freeze) {
+
+		Log.i(this.getClass().getName(), (freeze ? "" : "un") + "freeze castle");
+
+		Iterator<PhysicalEntity> it = this.blocks.iterator();
+		while(it.hasNext()) {
+			PhysicalEntity entity = it.next();
+			Body b = entity.getBody();
+
+			b.setActive(!freeze);
+		}
+
+	}
+
+	public void freeze() {
+		this.setFreeze(true);
+	}
+
+	public void unfreeze() {
+		this.setFreeze(false);
 	}
 
 }

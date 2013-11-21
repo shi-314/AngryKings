@@ -23,8 +23,6 @@ import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
-import org.andengine.entity.modifier.*;
-import org.andengine.entity.primitive.Line;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.util.FPSLogger;
@@ -60,8 +58,8 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	// Game Objects
 	//
 
-	private Cannon cannon;
-	private Cannon enemyCannon;
+	private Cannon myCannon;
+	private Cannon partnerCannon;
 	private Castle leftCastle, rightCastle;
 	private King leftKing, rightKing;
 
@@ -79,22 +77,22 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	//
 
 	private ServerConnection serverConnection;
-	private int round;
-	boolean turnSent;
-	boolean receivedEndTurn;
 	int aimX, aimY;
 	String myName, enemyName;
-	boolean wonTheGame = false;
 	boolean isLeft;
+
+	GameStatus status;
 
 	private class AngryKingsMessageHandler extends ServerConnection.OnMessageHandler {
 		@Override
 		public void onMessage(String payload) {
 			try {
 				JSONObject jObj = new JSONObject(payload);
-				if (jObj.getInt("action") == Action.Server.TURN
-						&& round % 2 == 1) {
+				if (jObj.getInt("action") == Action.Server.TURN) {
 
+					turn();
+
+				}else if (jObj.getInt("action") == Action.Server.END_TURN) {
 					// partner has made his turn
 
 					final int x = Integer.parseInt(jObj.getString("x"));
@@ -102,26 +100,18 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 					handlePartnerTurn(x, y);
 
-				} else if (jObj.getInt("action") == Action.Server.YOU_WIN
-						|| jObj.getInt("action") == Action.Server.PARTNER_LEFT) {
+				} else if (jObj.getInt("action") == Action.Server.YOU_WIN || jObj.getInt("action") == Action.Server.PARTNER_LEFT) {
 
 					// this client has won the game
 
-					Intent intent = new Intent(OnlineGameActivity.this,
-							EndGameActivity.class);
-					intent.putExtra("hasWon", true);
-					intent.putExtra("isLeft", OnlineGameActivity.this.isLeft);
-					intent.putExtra("username", myName);
-					intent.putExtra("partnername", enemyName);
-					intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-					startActivity(intent);
-					wonTheGame = true;
+					won();
+
 
 				} else if (jObj.getInt("action") == Action.Server.END_TURN) {
 
 					// partner has end his turn -> synchronize physics
 
-					onPartnerTurnEnd(jObj);
+					// onPartnerTurnEnd(jObj);
 
 				}
 			} catch (JSONException e) {
@@ -177,8 +167,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		// initialize network
 		//
 
-		this.receivedEndTurn = true;
-
 		ServerConnection.getInstance().setHandler(new AngryKingsMessageHandler());
 
 		gc.setVboManager(this.getVertexBufferObjectManager());
@@ -223,8 +211,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		if (extras != null) {
 			Boolean myTurn = extras.getBoolean("myTurn");
 			if (myTurn) {
-				this.receivedEndTurn = true;
-				this.round = 0;
 				amILeft = true;
 				myX = -400;
 				myY = (int) BasicMap.GROUND_Y - (int) rm.getWheelTexture().getHeight();
@@ -235,8 +221,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 				this.myName = leftPlayerName;
 				this.enemyName = rightPlayerName;
 			} else {
-				this.receivedEndTurn = false;
-				this.round = 1;
 				amILeft = false;
 				enemyX = -400;
 				enemyY = (int) BasicMap.GROUND_Y - (int) rm.getWheelTexture().getHeight();
@@ -251,13 +235,13 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 		isLeft = amILeft;
 
-		this.cannon = new Cannon(amILeft);
-		this.cannon.setPosition(myX, myY);
-		scene.attachChild(this.cannon);
+		this.myCannon = new Cannon(amILeft);
+		this.myCannon.setPosition(myX, myY);
+		scene.attachChild(this.myCannon);
 
-		this.enemyCannon = new Cannon(!amILeft);
-		this.enemyCannon.setPosition(enemyX, enemyY);
-		scene.attachChild(this.enemyCannon);
+		this.partnerCannon = new Cannon(!amILeft);
+		this.partnerCannon.setPosition(enemyX, enemyY);
+		scene.attachChild(this.partnerCannon);
 
 		this.leftCastle = new Castle(-800, BasicMap.GROUND_Y);
 		this.rightCastle = new Castle(500, BasicMap.GROUND_Y);
@@ -312,12 +296,12 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 		if (amILeft) {
 			hud.setStatus(this.getString(R.string.yourTurn));
-			this.cannon.showAimCircle();
 		} else {
 			hud.setStatus(this.getString(R.string.enemyTurn));
 		}
 
 		// TODO in HUD auslagern
+
 		scene.registerUpdateHandler(new IUpdateHandler() {
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
@@ -328,18 +312,10 @@ public class OnlineGameActivity extends BaseGameActivity implements
 				hud.getLeftLifeBar().setValue(1.0f - ((1.0f - leftLife) * 2.0f));
 				hud.getRightLifeBar().setValue(1.0f - ((1.0f - rightLife) * 2.0f));
 
-				if (left && leftLife < 0.5f || !left && rightLife < 0.5f) {
-					gc.getHud().setStatus("Du hast verloren!");
-					gc.getHud().setStatus(getString(R.string.hasLost));
-					serverConnection.sendTextMessage(ServerMessage.lose());
-					Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
-					intent.putExtra("hasWon", false);
-					intent.putExtra("isLeft", OnlineGameActivity.this.isLeft);
-					intent.putExtra("username", myName);
-					intent.putExtra("partnername", enemyName);
-					intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-					startActivity(intent);
+				if ((left && leftLife < 0.5f || !left && rightLife < 0.5f) && status != GameStatus.LOST) {
+					lost();
 				}
+
 			}
 
 			@Override
@@ -350,9 +326,12 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 		scene.registerUpdateHandler(pm.getPhysicsWorld());
 
-		pm.setFreeze(true);
+		this.leftCastle.freeze();
+		this.rightCastle.freeze();
 
 		pOnCreateSceneCallback.onCreateSceneFinished(scene);
+
+		this.serverConnection.sendTextMessage(ServerMessage.ready());
 	}
 
 	@Override
@@ -360,8 +339,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
 	}
 
-	
-	
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
 		gc = GameContext.getInstance();
@@ -369,12 +346,12 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		if (gc.getPhysicsWorld() == null)
 			return false;
 
-		double cannonDistanceX = pSceneTouchEvent.getX() - this.cannon.getX();
-		double cannonDistanceY = pSceneTouchEvent.getY() - this.cannon.getY();
+		double cannonDistanceX = pSceneTouchEvent.getX() - this.myCannon.getX();
+		double cannonDistanceY = pSceneTouchEvent.getY() - this.myCannon.getY();
 		double cannonDistanceR = Math.sqrt(cannonDistanceX*cannonDistanceX + cannonDistanceY*cannonDistanceY);
 		
-		Log.d(TAG, "Distance: " + cannonDistanceX + " " + cannonDistanceY);
-		Log.d(TAG, "DistanceR: " + cannonDistanceR);
+		// Log.d(TAG, "Distance: " + cannonDistanceX + " " + cannonDistanceY);
+		// Log.d(TAG, "DistanceR: " + cannonDistanceR);
 
 		// TODO: refactor constant
 		//if (this.isAiming) {
@@ -384,25 +361,19 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			// aim and fire
 			//
 
-			if (!PhysicsManager.getInstance().isReady()) {
-				return true;
-			}
-
 			float x = pSceneTouchEvent.getX();
 			float y = pSceneTouchEvent.getY();
 			
 			int iX = (int) x;
 			int iY = (int) y;
 			
-			if (this.cannon.pointAt(iX, iY)) {
+			if (this.myCannon.pointAt(iX, iY)) {
 				this.aimX = iX;
 				this.aimY = iY;
 			}
 
-			if (pSceneTouchEvent.isActionUp() && this.receivedEndTurn) {
-				if (!turnSent && round % 2 == 0) {
-					this.handleMyTurn();
-				}
+			if (pSceneTouchEvent.isActionUp() && this.status == GameStatus.MY_TURN) {
+				this.handleMyTurn(this.aimX, this.aimY);
 			}
 
 		} else {
@@ -540,96 +511,24 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		return super.onKeyDown(keyCode, event);
 	}
 
-	private void onMyTurnEnd() {
-		PhysicsManager.getInstance().setFreeze(true);
+	private void handleMyTurn(final int x, final int y) {
 
-		//
-		// send castle block positions
-		//
+		Log.i(getClass().getName(), "handleMyTurn()");
 
-		String jsonStr = ServerMessage.endTurn();
-		this.serverConnection.sendTextMessage(ServerMessage.endTurn());
-
-		Debug.d("send "
-				+ PhysicsManager.getInstance().getPhysicalEntities().size()
-				+ " entities");
-
-		//
-		// update own castle block position to avoid floating point precision
-		// issues
-		//
-
-		try {
-			JSONObject jObj = new JSONObject(jsonStr);
-			JSONArray jsonEntities = jObj.getJSONArray("entities");
-
-			if (jsonEntities != null) {
-				PhysicsManager.getInstance().updateEntities(jsonEntities);
-			}
-		} catch (JSONException e) {
-			Debug.d("JSONException: " + e);
-		}
-
-		this.cannon.hideAimCircle();
-
-		this.hud.setStatus(getString(R.string.enemyTurn));
-
-		if (isLeft) {
-			leftKing.getSprite().setCurrentTileIndex(0);
-			rightKing.getSprite().setCurrentTileIndex(1);
-		} else {
-			leftKing.getSprite().setCurrentTileIndex(1);
-			rightKing.getSprite().setCurrentTileIndex(0);
-		}
-
-		if(this.isLeft)
-			this.rightKing.jump();
-		else
-			this.leftKing.jump();
-	}
-
-	private void onPartnerTurnEnd(JSONObject jObj) throws JSONException {
-		PhysicsManager.getInstance().setFreeze(true);
-
-		JSONArray jsonEntities = jObj.getJSONArray("entities");
-
-		if (jsonEntities == null) {
-			Debug.d("Warning: jsonEntities is null");
-		} else {
-			Debug.d("received end turn from server with " + jsonEntities.length() + " entities");
-
-			PhysicsManager.getInstance().updateEntities(jsonEntities);
-			receivedEndTurn = true;
-			this.cannon.showAimCircle();
-
-			if (!this.wonTheGame) {
-				hud.setStatus(getString(R.string.yourTurn));
-				if (isLeft) {
-					leftKing.getSprite().setCurrentTileIndex(1);
-					rightKing.getSprite().setCurrentTileIndex(0);
-				} else {
-					leftKing.getSprite().setCurrentTileIndex(0);
-					rightKing.getSprite().setCurrentTileIndex(1);
-				}
-			}
-		}
-
-		if(this.isLeft)
-			this.leftKing.jump();
-		else
-			this.rightKing.jump();
-	}
-
-	private void handleMyTurn() {
-		this.turn();
+		this.status = GameStatus.PARTNER_TURN;
+		this.myCannon.hideAimCircle();
 
 		this.runOnUpdateThread(new Runnable() {
 
 			@Override
 			public void run() {
-				PhysicsManager.getInstance().setFreeze(false);
 
-				final Cannonball ball = OnlineGameActivity.this.cannon .fire(GameConfig.CANNON_FORCE);
+				if(isLeft)
+					rightCastle.unfreeze();
+				else
+					leftCastle.unfreeze();
+
+				final Cannonball ball = OnlineGameActivity.this.myCannon.fire(GameConfig.CANNON_FORCE);
 
 				getEngine().registerUpdateHandler(
 						new TimerHandler(
@@ -647,24 +546,28 @@ public class OnlineGameActivity extends BaseGameActivity implements
 						onMyTurnEnd();
 					}
 				});
+
 			}
 		});
 
-		this.serverConnection.sendTextMessage(ServerMessage.turn(this.aimX, this.aimY));
-		this.turnSent = true;
 	}
 
 	private void handlePartnerTurn(final int x, final int y) {
-		this.turn();
+
+		Log.i(getClass().getName(), "handlePartnerTurn()");
 
 		this.runOnUpdateThread(new Runnable() {
 			@Override
 			public void run() {
-				receivedEndTurn = false;
-				PhysicsManager.getInstance().setFreeze(false);
-				enemyCannon.pointAt(x, y);
 
-				final Cannonball ball = enemyCannon.fire(GameConfig.CANNON_FORCE);
+				if(isLeft)
+					leftCastle.unfreeze();
+				else
+					rightCastle.unfreeze();
+
+				partnerCannon.pointAt(x, y);
+
+				final Cannonball ball = partnerCannon.fire(GameConfig.CANNON_FORCE);
 
 				getEngine().registerUpdateHandler(
 						new TimerHandler(GameConfig.CANNONBALL_TIME_SEC,
@@ -678,21 +581,166 @@ public class OnlineGameActivity extends BaseGameActivity implements
 				ball.setOnRemove(new Runnable() {
 					@Override
 					public void run() {
-						PhysicsManager.getInstance().setFreeze(true);
+						if(isLeft)
+							leftCastle.freeze();
+						else
+							rightCastle.freeze();
+
+						onPartnerTurnEnd(new JSONObject()); //TODO: testing !!!!!!
 					}
 				});
 			}
 		});
 
-		turnSent = false;
+	}
+
+	private void onMyTurnEnd() {
+
+		Log.i(getClass().getName(), "onMyTurnEnd()");
+
+		if(this.isLeft)
+			this.leftCastle.freeze();
+		else
+			this.rightCastle.freeze();
+
+		//
+		// send castle block positions
+		//
+
+//		String jsonStr = ServerMessage.endTurn();
+		this.serverConnection.sendTextMessage(ServerMessage.endTurn(this.aimX, this.aimY));
+
+//		Debug.d("send "
+//				+ PhysicsManager.getInstance().getPhysicalEntities().size()
+//				+ " entities");
+
+		//
+		// update own castle block position to avoid floating point precision
+		// issues
+		//
+
+//		try {
+//			JSONObject jObj = new JSONObject(jsonStr);
+//			JSONArray jsonEntities = jObj.getJSONArray("entities");
+//
+//			if (jsonEntities != null) {
+//				PhysicsManager.getInstance().updateEntities(jsonEntities);
+//			}
+//		} catch (JSONException e) {
+//			Debug.d("JSONException: " + e);
+//		}
+
+		this.myCannon.hideAimCircle();
+
+		this.hud.setStatus(getString(R.string.enemyTurn));
+
+		if (isLeft) {
+			leftKing.getSprite().setCurrentTileIndex(0);
+			rightKing.getSprite().setCurrentTileIndex(1);
+		} else {
+			leftKing.getSprite().setCurrentTileIndex(1);
+			rightKing.getSprite().setCurrentTileIndex(0);
+		}
+
+		if(this.isLeft)
+			this.rightKing.jump();
+		else
+			this.leftKing.jump();
+	}
+
+	private void onPartnerTurnEnd(JSONObject jObj) {
+
+		Log.i(getClass().getName(), "onPartnerTurnEnd()");
+
+		if(this.isLeft)
+			this.leftCastle.freeze();
+		else
+			this.rightCastle.freeze();
+
+
+		JSONArray jsonEntities = null;
+		try {
+			jsonEntities = jObj.getJSONArray("entities");
+		} catch (JSONException e) {
+			Log.e(getClass().getName(), e.toString());
+		}
+
+		if (jsonEntities == null) {
+			Log.w(getClass().getName(), "Warning: jsonEntities is null");
+		} else {
+			Log.i(getClass().getName(), "received end turn from server with " + jsonEntities.length() + " entities");
+
+			PhysicsManager.getInstance().updateEntities(jsonEntities);
+		}
+
+		hud.setStatus(getString(R.string.yourTurn));
+		if (isLeft) {
+			leftKing.getSprite().setCurrentTileIndex(1);
+			rightKing.getSprite().setCurrentTileIndex(0);
+		} else {
+			leftKing.getSprite().setCurrentTileIndex(0);
+			rightKing.getSprite().setCurrentTileIndex(1);
+		}
+
+		if(this.isLeft)
+			this.leftKing.jump();
+		else
+			this.rightKing.jump();
+
+		if(this.status != GameStatus.LOST)
+			this.serverConnection.sendTextMessage(ServerMessage.ready());
+
 	}
 
 	private void turn() {
-		this.round++;
+
+		Log.i(getClass().getName(), "turn()");
+
+		this.status = GameStatus.MY_TURN;
+
+		this.myCannon.showAimCircle();
+
+	}
+
+	private void won() {
+
+		Log.i(getClass().getName(), "won()");
+
+		this.status = GameStatus.WON;
+
+		Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
+		intent.putExtra("hasWon", true);
+		intent.putExtra("isLeft", OnlineGameActivity.this.isLeft);
+		intent.putExtra("username", myName);
+		intent.putExtra("partnername", enemyName);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		startActivity(intent);
+
+	}
+
+	private void lost() {
+		Log.i(getClass().getName(), "lost()");
+
+		this.status = GameStatus.LOST;
+		serverConnection.sendTextMessage(ServerMessage.lose());
+
+		gc.getHud().setStatus("Du hast verloren!");
+		gc.getHud().setStatus(getString(R.string.hasLost));
+
+		Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
+		intent.putExtra("hasWon", false);
+		intent.putExtra("isLeft", OnlineGameActivity.this.isLeft);
+		intent.putExtra("username", myName);
+		intent.putExtra("partnername", enemyName);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		startActivity(intent);
+
 	}
 	
 	@Override
 	public synchronized void onPauseGame() {
+		Log.i(getClass().getName(), "onPauseGame()");
+
 		super.onPauseGame();
 		if(BuildConfig.DEBUG) {
 			Debug.d(this.getClass().getSimpleName() + ".onPauseGame lalala" + " @(Thread: '" + Thread.currentThread().getName() + "')");

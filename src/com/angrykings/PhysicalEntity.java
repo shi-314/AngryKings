@@ -55,8 +55,10 @@ public abstract class PhysicalEntity {
 		this.onRemove = onRemove;
 	}
 
-	public void remove(BaseGameActivity context) {
-		context.runOnUpdateThread(new Runnable() {
+	public void remove() {
+		BaseGameActivity gameActivity = GameContext.getInstance().getGameActivity();
+
+		gameActivity.runOnUpdateThread(new Runnable() {
 			
 			@Override
 			public void run() {

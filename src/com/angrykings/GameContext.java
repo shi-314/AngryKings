@@ -4,6 +4,7 @@ import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.Scene;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.ui.activity.BaseGameActivity;
 
 /**
  * GameContext
@@ -27,6 +28,7 @@ public class GameContext {
 	private Camera camera;
 	private PhysicsWorld physicsWorld;
 	private VertexBufferObjectManager vboManager;
+	private BaseGameActivity gameActivity;
 
 	private GameHUD hud;
 
@@ -79,5 +81,13 @@ public class GameContext {
 
 	public GameHUD getHud() {
 		return hud;
+	}
+
+	public BaseGameActivity getGameActivity() {
+		return gameActivity;
+	}
+
+	public void setGameActivity(BaseGameActivity gameActivity) {
+		this.gameActivity = gameActivity;
 	}
 }

@@ -30,8 +30,6 @@ public class PhysicsManager implements IUpdateHandler {
 	private boolean ready;
 	private boolean freezed;
 
-	protected BaseGameActivity context;
-
 	FixedStepPhysicsWorld physicsWorld;
 	
 	public static PhysicsManager getInstance() {
@@ -39,10 +37,6 @@ public class PhysicsManager implements IUpdateHandler {
 			instance = new PhysicsManager();
 
 		return instance;
-	}
-	
-	public void setContext(BaseGameActivity context){
-		this.context = context;
 	}
 
 	private static final float MIN_LINEAR_VELOCITY = 1e-2f;
@@ -94,7 +88,7 @@ public class PhysicsManager implements IUpdateHandler {
 
 			if(linearVelocity < PhysicsManager.MIN_LINEAR_VELOCITY && angularVelocity < PhysicsManager.MIN_ANGULAR_VELOCITY) {
 				Debug.d("remove physical entity: lin: " + b.getLinearVelocity().len() + " angular: " + b.getAngularVelocity());
-				entity.remove(context);
+				entity.remove();
 				it.remove();
 			}else{
 				Debug.d("not ready: lin="+linearVelocity+", ang="+angularVelocity);
@@ -103,7 +97,7 @@ public class PhysicsManager implements IUpdateHandler {
 
 			if(entity.getAreaShape().getY() > BasicMap.GROUND_Y + 100) {
 				Debug.d("remove physical entity (seems to have fallen down of the 'ground'): y " + entity.getAreaShape().getY());
-				entity.remove(context);
+				entity.remove();
 				it.remove();
 			}
 		}
@@ -177,7 +171,9 @@ public class PhysicsManager implements IUpdateHandler {
 	}
 
 	public void updateEntities(final JSONArray jsonEntities) {
-		context.runOnUpdateThread(new Runnable() {
+		BaseGameActivity gameActivity = GameContext.getInstance().getGameActivity();
+
+		gameActivity.runOnUpdateThread(new Runnable() {
 			@Override
 			public void run() {
 				try {

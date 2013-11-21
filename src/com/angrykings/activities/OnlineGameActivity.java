@@ -171,6 +171,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 		gc = GameContext.getInstance();
 
+		gc.setGameActivity(this);
 
 		//
 		// initialize network
@@ -200,7 +201,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		//
 
 		PhysicsManager pm = PhysicsManager.getInstance();
-		pm.setContext(this);
 		pm.clearEntities();
 
 		//
@@ -637,7 +637,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 								new ITimerCallback() {
 									@Override
 									public void onTimePassed(TimerHandler pTimerHandler) {
-										ball.remove(OnlineGameActivity.this);
+										ball.remove();
 									}
 								}));
 
@@ -671,7 +671,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 								new ITimerCallback() {
 									@Override
 									public void onTimePassed(TimerHandler pTimerHandler) {
-										ball.remove(OnlineGameActivity.this);
+										ball.remove();
 									}
 								}));
 

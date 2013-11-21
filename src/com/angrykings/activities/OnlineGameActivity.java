@@ -300,8 +300,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			hud.setStatus(this.getString(R.string.enemyTurn));
 		}
 
-		// TODO in HUD auslagern
-
 		scene.registerUpdateHandler(new IUpdateHandler() {
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
@@ -586,7 +584,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 						else
 							rightCastle.freeze();
 
-						onPartnerTurnEnd(new JSONObject()); //TODO: testing !!!!!!
+						onPartnerTurnEnd(new JSONObject()); //TODO: pass keyframes
 					}
 				});
 			}
@@ -599,36 +597,17 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		Log.i(getClass().getName(), "onMyTurnEnd()");
 
 		if(this.isLeft)
-			this.leftCastle.freeze();
-		else
 			this.rightCastle.freeze();
+		else
+			this.leftCastle.freeze();
 
 		//
 		// send castle block positions
 		//
 
-//		String jsonStr = ServerMessage.endTurn();
 		this.serverConnection.sendTextMessage(ServerMessage.endTurn(this.aimX, this.aimY));
 
-//		Debug.d("send "
-//				+ PhysicsManager.getInstance().getPhysicalEntities().size()
-//				+ " entities");
-
-		//
-		// update own castle block position to avoid floating point precision
-		// issues
-		//
-
-//		try {
-//			JSONObject jObj = new JSONObject(jsonStr);
-//			JSONArray jsonEntities = jObj.getJSONArray("entities");
-//
-//			if (jsonEntities != null) {
-//				PhysicsManager.getInstance().updateEntities(jsonEntities);
-//			}
-//		} catch (JSONException e) {
-//			Debug.d("JSONException: " + e);
-//		}
+		// TODO: send keyframes
 
 		this.myCannon.hideAimCircle();
 

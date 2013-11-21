@@ -65,6 +65,17 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	private Castle leftCastle, rightCastle;
 	private King leftKing, rightKing;
 
+    //
+    // Game Objects Positions
+    //
+
+    private static int LEFTCANNONX = -250;
+    private static int RIGHTCANNONX = 200;
+    private static int LEFTCASTLEX = -475;
+    private static int RIGHTCASTLEX = 275;
+    private static int LEFTKINGX = -300;
+    private static int RIGHTKINGX = 250;
+
 	//
 	// Navigation Attributes
 	//
@@ -226,9 +237,9 @@ public class OnlineGameActivity extends BaseGameActivity implements
 				this.receivedEndTurn = true;
 				this.round = 0;
 				amILeft = true;
-				myX = -400;
+				myX = LEFTCANNONX;
 				myY = (int) BasicMap.GROUND_Y - (int) rm.getWheelTexture().getHeight();
-				enemyX = 300;
+				enemyX = RIGHTCANNONX;
 				enemyY = (int) BasicMap.GROUND_Y - (int) rm.getWheelTexture().getHeight();
 				leftPlayerName = extras.getString("username");
 				rightPlayerName = extras.getString("partnername");
@@ -238,9 +249,9 @@ public class OnlineGameActivity extends BaseGameActivity implements
 				this.receivedEndTurn = false;
 				this.round = 1;
 				amILeft = false;
-				enemyX = -400;
+				enemyX = LEFTCANNONX;
 				enemyY = (int) BasicMap.GROUND_Y - (int) rm.getWheelTexture().getHeight();
-				myX = 300;
+				myX = RIGHTCANNONX;
 				myY = (int) BasicMap.GROUND_Y - (int) rm.getWheelTexture().getHeight();
 				leftPlayerName = extras.getString("partnername");
 				rightPlayerName = extras.getString("username");
@@ -259,13 +270,13 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		this.enemyCannon.setPosition(enemyX, enemyY);
 		scene.attachChild(this.enemyCannon);
 
-		this.leftCastle = new Castle(-800, BasicMap.GROUND_Y);
-		this.rightCastle = new Castle(500, BasicMap.GROUND_Y);
+		this.leftCastle = new Castle(LEFTCASTLEX, BasicMap.GROUND_Y);
+		this.rightCastle = new Castle(RIGHTCASTLEX, BasicMap.GROUND_Y);
 
-		this.rightKing = new King(rm.getKingTexture1(), 400, BasicMap.GROUND_Y - rm.getKingTexture1().getHeight() / 2);
+		this.rightKing = new King(rm.getKingTexture1(), RIGHTKINGX, BasicMap.GROUND_Y - rm.getKingTexture1().getHeight() / 2);
 		scene.attachChild(this.rightKing);
 
-		this.leftKing = new King(rm.getKingTexture2(), -550, BasicMap.GROUND_Y - rm.getKingTexture2().getHeight() / 2);
+		this.leftKing = new King(rm.getKingTexture2(), LEFTKINGX, BasicMap.GROUND_Y - rm.getKingTexture2().getHeight() / 2);
 		scene.attachChild(this.leftKing);
 
 		leftKing.getSprite().setCurrentTileIndex(1);
@@ -372,13 +383,14 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		double cannonDistanceX = pSceneTouchEvent.getX() - this.cannon.getX();
 		double cannonDistanceY = pSceneTouchEvent.getY() - this.cannon.getY();
 		double cannonDistanceR = Math.sqrt(cannonDistanceX*cannonDistanceX + cannonDistanceY*cannonDistanceY);
-		
+
 		Log.d(TAG, "Distance: " + cannonDistanceX + " " + cannonDistanceY);
 		Log.d(TAG, "DistanceR: " + cannonDistanceR);
 
 		// TODO: refactor constant
 		//if (this.isAiming) {
-		if (cannonDistanceR < 1200) {
+		if (cannonDistanceR < rm.getAimCircleTexture().getHeight() &&
+                ((isLeft && cannonDistanceX > 0) || (!isLeft && cannonDistanceX < 0))) {
 
 			//
 			// aim and fire
@@ -492,42 +504,42 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 	private void resign() {
 		handler.post(new Runnable() {
-			@Override
-			public void run() {
-				final Dialog dialog = new Dialog(OnlineGameActivity.this);
-				dialog.setContentView(R.layout.quit_dialog);
-				dialog.setCancelable(true);
-				dialog.getWindow().setBackgroundDrawable(
-						new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            @Override
+            public void run() {
+                final Dialog dialog = new Dialog(OnlineGameActivity.this);
+                dialog.setContentView(R.layout.quit_dialog);
+                dialog.setCancelable(true);
+                dialog.getWindow().setBackgroundDrawable(
+                        new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-				Button bCancel = (Button) dialog.findViewById(R.id.bCancel);
-				Button bResign = (Button) dialog.findViewById(R.id.bResign);
+                Button bCancel = (Button) dialog.findViewById(R.id.bCancel);
+                Button bResign = (Button) dialog.findViewById(R.id.bResign);
 
-				bCancel.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						dialog.dismiss();
-					}
-				});
+                bCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
 
-				bResign.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						hud.setStatus(getString(R.string.youResigned));
-						serverConnection.sendTextMessage(ServerMessage.lose());
-						dialog.dismiss();
-						Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
-						intent.putExtra("hasWon", false);
-						intent.putExtra("isLeft", OnlineGameActivity.this.isLeft);
-						intent.putExtra("username", myName);
-						intent.putExtra("partnername", enemyName);
-						intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-						startActivity(intent);
-					}
-				});
-				dialog.show();
-			}
-		});
+                bResign.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        hud.setStatus(getString(R.string.youResigned));
+                        serverConnection.sendTextMessage(ServerMessage.lose());
+                        dialog.dismiss();
+                        Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
+                        intent.putExtra("hasWon", false);
+                        intent.putExtra("isLeft", OnlineGameActivity.this.isLeft);
+                        intent.putExtra("username", myName);
+                        intent.putExtra("partnername", enemyName);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        startActivity(intent);
+                    }
+                });
+                dialog.show();
+            }
+        });
 	}
 
 	@Override

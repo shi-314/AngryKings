@@ -94,7 +94,7 @@ public class ResourceManager {
 				.createFromAsset(textureAtlas, gameActivity, "ball.png", 0, 0);
 		textureAtlas.load();
 
-		textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 140, 151, TextureOptions.BILINEAR);
+		textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 280, 302, TextureOptions.BILINEAR);
 		this.aimCircleTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(textureAtlas, gameActivity, "aimCircle.png", 0, 0);
 		textureAtlas.load();
 
@@ -154,21 +154,21 @@ public class ResourceManager {
 		// castle textures
 		//
 
-		textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 96,
-				32, TextureOptions.BILINEAR);
+		textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 63,
+				21, TextureOptions.BILINEAR);
 		this.stoneTexture = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(textureAtlas, gameActivity, "stones.png", 0, 0,
 						3, 1);
 		textureAtlas.load();
 
-		textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 32,
-				32, TextureOptions.BILINEAR);
+		textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 21,
+				21, TextureOptions.BILINEAR);
 		this.roofTexture = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(textureAtlas, gameActivity, "roof.png", 0, 0);
 		textureAtlas.load();
 
-		textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 103,
-				13, TextureOptions.BILINEAR);
+		textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 68,
+				9, TextureOptions.BILINEAR);
 		this.woodTexture = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(textureAtlas, gameActivity, "wood.png", 0, 0);
 		textureAtlas.load();

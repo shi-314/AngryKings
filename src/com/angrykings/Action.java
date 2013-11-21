@@ -24,7 +24,7 @@ public class Action {
 		public static final int PAIR = 2003;
 		public static final int ACCEPT = 2004;
 		public static final int DENY = 2005;
-		public static final int TURN = 2006;
+		public static final int READY = 2006;
 		public static final int SET_ID = 2007;
 		public static final int LOSE = 2008;
 		public static final int GET_NAME = 2009;

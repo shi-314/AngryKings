@@ -57,23 +57,23 @@ public class ServerConnection {
 			connection.connect(GameConfig.WEBSERVICE_URI, new WebSocketHandler() {
 				@Override
 				public void onOpen() {
-					Log.d(TAG, "Status: Connected");
+					Log.i(TAG, "Status: Connected");
 					startHandler.onStart();
 				}
 
 				@Override
 				public void onTextMessage(String payload) {
-					Log.d(TAG, "received: "+payload);
+					Log.i(TAG, "received: "+payload);
 					handler.onMessage(payload);
 				}
 
 				@Override
 				public void onClose(int code, String reason) {
-					Log.d(TAG, "Connection lost.");
+					Log.i(TAG, "Connection lost.");
 				}
 			});
 		} catch (WebSocketException e) {
-			Log.d(TAG, e.toString());
+			Log.i(TAG, e.toString());
 		}
 	}
 
@@ -82,7 +82,7 @@ public class ServerConnection {
 	 * @param payload
 	 */
 	public void sendTextMessage(String payload) {
-		Log.d(TAG, "sent: "+payload);
+		Log.i(TAG, "sent: "+payload);
 		this.connection.sendTextMessage(payload);
 	}
 

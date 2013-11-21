@@ -19,16 +19,17 @@ public class ServerMessage {
 		return  new ServerJSONBuilder().create(Action.Client.LOSE).build();
 	}
 
-	public static String turn(int x, int y) {
-		return new ServerJSONBuilder()
-				.create(Action.Client.TURN)
-				.option("x", String.valueOf(x))
-				.option("y", String.valueOf(y))
-				.build();
+	public static String ready() {
+		return new ServerJSONBuilder().create(Action.Client.READY).build();
 	}
 
-	public static String endTurn() {
-		return new ServerJSONBuilder().create(Action.Client.END_TURN).entities().build();
+	// TODO: send keyframes
+	public static String endTurn(int x, int y) {
+		return new ServerJSONBuilder().create(Action.Client.END_TURN)
+				.option("x", String.valueOf(x))
+				.option("y", String.valueOf(y))
+				.option("entities", "[0,1,2,3]")
+				.build();
 	}
 
 	public static String setId(String id) {

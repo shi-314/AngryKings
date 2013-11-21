@@ -306,7 +306,7 @@ public class MapTest extends BaseGameActivity implements IOnSceneTouchListener {
 						.getInstance()
 						.sendTextMessage(
 								new ServerJSONBuilder()
-										.create(Action.Client.TURN)
+										.create(Action.Client.END_TURN)
 										.option("x", String.valueOf(x))
 										.option("y", String.valueOf(y)).build());
 				mTurnSent = true;

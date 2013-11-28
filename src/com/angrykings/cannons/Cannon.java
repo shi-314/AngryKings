@@ -87,11 +87,11 @@ public class Cannon extends Entity {
 
 	private Vector2 getBarrelEndPosition() {
 		if (this.isLeft) {
-			return new Vector2(this.getX(), this.getY() + 9).add(this
-					.getDirection().mul(64));
+			return new Vector2(this.getX(), this.getY() + 25).add(this
+					.getDirection().mul(105));
 		} else {
-			return new Vector2(this.getX(), this.getY() + 9).add(this
-					.getDirection().mul(64));
+			return new Vector2(this.getX(), this.getY() + 25).add(this
+					.getDirection().mul(105));
 		}
 	}
 

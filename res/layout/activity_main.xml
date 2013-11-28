@@ -1,33 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/menu"
     android:orientation="vertical" >
+
+	<ImageView
+		android:src="@drawable/menu"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:contentDescription=""
+		android:adjustViewBounds="true"
+		android:layout_weight="1"
+		android:scaleType="centerCrop"
+		/>
+
 
     <Button
         android:id="@+id/lobbyButton"
-        android:layout_width="200dp"
-        android:layout_height="75dp"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:layout_marginTop="150dp"
-        android:background="@drawable/lobby_button" />
-    
+        android:layout_width="120dp"
+        android:layout_height="41dp"
+        android:layout_gravity="center_horizontal"
+		android:background="@drawable/lobby_button"
+		android:layout_centerHorizontal="true"
+		android:layout_marginTop="140dp"
+		android:layout_marginBottom="20dp"
+		/>
+
     <Button
         android:id="@+id/introButton"
-        android:layout_width="200dp"
-        android:layout_height="75dp"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:layout_marginTop="-25dp"
-        android:background="@drawable/intro_button" />
+        android:layout_width="120dp"
+        android:layout_height="41dp"
+        android:layout_gravity="center_vertical"
+		android:background="@drawable/intro_button"
+		android:layout_centerHorizontal="true"
+		android:layout_below="@+id/lobbyButton"/>
 
     <Button
         android:id="@+id/settingsButton"
-        android:layout_width="150dp"
-        android:layout_height="30dp"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:layout_marginTop="0dp"
+        android:layout_width="44dp"
+        android:layout_height="38dp"
         android:background="@drawable/settings"
-        />
 
-</LinearLayout>
+		android:layout_marginTop="15dp"
+		android:layout_marginLeft="15dp"
+		/>
+
+</RelativeLayout>

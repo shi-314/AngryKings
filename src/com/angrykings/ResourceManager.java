@@ -76,14 +76,14 @@ public class ResourceManager {
 		// cannon textures
 		//
 
-		textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 64,
-				18, TextureOptions.BILINEAR);
+		textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 120,
+				19, TextureOptions.BILINEAR);
 		this.cannonTexture = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(textureAtlas, gameActivity, "cannon.png", 0, 0);
 		textureAtlas.load();
 
-		textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 32,
-				32, TextureOptions.BILINEAR);
+		textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 155,
+				60, TextureOptions.BILINEAR);
 		this.wheelTexture = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(textureAtlas, gameActivity, "wheel.png", 0, 0);
 		textureAtlas.load();
@@ -167,8 +167,8 @@ public class ResourceManager {
 				.createFromAsset(textureAtlas, gameActivity, "roof.png", 0, 0);
 		textureAtlas.load();
 
-		textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 68,
-				9, TextureOptions.BILINEAR);
+		textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 100,
+				10, TextureOptions.BILINEAR);
 		this.woodTexture = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(textureAtlas, gameActivity, "wood.png", 0, 0);
 		textureAtlas.load();

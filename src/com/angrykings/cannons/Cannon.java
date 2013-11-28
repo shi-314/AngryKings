@@ -26,9 +26,9 @@ public class Cannon extends Entity {
 
 		GameContext gc = GameContext.getInstance();
 
-		this.wheelSprite = new Sprite(0, 0, rm.getWheelTexture(), gc.getVboManager());
-		this.barrelSprite = new Sprite(0, 0, rm.getCannonTexture(), gc.getVboManager());
-		this.barrelSprite.setRotationCenter(15.0f, 18.0f);
+		this.wheelSprite = new Sprite(-76, 0, rm.getWheelTexture(), gc.getVboManager());
+		this.barrelSprite = new Sprite(0, 12, rm.getCannonTexture(), gc.getVboManager());
+		this.barrelSprite.setRotationCenter(40.0f, 16.0f);
 		this.aimCircleSprite = new Sprite(
 				0,
 				-rm.getAimCircleTexture().getHeight() + rm.getWheelTexture().getHeight(),

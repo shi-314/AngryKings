@@ -91,7 +91,7 @@ public class Player {
 		Log.i(getClass().getName(), "["+this.name+"] handleTurn("+aimX+", "+aimY+")");
 
 		if(this.playerTurnListener != null)
-			this.playerTurnListener.onHandleTurn();
+			this.playerTurnListener.onHandleTurn(aimX, aimY);
 
 		final BaseGameActivity gameActivity = GameContext.getInstance().getGameActivity();
 

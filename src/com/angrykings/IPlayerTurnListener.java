@@ -8,7 +8,7 @@ package com.angrykings;
  */
 public interface IPlayerTurnListener {
 
-	void onHandleTurn();
+	void onHandleTurn(int x, int y);
 	void onEndTurn();
 
 }

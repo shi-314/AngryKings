@@ -116,7 +116,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 	private class MyTurnListener implements IPlayerTurnListener {
 		@Override
-		public void onHandleTurn() {
+		public void onHandleTurn(int x, int y) {
 			status = GameStatus.PARTNER_TURN;
 			me.getCannon().hideAimCircle();
 			partner.getCastle().unfreeze();
@@ -139,7 +139,8 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 	private class PartnerTurnListener implements IPlayerTurnListener {
 		@Override
-		public void onHandleTurn() {
+		public void onHandleTurn(int x, int y) {
+			partner.getCannon().pointAt(x, y);
 			me.getCastle().unfreeze();
 		}
 

@@ -52,6 +52,7 @@ public class Stone extends PhysicalEntity {
 
 		this.stoneBody.setLinearDamping(Stone.LINEAR_DAMPING);
 		this.stoneBody.setAngularDamping(Stone.ANGULAR_DAMPING);
+        this.stoneBody.setUserData("Stein");
 	}
 
 

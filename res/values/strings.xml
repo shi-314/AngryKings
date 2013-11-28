@@ -18,5 +18,8 @@
 	<string name="enemyTurn">Dein Gegner ist dran!</string>
 	<string name="youResigned">Du hast aufgegeben :(</string>
 	<string name="revengeButton">Erneut Spielen</string>
+    <string name="username_summary">Dein Spielername im Spiel</string>
+    <string name="sound_summary">Soundeffekte an und aus schalten</string>
+
 
 </resources>

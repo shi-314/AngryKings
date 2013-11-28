@@ -2,7 +2,9 @@ package com.angrykings.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -22,9 +24,11 @@ public class LogInActivity extends Activity {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-		
+
 		final Button nameSendButton = (Button) findViewById(R.id.button);
 		final EditText nameText = (EditText) findViewById(R.id.nameInput);
+
+        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		
 		ServerConnection.getInstance().setHandler(new OnMessageHandler() {
 			
@@ -51,6 +55,7 @@ public class LogInActivity extends Activity {
 				ServerConnection
 						.getInstance()
 						.sendTextMessage(ServerMessage.setName(nameText.getText().toString()));
+                settings.edit().putString("username", nameText.getText().toString());
 			}
 		});
 	}

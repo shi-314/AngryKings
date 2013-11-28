@@ -3,7 +3,9 @@ package com.angrykings.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.View;
@@ -23,6 +25,7 @@ public class MainActivity extends Activity {
 	private String username;
 	private Button lobbyButton;
 	private Button introButton;
+    private Button settingsButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +38,11 @@ public class MainActivity extends Activity {
 		lobbyButton = (Button) findViewById(R.id.lobbyButton);
 		lobbyButton.setBackgroundResource(R.drawable.verbinde_button);
 
+        settingsButton = (Button) findViewById(R.id.settingsButton);
+
 		lobbyButton.setEnabled(false);
+
+        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
 		ServerConnection.getInstance().setHandler(new OnMessageHandler() {
 
@@ -45,6 +52,7 @@ public class MainActivity extends Activity {
 					JSONObject jObj = new JSONObject(payload);
 					if (jObj.getInt("action") == Action.Server.KNOWN_USER || jObj.getInt("action") == Action.Server.SEND_NAME) {
 						username = jObj.getString("name");
+                        settings.edit().putString("username", username);
 						lobbyButton.setBackgroundResource(R.drawable.lobby_button);
 						//bLobby.setText(getString(R.string.lobbyButton));
 						lobbyButton.setEnabled(true);
@@ -105,6 +113,14 @@ public class MainActivity extends Activity {
 			}
 			
 		});
+
+        settingsButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
 	}
 
 	private String getImei() {

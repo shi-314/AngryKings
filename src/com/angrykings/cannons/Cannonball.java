@@ -58,6 +58,8 @@ public class Cannonball extends PhysicalEntity {
 
 		this.ballBody.setLinearDamping(linearDamping);
 		this.ballBody.setAngularDamping(angularDamping);
+        this.ballBody.setBullet(true);
+        this.ballBody.setUserData("Kugel");
 	}
 
 	@Override

@@ -57,6 +57,11 @@
             android:name="com.angrykings.activities.EndGameActivity"
             android:screenOrientation="landscape" >
         </activity>
+        <activity android:name="com.angrykings.activities.SettingsActivity">
+            <intent-filter>
+
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

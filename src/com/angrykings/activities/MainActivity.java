@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+
 import com.angrykings.Action;
 import com.angrykings.R;
 import com.angrykings.ServerConnection;
@@ -140,4 +141,10 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        username = settings.getString("username", "");
+    }
 }

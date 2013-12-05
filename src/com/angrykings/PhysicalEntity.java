@@ -75,7 +75,7 @@ public abstract class PhysicalEntity {
 						gc.getPhysicsWorld().getPhysicsConnectorManager()
 								.findPhysicsConnectorByShape(PhysicalEntity.this.getAreaShape()));
 				gc.getPhysicsWorld().destroyBody(PhysicalEntity.this.getBody());
-				PhysicalEntity.this.getAreaShape().dispose();				
+				PhysicalEntity.this.getAreaShape().dispose();
 			}
 		});
 	}

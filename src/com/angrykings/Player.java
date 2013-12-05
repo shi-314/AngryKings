@@ -101,6 +101,7 @@ public class Player {
 			public void run() {
 
 				final Cannonball ball = cannon.fire(GameConfig.CANNON_FORCE);
+                cannon.activateFollowCamera();
 
 				gameActivity.getEngine().registerUpdateHandler(
 						new TimerHandler(

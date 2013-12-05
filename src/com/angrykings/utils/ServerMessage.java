@@ -1,6 +1,13 @@
 package com.angrykings.utils;
 
 import com.angrykings.Action;
+import com.angrykings.Keyframe;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * AngryKings
@@ -24,11 +31,21 @@ public class ServerMessage {
 	}
 
 	// TODO: send keyframes
-	public static String endTurn(int x, int y) {
+	public static String endTurn(int x, int y, ArrayList<Keyframe> keyframes) {
+		JSONArray keyframesJson = new JSONArray();
+
+		for(Keyframe k : keyframes) {
+			try {
+				keyframesJson.put(k.toJson());
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+
 		return new ServerJSONBuilder().create(Action.Client.END_TURN)
 				.option("x", String.valueOf(x))
 				.option("y", String.valueOf(y))
-				.option("entities", "[0,1,2,3]")
+				.option("keyframes", keyframesJson.toString())
 				.build();
 	}
 

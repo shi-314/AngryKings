@@ -54,6 +54,7 @@ public class Player implements IUpdateHandler {
 	private final Castle castle;
 	private final Cannon cannon;
 	private final boolean isLeft;
+	private Cannonball cannonball;
 
 	//
 	// Callbacks
@@ -112,7 +113,7 @@ public class Player implements IUpdateHandler {
 			@Override
 			public void run() {
 
-				final Cannonball ball = cannon.fire(GameConfig.CANNON_FORCE);
+				cannonball = cannon.fire(GameConfig.CANNON_FORCE);
 
 				gameActivity.getEngine().registerUpdateHandler(
 						new TimerHandler(
@@ -120,11 +121,12 @@ public class Player implements IUpdateHandler {
 								new ITimerCallback() {
 									@Override
 									public void onTimePassed(TimerHandler pTimerHandler) {
-										ball.remove();
+										playerTurnListener.onEndTurn();
+										cannonball.remove();
 									}
 								}));
 
-				ball.setOnRemove(new Runnable() {
+				cannonball.setOnRemove(new Runnable() {
 					@Override
 					public void run() {
 						endTurn();
@@ -149,7 +151,6 @@ public class Player implements IUpdateHandler {
 
 		if(this.playerTurnListener != null) {
 			this.playerTurnListener.onKeyframe(GameConfig.CANNONBALL_TIME_SEC);
-			this.playerTurnListener.onEndTurn();
 		}
 
 	}
@@ -168,6 +169,10 @@ public class Player implements IUpdateHandler {
 
 	public Cannon getCannon() {
 		return cannon;
+	}
+
+	public Cannonball getCannonball() {
+		return cannonball;
 	}
 
 	public void setPlayerTurnListener(IPlayerTurnListener playerTurnListener) {
@@ -189,6 +194,10 @@ public class Player implements IUpdateHandler {
 			}
 		}
 
+	}
+
+	public boolean isInTurn() {
+		return inTurn;
 	}
 
 	@Override

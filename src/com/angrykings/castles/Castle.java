@@ -177,9 +177,9 @@ public class Castle implements IJsonSerializable{
 	}
 
 	@Override
-	public void updateFromJson(JSONObject json) throws JSONException {
+	public void fromJson(JSONObject json) throws JSONException {
 		for(PhysicalEntity entity : blocks) {
-			entity.updateFromJson(json.getJSONObject(String.valueOf(entity.getId())));
+			entity.fromJson(json.getJSONObject(String.valueOf(entity.getId())));
 		}
 	}
 }

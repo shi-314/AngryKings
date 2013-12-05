@@ -38,6 +38,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 /**
  * OnlineGameActivity
  *
@@ -115,8 +117,15 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	}
 
 	private class MyTurnListener implements IPlayerTurnListener {
+		private ArrayList<Keyframe> keyframes;
+
+		public MyTurnListener() {
+			this.keyframes = new ArrayList<Keyframe>();
+		}
+
 		@Override
 		public void onHandleTurn(int x, int y) {
+			this.keyframes.clear();
 			status = GameStatus.PARTNER_TURN;
 			me.getCannon().hideAimCircle();
 			partner.getCastle().unfreeze();
@@ -124,7 +133,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 		@Override
 		public void onEndTurn() {
-			serverConnection.sendTextMessage(ServerMessage.endTurn(aimX, aimY));
+			serverConnection.sendTextMessage(ServerMessage.endTurn(aimX, aimY, this.keyframes));
 
 			// TODO: send keyframes
 
@@ -138,7 +147,15 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 		@Override
 		public void onKeyframe(float time) {
-			Log.i(getClass().getName(), "me.onKeyframe: "+time);
+			try {
+				Log.i("Player", "me.onKeyframe: "+time);
+				Keyframe k = new Keyframe(time, me.getCannonball(), partner.getCastle());
+				//Log.i("KEYFRAME", "ball: "+me.getCannonball()+", castle: "+me.getCastle());
+				//Log.i("KEYFRAME", "keyframe: "+k.getCannonballJson().toString());
+				this.keyframes.add(k);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -164,7 +181,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 		@Override
 		public void onKeyframe(float time) {
-			Log.i(getClass().getName(), "partner.onKeyframe: "+time);
 		}
 	}
 

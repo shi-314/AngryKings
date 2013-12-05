@@ -104,7 +104,7 @@ public abstract class PhysicalEntity implements IJsonSerializable {
 	}
 
 	@Override
-	public void updateFromJson(JSONObject json) throws JSONException {
+	public void fromJson(JSONObject json) throws JSONException {
 		final float x = (float) json.getDouble("x");
 		final float y = (float) json.getDouble("y");
 

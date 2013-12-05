@@ -148,6 +148,11 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			partner.getKing().jump();
             followCamera = GEGNERKANONE;
 		}
+
+		@Override
+		public void onKeyframe(float time) {
+			Log.i(getClass().getName(), "me.onKeyframe: "+time);
+		}
 	}
 
 	private class PartnerTurnListener implements IPlayerTurnListener {
@@ -170,6 +175,11 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 			if(status != GameStatus.LOST)
 				serverConnection.sendTextMessage(ServerMessage.ready());
+		}
+
+		@Override
+		public void onKeyframe(float time) {
+			Log.i(getClass().getName(), "partner.onKeyframe: "+time);
 		}
 	}
 
@@ -342,6 +352,9 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 		this.me.getCastle().freeze();
 		this.partner.getCastle().freeze();
+
+		scene.registerUpdateHandler(this.me);
+		scene.registerUpdateHandler(this.partner);
 
 		pOnCreateSceneCallback.onCreateSceneFinished(scene);
 

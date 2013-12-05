@@ -6,10 +6,13 @@ import com.angrykings.cannons.Cannonball;
 import com.angrykings.castles.Castle;
 import com.angrykings.kings.King;
 import com.angrykings.maps.BasicMap;
+
+import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.Entity;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
+import org.andengine.opengl.view.ConfigChooser;
 import org.andengine.ui.activity.BaseGameActivity;
 
 /**
@@ -18,7 +21,16 @@ import org.andengine.ui.activity.BaseGameActivity;
  * @author 	Shivan Taher <zn31415926535@gmail.com>
  * @date 	21.11.13
  */
-public class Player {
+public class Player implements IUpdateHandler {
+
+	//
+	// Attributes
+	//
+
+	private static final int KEYFRAMES_PER_SECOND = 1;
+	private boolean inTurn;
+	private float timeElapsed;
+	private float keyTime;
 
 	//
 	// Game Objects Positions
@@ -124,14 +136,22 @@ public class Player {
 			}
 		});
 
+		this.timeElapsed = 0;
+		this.keyTime = 0;
+		this.inTurn = true;
+
 	}
 
 	public void endTurn() {
 
 		Log.i(getClass().getName(), "["+this.name+"] onEndTurn()");
 
-		if(this.playerTurnListener != null)
+		this.inTurn = false;
+
+		if(this.playerTurnListener != null) {
+			this.playerTurnListener.onKeyframe(GameConfig.CANNONBALL_TIME_SEC);
 			this.playerTurnListener.onEndTurn();
+		}
 
 	}
 
@@ -155,4 +175,25 @@ public class Player {
 		this.playerTurnListener = playerTurnListener;
 	}
 
+	@Override
+	public void onUpdate(float pSecondsElapsed) {
+
+		if(inTurn) {
+			this.timeElapsed += pSecondsElapsed;
+			this.keyTime += pSecondsElapsed;
+
+			if(this.keyTime > Player.KEYFRAMES_PER_SECOND) {
+				if(this.playerTurnListener != null)
+					this.playerTurnListener.onKeyframe(this.timeElapsed);
+
+				this.keyTime = 0;
+			}
+		}
+
+	}
+
+	@Override
+	public void reset() {
+
+	}
 }

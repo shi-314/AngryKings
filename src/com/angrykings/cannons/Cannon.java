@@ -1,9 +1,14 @@
 package com.angrykings.cannons;
 
+import android.util.Log;
+
+import com.angrykings.GameConfig;
 import com.angrykings.GameContext;
 import com.angrykings.PhysicsManager;
 import com.angrykings.ResourceManager;
 import com.badlogic.gdx.math.Vector2;
+
+import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.entity.Entity;
 import org.andengine.entity.sprite.Sprite;
 
@@ -18,6 +23,7 @@ public class Cannon extends Entity {
 
 	protected final boolean isLeft;
 	protected final float minAngle, maxAngle;
+    protected Cannonball ball;
 
 	public Cannon(boolean isLeft) {
 		ResourceManager rm = ResourceManager.getInstance();
@@ -100,7 +106,7 @@ public class Cannon extends Entity {
 
 		Vector2 ballPosition = this.getBarrelEndPosition();
 
-		Cannonball ball = new Cannonball(ballPosition.x, ballPosition.y);
+		ball = new Cannonball(ballPosition.x, ballPosition.y);
 		ball.registerPhysicsConnector();
 
 		ball.getBody().applyLinearImpulse(this.getDirection().mul(force), ball.getBody().getPosition());
@@ -112,6 +118,55 @@ public class Cannon extends Entity {
 
 		return ball;
 	}
+
+    public void activateFollowCamera(){
+        GameContext gc = GameContext.getInstance();
+        if(this.ball != null) {
+            ZoomCamera camera = (ZoomCamera) gc.getCamera();
+            float posX = camera.getCenterX();
+
+            camera.setChaseEntity(this.ball.getAreaShape());
+            float zoom = camera.getZoomFactor();
+            if(zoom < 0.75f){
+                zoom += 0.005f;
+                camera.setZoomFactor(zoom);
+            }
+        }
+        /*
+        if(this.ball != null){
+            ZoomCamera camera = (ZoomCamera) gc.getCamera();
+            float cameraX = camera.getCenterX();
+            float cameraY = camera.getCenterY();
+            float difX = cameraX - (this.ball.getAreaShape().getX());
+            float difY = cameraY - (this.ball.getAreaShape().getY());
+            boolean rightPositionX = false;
+            boolean rightPositionY = false;
+            if(difX < -20){
+                cameraX += 15;
+                camera.setCenter(cameraX, cameraY);
+            }else if(difX > 20){
+                cameraX -= 15;
+                camera.setCenter(cameraX, cameraY);
+            }else{
+                rightPositionX = true;
+            }
+            if(difY < -20){
+                cameraY += 15;
+                camera.setCenter(cameraX, cameraY);
+            }else if(difY > 20){
+                cameraY -= 15;
+                camera.setCenter(cameraX, cameraY);
+            }else{
+                rightPositionY = true;
+            }
+
+            if(rightPositionX && rightPositionY){
+                camera.setChaseEntity(this.ball.getAreaShape());
+                //camera.setZoomFactor(GameConfig.CAMERA_STARTUP_ZOOM);
+            }
+        }*/
+
+    }
 	
 	public void showAimCircle(){
 		this.attachChild(aimCircleSprite);

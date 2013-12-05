@@ -114,6 +114,7 @@ public class Player implements IUpdateHandler {
 			public void run() {
 
 				cannonball = cannon.fire(GameConfig.CANNON_FORCE);
+                cannon.activateFollowCamera();
 
 				gameActivity.getEngine().registerUpdateHandler(
 						new TimerHandler(

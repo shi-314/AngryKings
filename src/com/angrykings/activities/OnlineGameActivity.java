@@ -71,6 +71,17 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	private float pinchZoomStartedCameraZoomFactor;
 	boolean isAiming = true;
 
+    //
+    // Kamerapositionen
+    //
+
+    private static final int MITTE = 0;
+    private static final int EIGENEKUGEL = 1;
+    private static final int GEGNERKUGEL = 2;
+    private static final int GEGNERKANONE = 3;
+    private static final int DEFAULT = 4;
+    private int followCamera = DEFAULT;
+
 	//
 	// Network
 	//
@@ -129,6 +140,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			status = GameStatus.PARTNER_TURN;
 			me.getCannon().hideAimCircle();
 			partner.getCastle().unfreeze();
+            followCamera = EIGENEKUGEL;
 		}
 
 		@Override
@@ -143,6 +155,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			partner.getKing().getSprite().setCurrentTileIndex(1);
 
 			partner.getKing().jump();
+            followCamera = GEGNERKANONE;
 		}
 
 		@Override
@@ -164,6 +177,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		public void onHandleTurn(int x, int y) {
 			partner.getCannon().pointAt(x, y);
 			me.getCastle().unfreeze();
+            followCamera = GEGNERKUGEL;
 		}
 
 		@Override
@@ -174,6 +188,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			partner.getKing().getSprite().setCurrentTileIndex(1);
 
 			me.getKing().jump();
+            followCamera = MITTE;
 
 			if(status != GameStatus.LOST)
 				serverConnection.sendTextMessage(ServerMessage.ready());
@@ -332,7 +347,15 @@ public class OnlineGameActivity extends BaseGameActivity implements
 				if ((left && leftLife < 0.5f || !left && rightLife < 0.5f) && status != GameStatus.LOST) {
 					lost();
 				}
-
+                if(followCamera == EIGENEKUGEL){
+                    me.getCannon().activateFollowCamera();
+                }else if(followCamera == GEGNERKUGEL){
+                    partner.getCannon().activateFollowCamera();
+                }else if(followCamera == MITTE){
+                    deactivateFollowCamera("mitte");
+                }else if(followCamera == GEGNERKANONE){
+                    deactivateFollowCamera("gegner");
+                }
 			}
 
 			@Override
@@ -355,7 +378,53 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		hud.setStatus(this.getString(R.string.yourTurn));
 	}
 
-	@Override
+    private void deactivateFollowCamera(String s) {
+        GameContext gc = GameContext.getInstance();
+        ZoomCamera camera = (ZoomCamera) gc.getCamera();
+        camera.setChaseEntity(null);
+        float cameraX = camera.getCenterX();
+        float cameraY = camera.getCenterY();
+        float difX;
+        float difY;
+        if(s.equals("mitte")){
+            difX = cameraX - (GameConfig.CAMERA_X + GameConfig.CAMERA_WIDTH/2);
+            difY = cameraY - (GameConfig.CAMERA_Y + GameConfig.CAMERA_HEIGHT/2);
+        }else{
+            difX = cameraX - (partner.getCannon().getX());
+            difY = cameraY - (partner.getCannon().getY());
+        }
+        boolean rightPositionX = false;
+        boolean rightPositionY = false;
+        if(difX < -10){
+            cameraX += 10;
+            camera.setCenter(cameraX, cameraY);
+        }else if(difX > 10){
+            cameraX -= 10;
+            camera.setCenter(cameraX, cameraY);
+        }else{
+            rightPositionX = true;
+        }
+        if(difY < -10){
+            cameraY += 10;
+            camera.setCenter(cameraX, cameraY);
+        }else if(difY > 10){
+            cameraY -= 10;
+            camera.setCenter(cameraX, cameraY);
+        }else{
+            rightPositionY = true;
+        }
+        if(rightPositionX && rightPositionY && s.equals("mitte")){
+            camera.setCenter(GameConfig.CAMERA_X + GameConfig.CAMERA_WIDTH/2, GameConfig.CAMERA_Y + GameConfig.CAMERA_HEIGHT/2);
+            camera.setZoomFactor(GameConfig.CAMERA_STARTUP_ZOOM);
+            followCamera = DEFAULT;
+        }else if(rightPositionX && rightPositionY && s.equals("gegner")){
+            camera.setCenter(partner.getCannon().getX(), partner.getCannon().getY());
+            camera.setZoomFactor(GameConfig.CAMERA_STARTUP_ZOOM);
+            followCamera = DEFAULT;
+        }
+    }
+
+    @Override
 	public void onPopulateScene(Scene pScene, OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception {
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
 	}

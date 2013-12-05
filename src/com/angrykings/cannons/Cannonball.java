@@ -1,5 +1,6 @@
 package com.angrykings.cannons;
 
+import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.entity.shape.IAreaShape;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -9,6 +10,7 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.angrykings.GameConfig;
 import com.angrykings.GameContext;
 import com.angrykings.IJsonSerializable;
 import com.angrykings.PhysicalEntity;

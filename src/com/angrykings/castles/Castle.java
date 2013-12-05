@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import android.util.Log;
+
+import com.angrykings.IJsonSerializable;
 import com.badlogic.gdx.physics.box2d.Body;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
@@ -13,7 +15,9 @@ import com.angrykings.PhysicalEntity;
 import com.angrykings.PhysicsManager;
 import com.angrykings.ResourceManager;
 import com.angrykings.maps.BasicMap;
-import org.andengine.util.debug.Debug;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Castle
@@ -21,7 +25,7 @@ import org.andengine.util.debug.Debug;
  * @author Shivan Taher <zn31415926535@gmail.com>
  * @date 31.05.13
  */
-public class Castle {
+public class Castle implements IJsonSerializable{
 	private float x;
 	private float y;
 
@@ -163,4 +167,19 @@ public class Castle {
 		this.setFreeze(false);
 	}
 
+	@Override
+	public JSONObject toJson() throws JSONException {
+		JSONObject json = new JSONObject();
+		for(PhysicalEntity entity : blocks) {
+			json.put(String.valueOf(entity.getId()), entity.toJson());
+		}
+		return json;
+	}
+
+	@Override
+	public void updateFromJson(JSONObject json) throws JSONException {
+		for(PhysicalEntity entity : blocks) {
+			entity.updateFromJson(json.getJSONObject(String.valueOf(entity.getId())));
+		}
+	}
 }

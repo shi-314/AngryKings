@@ -10,5 +10,6 @@ public interface IPlayerTurnListener {
 
 	void onHandleTurn(int x, int y);
 	void onEndTurn();
+	void onKeyframe(float time);
 
 }

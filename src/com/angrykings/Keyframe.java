@@ -3,11 +3,8 @@ package com.angrykings;
 import com.angrykings.cannons.Cannonball;
 import com.angrykings.castles.Castle;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 public class Keyframe {
 	private int timestampMilliSec;

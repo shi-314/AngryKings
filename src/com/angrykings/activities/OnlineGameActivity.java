@@ -207,7 +207,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			this.keyframeIndex = 0;
 			this.timeElapsed = 0;
 			this.timeElapsedSinceKeyframe = 0;
-			
+
             followCamera = ENEMYCANNONBALL;
 		}
 
@@ -407,8 +407,18 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			Log.i(getClass().getName(), "this client is " + (amILeft ? "left" : "right"));
 		}
 
-		this.me = new Player(myName, isLeft);
-		this.partner = new Player(partnerName, !isLeft);
+		//
+		// This is important because the entity ids are incremented in the order in which we
+		// create the entities :(
+		//
+
+		if(isLeft) {
+			this.me = new Player(myName, isLeft);
+			this.partner = new Player(partnerName, !isLeft);
+		} else {
+			this.partner = new Player(partnerName, !isLeft);
+			this.me = new Player(myName, isLeft);
+		}
 
 		this.me.setPlayerTurnListener(new MyTurnListener());
 		this.partner.setPlayerTurnListener(new PartnerTurnListener());
@@ -672,42 +682,42 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 	private void resign() {
 		handler.post(new Runnable() {
-            @Override
-            public void run() {
-                final Dialog dialog = new Dialog(OnlineGameActivity.this);
-                dialog.setContentView(R.layout.quit_dialog);
-                dialog.setCancelable(true);
-                dialog.getWindow().setBackgroundDrawable(
-                        new ColorDrawable(android.graphics.Color.TRANSPARENT));
+			@Override
+			public void run() {
+				final Dialog dialog = new Dialog(OnlineGameActivity.this);
+				dialog.setContentView(R.layout.quit_dialog);
+				dialog.setCancelable(true);
+				dialog.getWindow().setBackgroundDrawable(
+						new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-                Button bCancel = (Button) dialog.findViewById(R.id.bCancel);
-                Button bResign = (Button) dialog.findViewById(R.id.bResign);
+				Button bCancel = (Button) dialog.findViewById(R.id.bCancel);
+				Button bResign = (Button) dialog.findViewById(R.id.bResign);
 
-                bCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
+				bCancel.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						dialog.dismiss();
+					}
+				});
 
-                bResign.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        hud.setStatus(getString(R.string.youResigned));
-                        serverConnection.sendTextMessage(ServerMessage.lose());
-                        dialog.dismiss();
-                        Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
-                        intent.putExtra("hasWon", false);
-                        intent.putExtra("isLeft", OnlineGameActivity.this.isLeft);
-                        intent.putExtra("username", me.getName());
-                        intent.putExtra("partnername", partner.getName());
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                        startActivity(intent);
-                    }
-                });
-                dialog.show();
-            }
-        });
+				bResign.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						hud.setStatus(getString(R.string.youResigned));
+						serverConnection.sendTextMessage(ServerMessage.lose());
+						dialog.dismiss();
+						Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
+						intent.putExtra("hasWon", false);
+						intent.putExtra("isLeft", OnlineGameActivity.this.isLeft);
+						intent.putExtra("username", me.getName());
+						intent.putExtra("partnername", partner.getName());
+						intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+						startActivity(intent);
+					}
+				});
+				dialog.show();
+			}
+		});
 	}
 
 	@Override

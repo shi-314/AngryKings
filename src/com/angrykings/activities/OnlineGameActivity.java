@@ -10,16 +10,11 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import com.angrykings.*;
-import com.angrykings.cannons.Cannon;
-import com.angrykings.cannons.Cannonball;
 import com.angrykings.castles.Castle;
-import com.angrykings.kings.King;
 import com.angrykings.maps.BasicMap;
 import com.angrykings.utils.ServerMessage;
 import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.engine.handler.IUpdateHandler;
-import org.andengine.engine.handler.timer.ITimerCallback;
-import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
@@ -34,7 +29,6 @@ import org.andengine.input.touch.detector.ScrollDetector.IScrollDetectorListener
 import org.andengine.input.touch.detector.SurfaceScrollDetector;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.debug.Debug;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -79,8 +73,8 @@ public class OnlineGameActivity extends BaseGameActivity implements
     private static final int EIGENEKUGEL = 1;
     private static final int GEGNERKUGEL = 2;
     private static final int GEGNERKANONE = 3;
-    private static final int DEFAULT = 4;
-    private int followCamera = DEFAULT;
+    private static final int OFF = 4;
+    private int followCamera = OFF;
 
 	//
 	// Network
@@ -396,19 +390,19 @@ public class OnlineGameActivity extends BaseGameActivity implements
         boolean rightPositionX = false;
         boolean rightPositionY = false;
         if(difX < -10){
-            cameraX += 10;
+            cameraX += Math.abs(difX)/5;
             camera.setCenter(cameraX, cameraY);
         }else if(difX > 10){
-            cameraX -= 10;
+            cameraX -= Math.abs(difX)/5;
             camera.setCenter(cameraX, cameraY);
         }else{
             rightPositionX = true;
         }
         if(difY < -10){
-            cameraY += 10;
+            cameraY += Math.abs(difY)/5;
             camera.setCenter(cameraX, cameraY);
         }else if(difY > 10){
-            cameraY -= 10;
+            cameraY -= Math.abs(difY)/5;
             camera.setCenter(cameraX, cameraY);
         }else{
             rightPositionY = true;
@@ -416,11 +410,11 @@ public class OnlineGameActivity extends BaseGameActivity implements
         if(rightPositionX && rightPositionY && s.equals("mitte")){
             camera.setCenter(GameConfig.CAMERA_X + GameConfig.CAMERA_WIDTH/2, GameConfig.CAMERA_Y + GameConfig.CAMERA_HEIGHT/2);
             camera.setZoomFactor(GameConfig.CAMERA_STARTUP_ZOOM);
-            followCamera = DEFAULT;
+            followCamera = OFF;
         }else if(rightPositionX && rightPositionY && s.equals("gegner")){
             camera.setCenter(partner.getCannon().getX(), partner.getCannon().getY());
             camera.setZoomFactor(GameConfig.CAMERA_STARTUP_ZOOM);
-            followCamera = DEFAULT;
+            followCamera = OFF;
         }
     }
 

@@ -42,11 +42,18 @@ public class ServerMessage {
 			}
 		}
 
-		return new ServerJSONBuilder().create(Action.Client.END_TURN)
-				.option("x", String.valueOf(x))
-				.option("y", String.valueOf(y))
-				.option("keyframes", keyframesJson.toString())
-				.build();
+		JSONObject msg = new JSONObject();
+
+		try {
+			msg.put("action", Action.Client.END_TURN);
+			msg.put("x", String.valueOf(x));
+			msg.put("y", String.valueOf(y));
+			msg.put("keyframes", keyframesJson);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return msg.toString();
 	}
 
 	public static String setId(String id) {

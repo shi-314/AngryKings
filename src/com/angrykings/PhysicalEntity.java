@@ -93,8 +93,8 @@ public abstract class PhysicalEntity implements IJsonSerializable {
 	public JSONObject toJson() throws JSONException {
 		JSONObject json = new JSONObject();
 
-		json.put("x", this.getAreaShape().getX());
-		json.put("y", this.getAreaShape().getY());
+		json.put("x", this.getBody().getPosition().x);
+		json.put("y", this.getBody().getPosition().y);
 		json.put("rotation", this.getBody().getAngle());
 		json.put("linearVelocityX", this.getBody().getLinearVelocity().x);
 		json.put("linearVelocityY", this.getBody().getLinearVelocity().y);
@@ -107,22 +107,13 @@ public abstract class PhysicalEntity implements IJsonSerializable {
 	public void fromJson(JSONObject json) throws JSONException {
 		final float x = (float) json.getDouble("x");
 		final float y = (float) json.getDouble("y");
-
 		final float rotation = (float) json.getDouble("rotation");
-
 		final float linearVelocityY = (float) json.getDouble("linearVelocityY");
 		final float linearVelocityX = (float) json.getDouble("linearVelocityX");
 
 		final float angularVelocity = (float) json.getDouble("angularVelocity");
 
-		final float widthD2 = this.getAreaShape().getWidth() / 2;
-		final float heightD2 = this.getAreaShape().getHeight() / 2;
-		final Vector2 v2 = new Vector2(
-				(x + widthD2) / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
-				(y + heightD2) / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT
-		);
-
-		this.getBody().setTransform(v2, rotation);
+		this.getBody().setTransform(x, y, rotation);
 
 		this.getBody().setLinearVelocity(linearVelocityX, linearVelocityY);
 		this.getBody().setAngularVelocity(angularVelocity);

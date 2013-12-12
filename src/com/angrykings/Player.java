@@ -29,7 +29,7 @@ public class Player implements IUpdateHandler {
 	// Attributes
 	//
 
-	private static final int KEYFRAMES_PER_SECOND = 5;
+	private static final int KEYFRAMES_PER_SECOND = 15;
 	private boolean inTurn;
 	private float timeElapsed;
 	private float keyTime;

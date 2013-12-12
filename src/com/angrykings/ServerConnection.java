@@ -57,6 +57,7 @@ public class ServerConnection {
 		try {
 			WebSocketOptions webSocketOptions = new WebSocketOptions();
 			webSocketOptions.setMaxMessagePayloadSize(GameConfig.WEBSOCKET_MAX_PAYLOAD_SIZE);
+			webSocketOptions.setMaxFramePayloadSize(GameConfig.WEBSOCKET_MAX_FRAME_SIZE);
 
 			connection.connect(GameConfig.WEBSERVICE_URI, new WebSocketHandler() {
 				@Override

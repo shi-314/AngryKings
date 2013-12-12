@@ -258,7 +258,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			Keyframe k = this.keyframes.get(this.keyframeIndex);
 
 			if(this.timeElapsed > k.getTimestampSec()) {
-				Log.i("keyframe", "simulate partner key frame "+this.timeElapsed+" ("+k.getTimestampSec()+")");
+				//Log.i("keyframe", "simulate partner key frame "+this.timeElapsed+" ("+k.getTimestampSec()+")");
 
 				Cannonball cannonball = partner.getCannonball();
 

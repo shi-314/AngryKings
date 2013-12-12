@@ -106,15 +106,20 @@ public class OnlineGameActivity extends BaseGameActivity implements
 					final int x = Integer.parseInt(jObj.getString("x"));
 					final int y = Integer.parseInt(jObj.getString("y"));
 
-					final ArrayList<Keyframe> keyframes = new ArrayList<Keyframe>();
+					ArrayList<Keyframe> keyframes = null;
 
-					JSONArray jsonKeyframes = jObj.getJSONArray("keyframes");
+					if(jObj.has("keyframes")) {
+						JSONArray jsonKeyframes = jObj.getJSONArray("keyframes");
+						keyframes = new ArrayList<Keyframe>();
 
-					for(int i = 0; i < jsonKeyframes.length(); ++i) {
-						keyframes.add(new Keyframe(jsonKeyframes.getJSONObject(i)));
+						for(int i = 0; i < jsonKeyframes.length(); ++i) {
+							keyframes.add(new Keyframe(jsonKeyframes.getJSONObject(i)));
+						}
+
+						Log.i(getClass().getName(), "received "+keyframes.size()+" keyframes");
+					} else {
+						Log.i(getClass().getName(), "received 0 keyframes");
 					}
-
-					Log.i(getClass().getName(), "received "+keyframes.size()+" keyframes");
 
 					partner.handleTurn(x, y, keyframes);
 

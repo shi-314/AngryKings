@@ -121,6 +121,7 @@ public class Cannon extends Entity {
 
     public void activateFollowCamera(){
         GameContext gc = GameContext.getInstance();
+        /*
         if(this.ball != null) {
             ZoomCamera camera = (ZoomCamera) gc.getCamera();
             float posX = camera.getCenterX();
@@ -132,29 +133,31 @@ public class Cannon extends Entity {
                 camera.setZoomFactor(zoom);
             }
         }
-        /*
+        */
+
         if(this.ball != null){
             ZoomCamera camera = (ZoomCamera) gc.getCamera();
             float cameraX = camera.getCenterX();
             float cameraY = camera.getCenterY();
             float difX = cameraX - (this.ball.getAreaShape().getX());
             float difY = cameraY - (this.ball.getAreaShape().getY());
+
             boolean rightPositionX = false;
             boolean rightPositionY = false;
             if(difX < -20){
-                cameraX += 15;
+                cameraX += Math.abs(difX)/3;
                 camera.setCenter(cameraX, cameraY);
             }else if(difX > 20){
-                cameraX -= 15;
+                cameraX -= Math.abs(difX)/3;
                 camera.setCenter(cameraX, cameraY);
             }else{
                 rightPositionX = true;
             }
-            if(difY < -20){
-                cameraY += 15;
+            if(difY < -50){
+                cameraY += Math.abs(difY)/2;
                 camera.setCenter(cameraX, cameraY);
-            }else if(difY > 20){
-                cameraY -= 15;
+            }else if(difY > 50){
+                cameraY -= Math.abs(difY)/2;
                 camera.setCenter(cameraX, cameraY);
             }else{
                 rightPositionY = true;
@@ -164,7 +167,7 @@ public class Cannon extends Entity {
                 camera.setChaseEntity(this.ball.getAreaShape());
                 //camera.setZoomFactor(GameConfig.CAMERA_STARTUP_ZOOM);
             }
-        }*/
+        }
 
     }
 	

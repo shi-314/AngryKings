@@ -191,6 +191,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		private ArrayList<Keyframe> keyframes;
 		private int keyframeIndex;
 		private float timeElapsed;
+		private float timeElapsedSinceKeyframe;
 
 		@Override
 		public void onHandleTurn(int x, int y, ArrayList<Keyframe> keyframes) {
@@ -201,10 +202,12 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			this.keyframes = keyframes;
 			this.keyframeIndex = 0;
 			this.timeElapsed = 0;
+			this.timeElapsedSinceKeyframe = 0;
 		}
 
 		@Override
 		public void onEndTurn() {
+			this.keyframes = null;
 			me.getCastle().freeze();
 
 			me.getKing().getSprite().setCurrentTileIndex(0);
@@ -243,6 +246,8 @@ public class OnlineGameActivity extends BaseGameActivity implements
 				return;
 
 			this.timeElapsed += dt;
+			this.timeElapsedSinceKeyframe += dt;
+
 			Keyframe k = this.keyframes.get(this.keyframeIndex);
 
 			if(this.timeElapsed > k.getTimestampSec()) {
@@ -251,17 +256,59 @@ public class OnlineGameActivity extends BaseGameActivity implements
 				Cannonball cannonball = partner.getCannonball();
 
 				try {
-					JSONObject cannonballJson = k.getCannonballJson();
-					cannonball.fromJson(cannonballJson);
+					cannonball.fromJson(k.getCannonballJson());
+					me.getCastle().fromJson(k.getCastleJson());
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
 
 				this.keyframeIndex++;
-			} else {
-				Keyframe currentKeyframe = this.keyframes.get(this.keyframeIndex);
-				Keyframe nextKeyframe = this.keyframes.get(this.keyframeIndex + 1);
-			}
+				this.timeElapsedSinceKeyframe = 0;
+			} /*else if(this.keyframeIndex > 0) {
+				Keyframe currentKeyframe = this.keyframes.get(this.keyframeIndex - 1);
+				Keyframe nextKeyframe = this.keyframes.get(this.keyframeIndex);
+				Cannonball cannonball = partner.getCannonball();
+
+				try {
+
+					float x0 = (float) currentKeyframe.getCannonballJson().getDouble("x");
+					float y0 = (float) currentKeyframe.getCannonballJson().getDouble("y");
+					float x1 = (float) nextKeyframe.getCannonballJson().getDouble("x");
+					float y1 = (float) nextKeyframe.getCannonballJson().getDouble("y");
+					float angle0 = (float) currentKeyframe.getCannonballJson().getDouble("rotation");
+					float angle1 = (float) nextKeyframe.getCannonballJson().getDouble("rotation");
+					float linX0 = (float) currentKeyframe.getCannonballJson().getDouble("linearVelocityX");
+					float linY0 = (float) currentKeyframe.getCannonballJson().getDouble("linearVelocityY");
+					float linX1 = (float) nextKeyframe.getCannonballJson().getDouble("linearVelocityX");
+					float linY1 = (float) nextKeyframe.getCannonballJson().getDouble("linearVelocityY");
+
+					float deltaT = (float) (nextKeyframe.getTimestampSec() - currentKeyframe.getTimestampSec());
+
+					float t = this.timeElapsedSinceKeyframe / deltaT;
+
+					float x = lerp(x0, x1, t);
+					float y = lerp(y0, y1, t);
+					float angle = lerp(angle0, angle1, t);
+					float linX = lerp(linX0, linX1, t);
+					float linY = lerp(linY0, linY1, t);
+
+					Log.i("interpolate", "t: "+t+", timeElapsed: "+timeElapsed+", deltaT: "+deltaT);
+
+					cannonball.getBody().setTransform(x, y, angle);
+					cannonball.getBody().setLinearVelocity(linX, linY);
+
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}*/
+		}
+
+		private float lerp(float v0, float v1, float t) {
+			return v0+(v1-v0)*t;
+		}
+
+		Vector2 lerp(Vector2 A, Vector2 B, float t ){
+			return A.mul(t).add(B.mul(1f - t));
 		}
 	}
 

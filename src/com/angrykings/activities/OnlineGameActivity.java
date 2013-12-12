@@ -16,6 +16,8 @@ import com.angrykings.castles.Castle;
 import com.angrykings.kings.King;
 import com.angrykings.maps.BasicMap;
 import com.angrykings.utils.ServerMessage;
+import com.badlogic.gdx.math.Vector2;
+
 import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.handler.timer.ITimerCallback;
@@ -26,6 +28,8 @@ import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.util.FPSLogger;
+import org.andengine.extension.physics.box2d.util.Vector2Pool;
+import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.detector.PinchZoomDetector;
 import org.andengine.input.touch.detector.PinchZoomDetector.IPinchZoomDetectorListener;
@@ -122,12 +126,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 					won();
 
-				} else if (jObj.getInt("action") == Action.Server.END_TURN) {
-
-					// partner has end his turn
-
-					// TODO: synchronize entities
-
 				}
 			} catch (JSONException e) {
 
@@ -172,6 +170,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		public void onKeyframe(float time) {
 			try {
 				Log.i("Player", "me.onKeyframe: "+time);
+				//Log.i("Player", "cannonball = "+me.getCannonball().getAreaShape().getX()+", "+me.getCannonball().getAreaShape().getY());
 				Keyframe k = new Keyframe(time, me.getCannonball(), partner.getCastle());
 				//Log.i("KEYFRAME", "ball: "+me.getCannonball()+", castle: "+me.getCastle());
 				//Log.i("KEYFRAME", "keyframe: "+k.getCannonballJson().toString());
@@ -180,14 +179,27 @@ public class OnlineGameActivity extends BaseGameActivity implements
 				e.printStackTrace();
 			}
 		}
+
+		@Override
+		public void onUpdate(float dt) {
+
+		}
 	}
 
 	private class PartnerTurnListener implements IPlayerTurnListener {
+		private ArrayList<Keyframe> keyframes;
+		private int keyframeIndex;
+		private float timeElapsed;
+
 		@Override
 		public void onHandleTurn(int x, int y, ArrayList<Keyframe> keyframes) {
 			partner.getCannon().pointAt(x, y);
 			me.getCastle().unfreeze();
             followCamera = GEGNERKUGEL;
+
+			this.keyframes = keyframes;
+			this.keyframeIndex = 0;
+			this.timeElapsed = 0;
 		}
 
 		@Override
@@ -206,6 +218,49 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 		@Override
 		public void onKeyframe(float time) {
+
+			/*Keyframe k = this.keyframes.get(this.keyframeIndex);
+
+			Log.i("keyframe", "simulate partner key frame "+time+" ("+k.getTimestampSec()+")");
+
+			Cannonball cannonball = partner.getCannonball();
+
+			try {
+				JSONObject cannonballJson = k.getCannonballJson();
+				cannonball.fromJson(cannonballJson);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+
+			this.keyframeIndex++;*/
+
+		}
+
+		@Override
+		public void onUpdate(float dt) {
+			if(this.keyframes == null || this.keyframeIndex >= this.keyframes.size())
+				return;
+
+			this.timeElapsed += dt;
+			Keyframe k = this.keyframes.get(this.keyframeIndex);
+
+			if(this.timeElapsed > k.getTimestampSec()) {
+				Log.i("keyframe", "simulate partner key frame "+this.timeElapsed+" ("+k.getTimestampSec()+")");
+
+				Cannonball cannonball = partner.getCannonball();
+
+				try {
+					JSONObject cannonballJson = k.getCannonballJson();
+					cannonball.fromJson(cannonballJson);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+
+				this.keyframeIndex++;
+			} else {
+				Keyframe currentKeyframe = this.keyframes.get(this.keyframeIndex);
+				Keyframe nextKeyframe = this.keyframes.get(this.keyframeIndex + 1);
+			}
 		}
 	}
 

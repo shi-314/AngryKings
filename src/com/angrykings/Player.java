@@ -188,11 +188,14 @@ public class Player implements IUpdateHandler {
 	@Override
 	public void onUpdate(float pSecondsElapsed) {
 
+		if(this.playerTurnListener != null)
+			this.playerTurnListener.onUpdate(pSecondsElapsed);
+
 		if(inTurn) {
 			this.timeElapsed += pSecondsElapsed;
 			this.keyTime += pSecondsElapsed;
 
-			if(this.keyTime > Player.KEYFRAMES_PER_SECOND) {
+			if(this.keyTime > 1.0f / Player.KEYFRAMES_PER_SECOND) {
 				if(this.playerTurnListener != null)
 					this.playerTurnListener.onKeyframe(this.timeElapsed);
 

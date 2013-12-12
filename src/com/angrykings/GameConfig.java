@@ -36,4 +36,5 @@ public final class GameConfig {
 	public static final float CANNONBALL_TIME_SEC = 5.0f;
 
 	public static final String WEBSERVICE_URI = "ws://spaeti.pavo.uberspace.de:61224";
+	public static final int WEBSOCKET_MAX_PAYLOAD_SIZE = 128*1024;
 }

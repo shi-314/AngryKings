@@ -4,6 +4,7 @@ import android.util.Log;
 import de.tavendo.autobahn.WebSocketConnection;
 import de.tavendo.autobahn.WebSocketException;
 import de.tavendo.autobahn.WebSocketHandler;
+import de.tavendo.autobahn.WebSocketOptions;
 
 public class ServerConnection {
 
@@ -54,6 +55,9 @@ public class ServerConnection {
 	public void start(final OnStartHandler startHandler) {
 
 		try {
+			WebSocketOptions webSocketOptions = new WebSocketOptions();
+			webSocketOptions.setMaxMessagePayloadSize(GameConfig.WEBSOCKET_MAX_PAYLOAD_SIZE);
+
 			connection.connect(GameConfig.WEBSERVICE_URI, new WebSocketHandler() {
 				@Override
 				public void onOpen() {
@@ -71,7 +75,7 @@ public class ServerConnection {
 				public void onClose(int code, String reason) {
 					Log.i(TAG, "Connection lost.");
 				}
-			});
+			}, webSocketOptions);
 		} catch (WebSocketException e) {
 			Log.i(TAG, e.toString());
 		}

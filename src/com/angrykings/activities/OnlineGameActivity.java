@@ -54,6 +54,8 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	private Handler handler;
 	private GameHUD hud;
 	private ResourceManager rm;
+    private boolean myTurn;
+    private float timeElapsed;
 
 	//
 	// Game Objects
@@ -72,13 +74,13 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	boolean isAiming = true;
 
     //
-    // Kamerapositionen
+    // Camera Positions
     //
 
-    private static final int MITTE = 0;
-    private static final int EIGENEKUGEL = 1;
-    private static final int GEGNERKUGEL = 2;
-    private static final int GEGNERKANONE = 3;
+    private static final int MIDDLE = 0;
+    private static final int OWNCANNONBALL = 1;
+    private static final int ENEMYCANNONBALL = 2;
+    private static final int ENEMYCANNON = 3;
     private static final int OFF = 4;
     private int followCamera = OFF;
 
@@ -149,7 +151,8 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			status = GameStatus.PARTNER_TURN;
 			me.getCannon().hideAimCircle();
 			partner.getCastle().unfreeze();
-            followCamera = EIGENEKUGEL;
+            followCamera = OWNCANNONBALL;
+            timeElapsed = 0f;
 		}
 
 		@Override
@@ -164,7 +167,9 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			partner.getKing().getSprite().setCurrentTileIndex(1);
 
 			partner.getKing().jump();
-            followCamera = GEGNERKANONE;
+            followCamera = ENEMYCANNON;
+            myTurn = false;
+            timeElapsed = 0f;
 		}
 
 		@Override
@@ -197,12 +202,13 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		public void onHandleTurn(int x, int y, ArrayList<Keyframe> keyframes) {
 			partner.getCannon().pointAt(x, y);
 			me.getCastle().unfreeze();
-            followCamera = GEGNERKUGEL;
 
 			this.keyframes = keyframes;
 			this.keyframeIndex = 0;
 			this.timeElapsed = 0;
 			this.timeElapsedSinceKeyframe = 0;
+			
+            followCamera = ENEMYCANNONBALL;
 		}
 
 		@Override
@@ -214,7 +220,8 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			partner.getKing().getSprite().setCurrentTileIndex(1);
 
 			me.getKing().jump();
-            followCamera = MITTE;
+            followCamera = MIDDLE;
+            myTurn = true;
 
 			if(status != GameStatus.LOST)
 				serverConnection.sendTextMessage(ServerMessage.ready());
@@ -314,6 +321,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
+        GameContext.clear();
 		gc = GameContext.getInstance();
 		handler = new Handler();
 
@@ -346,9 +354,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 	@Override
 	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws Exception {
-
-		gc = GameContext.getInstance();
-
 		gc.setGameActivity(this);
 
 		//
@@ -376,6 +381,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		// initialize the physics engine
 		//
 
+        PhysicsManager.clear();
 		PhysicsManager pm = PhysicsManager.getInstance();
 		pm.clearEntities();
 
@@ -392,13 +398,13 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		Bundle extras = getIntent().getExtras();
 
 		if (extras != null) {
-			Boolean myTurn = extras.getBoolean("myTurn");
-			this.isLeft = myTurn;
+			Boolean amILeft = extras.getBoolean("myTurn");
+			this.isLeft = amILeft;
 
 			myName = extras.getString("username");
 			partnerName = extras.getString("partnername");
 
-			Log.i(getClass().getName(), "this client is " + (myTurn ? "left" : "right"));
+			Log.i(getClass().getName(), "this client is " + (amILeft ? "left" : "right"));
 		}
 
 		this.me = new Player(myName, isLeft);
@@ -447,6 +453,9 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		hud.setLeftPlayerName(isLeft ? myName : partnerName);
 		hud.setRightPlayerName(!isLeft ? myName : partnerName);
 
+        myTurn = true;
+        timeElapsed = 0f;
+
 		scene.registerUpdateHandler(new IUpdateHandler() {
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
@@ -457,16 +466,24 @@ public class OnlineGameActivity extends BaseGameActivity implements
 				hud.getLeftLifeBar().setValue(1.0f - ((1.0f - leftLife) * 2.0f));
 				hud.getRightLifeBar().setValue(1.0f - ((1.0f - rightLife) * 2.0f));
 
+                if(myTurn){
+                    timeElapsed += pSecondsElapsed;
+                    hud.setCountdown(30 - Math.round(timeElapsed));
+                    if(timeElapsed > 30f){
+                        autoshot();
+                    }
+                }
+
 				if ((left && leftLife < 0.5f || !left && rightLife < 0.5f) && status != GameStatus.LOST) {
 					lost();
 				}
-                if(followCamera == EIGENEKUGEL){
+                if(followCamera == OWNCANNONBALL){
                     me.getCannon().activateFollowCamera();
-                }else if(followCamera == GEGNERKUGEL){
+                }else if(followCamera == ENEMYCANNONBALL){
                     partner.getCannon().activateFollowCamera();
-                }else if(followCamera == MITTE){
+                }else if(followCamera == MIDDLE){
                     deactivateFollowCamera("mitte");
-                }else if(followCamera == GEGNERKANONE){
+                }else if(followCamera == ENEMYCANNON){
                     deactivateFollowCamera("gegner");
                 }
 			}
@@ -492,7 +509,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	}
 
     private void deactivateFollowCamera(String s) {
-        GameContext gc = GameContext.getInstance();
         ZoomCamera camera = (ZoomCamera) gc.getCamera();
         camera.setChaseEntity(null);
         float cameraX = camera.getCenterX();
@@ -544,8 +560,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
-		gc = GameContext.getInstance();
-
 		if (gc.getPhysicsWorld() == null)
 			return false;
 
@@ -603,7 +617,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	@Override
 	public void onPinchZoomStarted(PinchZoomDetector pPinchZoomDetector,
 								   TouchEvent pSceneTouchEvent) {
-		GameContext gc = GameContext.getInstance();
 		ZoomCamera camera = (ZoomCamera) gc.getCamera();
 		this.pinchZoomStartedCameraZoomFactor = camera.getZoomFactor();
 	}
@@ -611,7 +624,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	@Override
 	public void onPinchZoom(PinchZoomDetector pPinchZoomDetector,
 							TouchEvent pTouchEvent, float pZoomFactor) {
-		GameContext gc = GameContext.getInstance();
 		ZoomCamera camera = (ZoomCamera) gc.getCamera();
 
 		float factor = this.pinchZoomStartedCameraZoomFactor * pZoomFactor;
@@ -623,7 +635,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	@Override
 	public void onPinchZoomFinished(PinchZoomDetector pPinchZoomDetector,
 									TouchEvent pTouchEvent, float pZoomFactor) {
-		GameContext gc = GameContext.getInstance();
 		ZoomCamera camera = (ZoomCamera) gc.getCamera();
 
 		float factor = this.pinchZoomStartedCameraZoomFactor * pZoomFactor;
@@ -635,7 +646,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	@Override
 	public void onScrollStarted(ScrollDetector pScollDetector, int pPointerID,
 								float pDistanceX, float pDistanceY) {
-		GameContext gc = GameContext.getInstance();
 		ZoomCamera camera = (ZoomCamera) gc.getCamera();
 		final float zoomFactor = camera.getZoomFactor();
 
@@ -645,7 +655,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	@Override
 	public void onScroll(ScrollDetector pScollDetector, int pPointerID,
 						 float pDistanceX, float pDistanceY) {
-		GameContext gc = GameContext.getInstance();
 		ZoomCamera camera = (ZoomCamera) gc.getCamera();
 		final float zoomFactor = camera.getZoomFactor();
 
@@ -655,7 +664,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	@Override
 	public void onScrollFinished(ScrollDetector pScollDetector, int pPointerID,
 								 float pDistanceX, float pDistanceY) {
-		GameContext gc = GameContext.getInstance();
 		ZoomCamera camera = (ZoomCamera) gc.getCamera();
 		final float zoomFactor = camera.getZoomFactor();
 
@@ -769,5 +777,18 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			Debug.d(this.getClass().getSimpleName() + ".onPauseGame lalala" + " @(Thread: '" + Thread.currentThread().getName() + "')");
 		}
 	}
-	
+
+    private void autoshot() {
+        if (this.me.getCannon().pointAt(100, 100)) {
+            this.aimX = 100;
+            this.aimY = 100;
+        }
+        hud.setStatus(getString(R.string.waitTooLong));
+
+        myTurn = false;
+
+        if (this.status == GameStatus.MY_TURN) {
+            this.me.handleTurn(this.aimX, this.aimY, null);
+        }
+    }
 }

@@ -274,6 +274,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
+        GameContext.clear();
 		gc = GameContext.getInstance();
 		handler = new Handler();
 
@@ -306,9 +307,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 	@Override
 	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws Exception {
-
-		gc = GameContext.getInstance();
-
 		gc.setGameActivity(this);
 
 		//
@@ -336,6 +334,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		// initialize the physics engine
 		//
 
+        PhysicsManager.clear();
 		PhysicsManager pm = PhysicsManager.getInstance();
 		pm.clearEntities();
 
@@ -463,7 +462,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	}
 
     private void deactivateFollowCamera(String s) {
-        GameContext gc = GameContext.getInstance();
         ZoomCamera camera = (ZoomCamera) gc.getCamera();
         camera.setChaseEntity(null);
         float cameraX = camera.getCenterX();
@@ -515,8 +513,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
-		gc = GameContext.getInstance();
-
 		if (gc.getPhysicsWorld() == null)
 			return false;
 
@@ -574,7 +570,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	@Override
 	public void onPinchZoomStarted(PinchZoomDetector pPinchZoomDetector,
 								   TouchEvent pSceneTouchEvent) {
-		GameContext gc = GameContext.getInstance();
 		ZoomCamera camera = (ZoomCamera) gc.getCamera();
 		this.pinchZoomStartedCameraZoomFactor = camera.getZoomFactor();
 	}
@@ -582,7 +577,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	@Override
 	public void onPinchZoom(PinchZoomDetector pPinchZoomDetector,
 							TouchEvent pTouchEvent, float pZoomFactor) {
-		GameContext gc = GameContext.getInstance();
 		ZoomCamera camera = (ZoomCamera) gc.getCamera();
 
 		float factor = this.pinchZoomStartedCameraZoomFactor * pZoomFactor;
@@ -594,7 +588,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	@Override
 	public void onPinchZoomFinished(PinchZoomDetector pPinchZoomDetector,
 									TouchEvent pTouchEvent, float pZoomFactor) {
-		GameContext gc = GameContext.getInstance();
 		ZoomCamera camera = (ZoomCamera) gc.getCamera();
 
 		float factor = this.pinchZoomStartedCameraZoomFactor * pZoomFactor;
@@ -606,7 +599,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	@Override
 	public void onScrollStarted(ScrollDetector pScollDetector, int pPointerID,
 								float pDistanceX, float pDistanceY) {
-		GameContext gc = GameContext.getInstance();
 		ZoomCamera camera = (ZoomCamera) gc.getCamera();
 		final float zoomFactor = camera.getZoomFactor();
 
@@ -616,7 +608,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	@Override
 	public void onScroll(ScrollDetector pScollDetector, int pPointerID,
 						 float pDistanceX, float pDistanceY) {
-		GameContext gc = GameContext.getInstance();
 		ZoomCamera camera = (ZoomCamera) gc.getCamera();
 		final float zoomFactor = camera.getZoomFactor();
 
@@ -626,7 +617,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	@Override
 	public void onScrollFinished(ScrollDetector pScollDetector, int pPointerID,
 								 float pDistanceX, float pDistanceY) {
-		GameContext gc = GameContext.getInstance();
 		ZoomCamera camera = (ZoomCamera) gc.getCamera();
 		final float zoomFactor = camera.getZoomFactor();
 

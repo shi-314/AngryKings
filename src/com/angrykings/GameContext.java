@@ -24,6 +24,10 @@ public class GameContext {
 		return instance;
 	}
 
+    public static void clear(){
+        instance = null;
+    }
+
 	private Scene scene;
 	private Camera camera;
 	private PhysicsWorld physicsWorld;

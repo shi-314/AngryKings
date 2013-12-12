@@ -39,6 +39,10 @@ public class PhysicsManager implements IUpdateHandler {
 		return instance;
 	}
 
+    public static void clear(){
+        instance = null;
+    }
+
 	private static final float MIN_LINEAR_VELOCITY = 1e-2f;
 	private static final float MIN_ANGULAR_VELOCITY = 1e-1f;
 	private ArrayList<PhysicalEntity> physicalEntities;
@@ -62,6 +66,7 @@ public class PhysicsManager implements IUpdateHandler {
 		GameContext.getInstance().setPhysicsWorld(physicsWorld);
 
 	}
+
 
 	public void addPhysicalEntity(PhysicalEntity entity) {
 		this.physicalEntities.add(entity);

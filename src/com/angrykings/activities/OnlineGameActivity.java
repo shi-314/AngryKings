@@ -106,7 +106,17 @@ public class OnlineGameActivity extends BaseGameActivity implements
 					final int x = Integer.parseInt(jObj.getString("x"));
 					final int y = Integer.parseInt(jObj.getString("y"));
 
-					partner.handleTurn(x, y);
+					final ArrayList<Keyframe> keyframes = new ArrayList<Keyframe>();
+
+					JSONArray jsonKeyframes = jObj.getJSONArray("keyframes");
+
+					for(int i = 0; i < jsonKeyframes.length(); ++i) {
+						keyframes.add(new Keyframe(jsonKeyframes.getJSONObject(i)));
+					}
+
+					Log.i(getClass().getName(), "received "+keyframes.size()+" keyframes");
+
+					partner.handleTurn(x, y, keyframes);
 
 				} else if (jObj.getInt("action") == Action.Server.YOU_WIN || jObj.getInt("action") == Action.Server.PARTNER_LEFT) {
 
@@ -135,7 +145,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		}
 
 		@Override
-		public void onHandleTurn(int x, int y) {
+		public void onHandleTurn(int x, int y, ArrayList<Keyframe> keyframes) {
 			this.keyframes.clear();
 			status = GameStatus.PARTNER_TURN;
 			me.getCannon().hideAimCircle();
@@ -174,7 +184,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 	private class PartnerTurnListener implements IPlayerTurnListener {
 		@Override
-		public void onHandleTurn(int x, int y) {
+		public void onHandleTurn(int x, int y, ArrayList<Keyframe> keyframes) {
 			partner.getCannon().pointAt(x, y);
 			me.getCastle().unfreeze();
             followCamera = GEGNERKUGEL;
@@ -461,7 +471,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			}
 
 			if (pSceneTouchEvent.isActionUp() && this.status == GameStatus.MY_TURN) {
-				this.me.handleTurn(this.aimX, this.aimY);
+				this.me.handleTurn(this.aimX, this.aimY, null);
 			}
 
 		} else {

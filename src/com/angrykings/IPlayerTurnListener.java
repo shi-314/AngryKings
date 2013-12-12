@@ -1,5 +1,7 @@
 package com.angrykings;
 
+import java.util.ArrayList;
+
 /**
  * IPlayerTurnListener
  *
@@ -8,7 +10,7 @@ package com.angrykings;
  */
 public interface IPlayerTurnListener {
 
-	void onHandleTurn(int x, int y);
+	void onHandleTurn(int x, int y, ArrayList<Keyframe> keyframes);
 	void onEndTurn();
 	void onKeyframe(float time);
 

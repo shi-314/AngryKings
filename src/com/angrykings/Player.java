@@ -15,6 +15,8 @@ import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.opengl.view.ConfigChooser;
 import org.andengine.ui.activity.BaseGameActivity;
 
+import java.util.ArrayList;
+
 /**
  * Player
  *
@@ -99,12 +101,12 @@ public class Player implements IUpdateHandler {
 
 	}
 
-	public void handleTurn(final int aimX, final  int aimY) {
+	public void handleTurn(final int aimX, final  int aimY, final ArrayList<Keyframe> keyframes) {
 
 		Log.i(getClass().getName(), "["+this.name+"] handleTurn("+aimX+", "+aimY+")");
 
 		if(this.playerTurnListener != null)
-			this.playerTurnListener.onHandleTurn(aimX, aimY);
+			this.playerTurnListener.onHandleTurn(aimX, aimY, keyframes);
 
 		final BaseGameActivity gameActivity = GameContext.getInstance().getGameActivity();
 
@@ -122,7 +124,6 @@ public class Player implements IUpdateHandler {
 								new ITimerCallback() {
 									@Override
 									public void onTimePassed(TimerHandler pTimerHandler) {
-										playerTurnListener.onEndTurn();
 										cannonball.remove();
 									}
 								}));
@@ -146,12 +147,16 @@ public class Player implements IUpdateHandler {
 
 	public void endTurn() {
 
+		if(this.playerTurnListener != null) {
+			this.playerTurnListener.onKeyframe(GameConfig.CANNONBALL_TIME_SEC);
+		}
+
 		Log.i(getClass().getName(), "["+this.name+"] onEndTurn()");
 
 		this.inTurn = false;
 
 		if(this.playerTurnListener != null) {
-			this.playerTurnListener.onKeyframe(GameConfig.CANNONBALL_TIME_SEC);
+			this.playerTurnListener.onEndTurn();
 		}
 
 	}

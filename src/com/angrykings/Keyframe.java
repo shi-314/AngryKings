@@ -42,8 +42,8 @@ public class Keyframe implements IJsonSerializable {
 	public JSONObject toJson() throws JSONException {
 
 		JSONObject json = new JSONObject();
-		json.put("timestampSec", this.timestampSec);
-		json.put("cannonball", this.cannonballJson);
+		json.put("t", this.timestampSec);
+		json.put("ball", this.cannonballJson);
 		json.put("castle", this.castleJson);
 
 		return json;
@@ -53,8 +53,8 @@ public class Keyframe implements IJsonSerializable {
 	@Override
 	public void fromJson(JSONObject json) throws JSONException {
 
-		this.timestampSec = json.getDouble("timestampSec");
-		this.cannonballJson = json.getJSONObject("cannonball");
+		this.timestampSec = json.getDouble("t");
+		this.cannonballJson = json.getJSONObject("ball");
 		this.castleJson = json.getJSONObject("castle");
 
 	}

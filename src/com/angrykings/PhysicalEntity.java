@@ -95,10 +95,10 @@ public abstract class PhysicalEntity implements IJsonSerializable {
 
 		json.put("x", this.getBody().getPosition().x);
 		json.put("y", this.getBody().getPosition().y);
-		json.put("rotation", this.getBody().getAngle());
-		json.put("linearVelocityX", this.getBody().getLinearVelocity().x);
-		json.put("linearVelocityY", this.getBody().getLinearVelocity().y);
-		json.put("angularVelocity", this.getBody().getAngularVelocity());
+		json.put("r", this.getBody().getAngle());
+		json.put("l", this.getBody().getLinearVelocity().x);
+		json.put("m", this.getBody().getLinearVelocity().y);
+		json.put("a", this.getBody().getAngularVelocity());
 
 		return json;
 	}
@@ -107,11 +107,10 @@ public abstract class PhysicalEntity implements IJsonSerializable {
 	public void fromJson(JSONObject json) throws JSONException {
 		final float x = (float) json.getDouble("x");
 		final float y = (float) json.getDouble("y");
-		final float rotation = (float) json.getDouble("rotation");
-		final float linearVelocityY = (float) json.getDouble("linearVelocityY");
-		final float linearVelocityX = (float) json.getDouble("linearVelocityX");
-
-		final float angularVelocity = (float) json.getDouble("angularVelocity");
+		final float rotation = (float) json.getDouble("r");
+		final float linearVelocityX = (float) json.getDouble("l");
+		final float linearVelocityY = (float) json.getDouble("m");
+		final float angularVelocity = (float) json.getDouble("a");
 
 		this.getBody().setTransform(x, y, rotation);
 

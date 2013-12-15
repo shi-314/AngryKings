@@ -21,6 +21,7 @@ import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
+import org.andengine.entity.modifier.MoveModifier;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.util.FPSLogger;
@@ -175,7 +176,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		@Override
 		public void onKeyframe(float time) {
 			try {
-				Log.i("Player", "me.onKeyframe: "+time);
+				// Log.i("Player", "me.onKeyframe: "+time);
 				//Log.i("Player", "cannonball = "+me.getCannonball().getAreaShape().getX()+", "+me.getCannonball().getAreaShape().getY());
 				Keyframe k = new Keyframe(time, me.getCannonball(), partner.getCastle());
 				//Log.i("KEYFRAME", "ball: "+me.getCannonball()+", castle: "+me.getCastle());
@@ -201,7 +202,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		@Override
 		public void onHandleTurn(int x, int y, ArrayList<Keyframe> keyframes) {
 			partner.getCannon().pointAt(x, y);
-			me.getCastle().unfreeze();
+			// me.getCastle().unfreeze();
 
 			this.keyframes = keyframes;
 			this.keyframeIndex = 0;
@@ -282,12 +283,14 @@ public class OnlineGameActivity extends BaseGameActivity implements
 					float y0 = (float) currentKeyframe.getCannonballJson().getDouble("y");
 					float x1 = (float) nextKeyframe.getCannonballJson().getDouble("x");
 					float y1 = (float) nextKeyframe.getCannonballJson().getDouble("y");
-					float angle0 = (float) currentKeyframe.getCannonballJson().getDouble("rotation");
-					float angle1 = (float) nextKeyframe.getCannonballJson().getDouble("rotation");
-					float linX0 = (float) currentKeyframe.getCannonballJson().getDouble("linearVelocityX");
-					float linY0 = (float) currentKeyframe.getCannonballJson().getDouble("linearVelocityY");
-					float linX1 = (float) nextKeyframe.getCannonballJson().getDouble("linearVelocityX");
-					float linY1 = (float) nextKeyframe.getCannonballJson().getDouble("linearVelocityY");
+					float angle0 = (float) currentKeyframe.getCannonballJson().getDouble("r");
+					float angle1 = (float) nextKeyframe.getCannonballJson().getDouble("r");
+					float linX0 = (float) currentKeyframe.getCannonballJson().getDouble("l");
+					float linY0 = (float) currentKeyframe.getCannonballJson().getDouble("m");
+					float linX1 = (float) nextKeyframe.getCannonballJson().getDouble("l");
+					float linY1 = (float) nextKeyframe.getCannonballJson().getDouble("m");
+					float angular0 = (float) currentKeyframe.getCannonballJson().getDouble("a");
+					float angular1 = (float) nextKeyframe.getCannonballJson().getDouble("a");
 
 					float deltaT = (float) (nextKeyframe.getTimestampSec() - currentKeyframe.getTimestampSec());
 
@@ -298,11 +301,13 @@ public class OnlineGameActivity extends BaseGameActivity implements
 					float angle = lerp(angle0, angle1, t);
 					float linX = lerp(linX0, linX1, t);
 					float linY = lerp(linY0, linY1, t);
+					float angular = lerp(angular0, angular1, t);
 
-					Log.i("interpolate", "t: "+t+", timeElapsed: "+timeElapsed+", deltaT: "+deltaT);
+					//Log.i("interpolate", "t: "+t+", timeElapsed: "+timeElapsed+", deltaT: "+deltaT);
 
 					cannonball.getBody().setTransform(x, y, angle);
 					cannonball.getBody().setLinearVelocity(linX, linY);
+					cannonball.getBody().setAngularVelocity(angular);
 
 				} catch (JSONException e) {
 					e.printStackTrace();

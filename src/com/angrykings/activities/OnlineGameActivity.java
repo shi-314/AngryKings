@@ -202,7 +202,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		@Override
 		public void onHandleTurn(int x, int y, ArrayList<Keyframe> keyframes) {
 			partner.getCannon().pointAt(x, y);
-			// me.getCastle().unfreeze();
+			me.getCastle().unfreeze();
 
 			this.keyframes = keyframes;
 			this.keyframeIndex = 0;

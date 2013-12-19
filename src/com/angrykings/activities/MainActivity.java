@@ -96,7 +96,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				Intent intent = new Intent(getApplicationContext(),
-						LobbyActivity.class);
+						LobbyActivity2.class);
 				intent.putExtra("username", username);
 				intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 				startActivity(intent);

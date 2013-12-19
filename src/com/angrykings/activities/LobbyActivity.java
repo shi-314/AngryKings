@@ -56,6 +56,7 @@ public class LobbyActivity extends ListActivity {
 		ServerConnection
 				.getInstance()
 				.sendTextMessage(ServerMessage.gotoLobby());
+
 		displayLobby();
 	}
 

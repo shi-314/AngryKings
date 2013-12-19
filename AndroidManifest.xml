@@ -46,6 +46,10 @@
             android:screenOrientation="landscape" >
         </activity>
         <activity
+            android:name=".activities.LobbyActivity2"
+            android:screenOrientation="landscape">
+        </activity>
+        <activity
             android:name="com.angrykings.activities.LogInActivity"
             android:screenOrientation="landscape" >
         </activity>

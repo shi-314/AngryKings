@@ -13,7 +13,7 @@ public class ServerConnection {
 	public static abstract class OnMessageHandler {
 		public abstract void onMessage(String payload);
 	}
-	
+
 	public static abstract class OnStartHandler{
 		public abstract void onStart();
 	}
@@ -48,7 +48,7 @@ public class ServerConnection {
 
 	/**
 	 * Connects to our WebSocket Server. Only needs to be called ONCE in the whole app lifecycle.
-	 * 
+	 *
 	 * @param startHandler
 	 */
 	//TODO As long the connection persists, do not restart
@@ -59,6 +59,8 @@ public class ServerConnection {
 			webSocketOptions.setMaxMessagePayloadSize(GameConfig.WEBSOCKET_MAX_PAYLOAD_SIZE);
 			webSocketOptions.setMaxFramePayloadSize(GameConfig.WEBSOCKET_MAX_FRAME_SIZE);
 
+            Log.i(TAG, "connecting to " + GameConfig.WEBSERVICE_URI + " ...");
+
 			connection.connect(GameConfig.WEBSERVICE_URI, new WebSocketHandler() {
 				@Override
 				public void onOpen() {
@@ -68,7 +70,13 @@ public class ServerConnection {
 
 				@Override
 				public void onTextMessage(String payload) {
-					Log.i(TAG, "received "+payload.length()+" bytes: "+payload);
+					int length = payload.length();
+
+					if (length > 128)
+						Log.i(TAG, "received " + length + " bytes: " + payload.substring(0, 128) + " ...");
+					else
+						Log.i(TAG, "received " + length + " bytes: " + payload);
+
 					handler.onMessage(payload);
 				}
 
@@ -87,8 +95,15 @@ public class ServerConnection {
 	 * @param payload
 	 */
 	public void sendTextMessage(String payload) {
-		Log.i(TAG, "sent "+payload.length()+" bytes: "+payload);
+
 		this.connection.sendTextMessage(payload);
+
+        int length = payload.length();
+        if (length > 128)
+            Log.i(TAG, "sent " + length + " bytes: " + payload.substring(0, 128) + " ...");
+        else
+            Log.i(TAG, "sent " + length + " bytes: " + payload);
+
 	}
 
 }

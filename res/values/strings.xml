@@ -21,6 +21,8 @@
     <string name="username_summary">Dein Spielername im Spiel</string>
     <string name="sound_summary">Soundeffekte an und aus schalten</string>
     <string name="waitTooLong">Zu Langsam!</string>
+    <string name="tZufall">Zufall oder aus der Liste wählen</string>
+    <string name="bZufall">Zufallsmatch</string>
 
 
 </resources>

@@ -23,7 +23,7 @@ public class Roof extends PhysicalEntity {
 	protected final Sprite roofSprite;
 	protected final Body roofBody;
 
-	public final static FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.4f, 0.2f, 0.5f);
+	public final static FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.7f, 0.2f, 0.5f);
 
 	private final static float LINEAR_DAMPING = 0.1f;
 	private final static float ANGULAR_DAMPING = 0.1f;

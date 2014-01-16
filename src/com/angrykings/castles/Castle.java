@@ -6,6 +6,7 @@ import java.util.Iterator;
 import android.util.Log;
 
 import com.angrykings.IJsonSerializable;
+import com.angrykings.KeyframeData;
 import com.badlogic.gdx.physics.box2d.Body;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
@@ -171,17 +172,33 @@ public class Castle implements IJsonSerializable{
 	public JSONObject toJson() throws JSONException {
 		JSONObject json = new JSONObject();
 		for(PhysicalEntity entity : blocks) {
-			json.put(String.valueOf(entity.getId()), entity.toJson());
+			json.put(String.valueOf(entity.getId()), entity.getKeyframeData().toJson());
 		}
 		return json;
 	}
 
 	@Override
 	public void fromJson(JSONObject json) throws JSONException {
-		for(PhysicalEntity entity : blocks) {
-			entity.fromJson(json.getJSONObject(String.valueOf(entity.getId())));
+
+        for(PhysicalEntity entity : blocks) {
+            KeyframeData data = new KeyframeData();
+            data.fromJson(json.getJSONObject(String.valueOf(entity.getId())));
+			entity.setKeyframeData(data);
 		}
+
 	}
+
+    public ArrayList<KeyframeData> getKeyframeData() {
+
+        ArrayList<KeyframeData> data = new ArrayList<KeyframeData>();
+
+        for(PhysicalEntity entity : this.blocks) {
+            data.add(entity.getKeyframeData());
+        }
+
+        return data;
+
+    }
 
     public ArrayList<PhysicalEntity> getBlocks() {
         return this.blocks;

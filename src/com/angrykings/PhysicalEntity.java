@@ -17,7 +17,7 @@ import com.badlogic.gdx.physics.box2d.Body;
  * @author Shivan Taher <zn31415926535@gmail.com>
  * @date 14.06.13
  */
-public abstract class PhysicalEntity implements IJsonSerializable {
+public abstract class PhysicalEntity {
 
 	public static int CURRENT_ID = 0;
 
@@ -96,10 +96,9 @@ public abstract class PhysicalEntity implements IJsonSerializable {
 
         KeyframeData data = new KeyframeData();
 
-        data.position = body.getPosition();
-        data.linearVelocity = body.getLinearVelocity();
+        data.entityId = this.getId();
+        data.position = new Vector2(body.getPosition());
         data.angle = body.getAngle();
-        data.angularVelocity = body.getAngularVelocity();
 
         return data;
 
@@ -108,30 +107,7 @@ public abstract class PhysicalEntity implements IJsonSerializable {
     public void setKeyframeData(KeyframeData data) {
 
         this.getBody().setTransform(data.position, data.angle);
-        this.getBody().setLinearVelocity(data.linearVelocity);
-        this.getBody().setAngularVelocity(data.angularVelocity);
 
     }
-
-	@Override
-	public JSONObject toJson() throws JSONException {
-		JSONObject json = new JSONObject();
-
-        json.put("i", this.getId());
-		json.put("x", this.getBody().getPosition().x);
-		json.put("y", this.getBody().getPosition().y);
-		json.put("r", this.getBody().getAngle());
-
-		return json;
-	}
-
-	@Override
-	public void fromJson(JSONObject json) throws JSONException {
-		final float x = (float) json.getDouble("x");
-		final float y = (float) json.getDouble("y");
-		final float rotation = (float) json.getDouble("r");
-
-		this.getBody().setTransform(x, y, rotation);
-	}
 
 }

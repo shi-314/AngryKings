@@ -160,8 +160,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		public void onEndTurn() {
 			serverConnection.sendTextMessage(ServerMessage.endTurn(aimX, aimY, this.keyframes));
 
-			// TODO: send keyframes
-
 			hud.setStatus(getString(R.string.enemyTurn));
 
 			me.getKing().getSprite().setCurrentTileIndex(0);
@@ -176,11 +174,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		@Override
 		public void onKeyframe(float time) {
 			try {
-				Log.i("Player", "me.onKeyframe: "+time);
-				//Log.i("Player", "cannonball = "+me.getCannonball().getAreaShape().getX()+", "+me.getCannonball().getAreaShape().getY());
 				Keyframe k = new Keyframe(time, me.getCannonball(), partner.getCastle());
-				//Log.i("KEYFRAME", "ball: "+me.getCannonball()+", castle: "+me.getCastle());
-				//Log.i("KEYFRAME", "keyframe: "+k.getCannonballJson().toString());
 				this.keyframes.add(k);
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -231,24 +225,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		}
 
 		@Override
-		public void onKeyframe(float time) {
-
-			/*Keyframe k = this.keyframes.get(this.keyframeIndex);
-
-			Log.i("keyframe", "simulate partner key frame "+time+" ("+k.getTimestampSec()+")");
-
-			Cannonball cannonball = partner.getCannonball();
-
-			try {
-				JSONObject cannonballJson = k.getCannonballJson();
-				cannonball.fromJson(cannonballJson);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-
-			this.keyframeIndex++;*/
-
-		}
+		public void onKeyframe(float time) {}
 
 		@Override
 		public void onUpdate(float dt) {
@@ -258,20 +235,12 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			this.timeElapsed += dt;
 			this.timeElapsedSinceKeyframe += dt;
 
-			Keyframe k = this.keyframes.get(this.keyframeIndex + 1);
-
-
-
-            // Log.i("keyframe", "simulate partner key frame "+this.keyframeIndex+": "+this.timeElapsed+" ("+k.getTimestampSec()+")");
-
             Keyframe currentKeyframe = this.keyframes.get(this.keyframeIndex);
             Keyframe nextKeyframe = this.keyframes.get(this.keyframeIndex + 1);
             Cannonball cannonball = partner.getCannonball();
 
             float deltaT = (float) (nextKeyframe.getTimestampSec() - currentKeyframe.getTimestampSec());
             float t = this.timeElapsedSinceKeyframe / deltaT;
-
-            // Log.i("OnlineGame", "["+this.keyframeIndex+"] t="+t);
 
             KeyframeData interpolated = currentKeyframe.getCannonballKeyframeData()
                                         .interpolate(
@@ -284,7 +253,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
             ArrayList<KeyframeData> currentCastleData = currentKeyframe.getCastleKeyframeData();
             ArrayList<KeyframeData> nextCastleData = nextKeyframe.getCastleKeyframeData();
             ArrayList<PhysicalEntity> castleEntities = me.getCastle().getBlocks();
-            Log.i("OnlineGame", "castle key frames: " + currentCastleData.size());
 
             for(int i = 0; i < currentCastleData.size(); i++) {
 
@@ -298,17 +266,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
             }
 
-
-            if(this.timeElapsed > k.getTimestampSec()) {
-                //Log.i("keyframe", "simulate partner key frame "+this.keyframeIndex+": "+this.timeElapsed+" ("+k.getTimestampSec()+")");
-
-                try {
-                    cannonball.fromJson(k.getCannonballJson());
-                    me.getCastle().fromJson(k.getCastleJson());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
+            if(this.timeElapsed > nextKeyframe.getTimestampSec()) {
                 if(this.keyframeIndex+1 <= this.keyframes.size())
                     this.keyframeIndex++;
 

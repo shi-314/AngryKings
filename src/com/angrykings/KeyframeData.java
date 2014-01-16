@@ -9,15 +9,17 @@ public class KeyframeData implements IJsonSerializable {
 
     public int entityId;
     public Vector2 position;
-    public Vector2 linearVelocity;
     public float angle;
-    public float angularVelocity;
 
     public KeyframeData() {
 
         this.position = new Vector2();
-        this.linearVelocity = new Vector2();
 
+    }
+
+    public KeyframeData(JSONObject json) throws JSONException {
+        this();
+        this.fromJson(json);
     }
 
     private float lerp(float v0, float v1, float t) {
@@ -30,12 +32,7 @@ public class KeyframeData implements IJsonSerializable {
 
         interpolated.position.x = lerp(this.position.x, data.position.x, t);
         interpolated.position.y = lerp(this.position.y, data.position.y, t);
-
-        interpolated.linearVelocity.x = lerp(this.linearVelocity.x, data.linearVelocity.x, t);
-        interpolated.linearVelocity.y = lerp(this.linearVelocity.y, data.linearVelocity.y, t);
-
         interpolated.angle = lerp(this.angle, data.angle, t);
-        interpolated.angularVelocity = lerp(this.angularVelocity, data.angularVelocity, t);
 
         return interpolated;
 
@@ -49,7 +46,7 @@ public class KeyframeData implements IJsonSerializable {
         json.put("i", this.entityId);
         json.put("x", this.position.x);
         json.put("y", this.position.y);
-        json.put("r", this.angle);
+        json.put("a", this.angle);
 
         return json;
 
@@ -58,13 +55,9 @@ public class KeyframeData implements IJsonSerializable {
     @Override
     public void fromJson(JSONObject json) throws JSONException {
 
-        try {
-            this.entityId = json.getInt("i");
-            this.position = new Vector2((float) json.getDouble("x"), (float) json.getDouble("y"));
-            this.angle = (float) json.getDouble("r");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        this.entityId = json.getInt("i");
+        this.position = new Vector2((float) json.getDouble("x"), (float) json.getDouble("y"));
+        this.angle = (float) json.getDouble("a");
 
     }
 }

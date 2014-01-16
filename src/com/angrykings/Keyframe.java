@@ -2,32 +2,38 @@ package com.angrykings;
 
 import com.angrykings.cannons.Cannonball;
 import com.angrykings.castles.Castle;
-import com.badlogic.gdx.math.Vector2;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.jar.JarOutputStream;
 
 public class Keyframe implements IJsonSerializable {
 
 	private double timestampSec;
-	private JSONObject cannonballJson;
-	private JSONObject castleJson;
+	private KeyframeData cannonballData;
+	private ArrayList<KeyframeData> castleBlocksData;
+
+    public Keyframe() {
+
+        this.castleBlocksData = new ArrayList<KeyframeData>();
+
+    }
 
 	public Keyframe(JSONObject json) throws JSONException {
 
+        this();
 		this.fromJson(json);
 
 	}
 
 	public Keyframe(double timestampSec, Cannonball cannonball, Castle castle) throws JSONException {
 
+        this();
 		this.timestampSec = timestampSec;
-		this.cannonballJson = cannonball.toJson();
-		this.castleJson = castle.toJson();
+		this.cannonballData = cannonball.getKeyframeData();
+		this.castleBlocksData = castle.getKeyframeData();
 
 	}
 
@@ -35,48 +41,15 @@ public class Keyframe implements IJsonSerializable {
 		return timestampSec;
 	}
 
-	public JSONObject getCannonballJson() {
-		return cannonballJson;
-	}
-
-	public JSONObject getCastleJson() {
-		return castleJson;
-	}
-
     public KeyframeData getCannonballKeyframeData() {
 
-        KeyframeData data = new KeyframeData();
-
-        try {
-            data.fromJson(this.cannonballJson);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return data;
+        return this.cannonballData;
 
     }
 
     public ArrayList<KeyframeData> getCastleKeyframeData() {
 
-        ArrayList<KeyframeData> dataList = new ArrayList<KeyframeData>();
-
-        Iterator<String> it = this.castleJson.keys();
-        while(it.hasNext()) {
-            String k = it.next();
-
-            KeyframeData keyframeData = new KeyframeData();
-
-            try {
-                keyframeData.fromJson(this.castleJson.getJSONObject(k));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            dataList.add(keyframeData);
-        }
-
-        return dataList;
+        return this.castleBlocksData;
 
     }
 
@@ -85,8 +58,14 @@ public class Keyframe implements IJsonSerializable {
 
 		JSONObject json = new JSONObject();
 		json.put("t", this.timestampSec);
-		json.put("ball", this.cannonballJson);
-		json.put("castle", this.castleJson);
+		json.put("ball", this.cannonballData.toJson());
+
+        JSONArray blocksJson = new JSONArray();
+
+        for(KeyframeData kd : this.castleBlocksData)
+            blocksJson.put(kd.toJson());
+
+		json.put("castle", blocksJson);
 
 		return json;
 
@@ -95,9 +74,19 @@ public class Keyframe implements IJsonSerializable {
 	@Override
 	public void fromJson(JSONObject json) throws JSONException {
 
-		this.timestampSec = json.getDouble("t");
-		this.cannonballJson = json.getJSONObject("ball");
-		this.castleJson = json.getJSONObject("castle");
+        try {
+            this.timestampSec = json.getDouble("t");
+            this.cannonballData = new KeyframeData(json.getJSONObject("ball"));
+
+            this.castleBlocksData.clear();
+
+            JSONArray blocks = json.getJSONArray("castle");
+            for(int i = 0; i < blocks.length(); i++) {
+                this.castleBlocksData.add(new KeyframeData(blocks.getJSONObject(i)));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
 	}
 }

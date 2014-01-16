@@ -31,11 +31,12 @@ public final class GameConfig {
 	public static final int PHYSICS_POSITION_ITERATION = 5;
 	public static final int PHYSICS_MAX_STEPS_PER_UPDATE = 1;
 
-
 	public static final float CANNON_FORCE = 12;
 	public static final float CANNONBALL_TIME_SEC = 5.0f;
 
-	public static final String WEBSERVICE_URI = "ws://141.64.170.106:8008"; //"ws://spaeti.pavo.uberspace.de:61224"; // "ws://141.64.161.253:8008"
+	//public static final String WEBSERVICE_URI = "ws://141.64.170.106:8008";
+    //public static final String WEBSERVICE_URI = "ws://spaeti.pavo.uberspace.de:61224";
+    public static final String WEBSERVICE_URI = "ws://spaeti.pavo.uberspace.de:62937";
 	public static final int WEBSOCKET_MAX_PAYLOAD_SIZE = 1024*1024*6;
 	public static final int WEBSOCKET_MAX_FRAME_SIZE = 1024*1024*10;
 }

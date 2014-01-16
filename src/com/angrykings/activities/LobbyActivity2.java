@@ -15,6 +15,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.angrykings.Action;
+import com.angrykings.LobbyPlayer;
+import com.angrykings.MyAdapter;
 import com.angrykings.R;
 import com.angrykings.ServerConnection;
 import com.angrykings.utils.ServerJSONBuilder;
@@ -43,23 +45,29 @@ public class LobbyActivity2 extends Activity{
 
     private String username;
     private List<String> users;
-    private Map<String, Player> listItemToName = new HashMap<String, Player>();
+    private Map<String, LobbyPlayer> listItemToName = new HashMap<String, LobbyPlayer>();
+    private List<LobbyPlayer> lobbyPlayers;
 
     private class Player{
         final String name;
         final String id;
+        final String win;
+        final String lose;
 
-        Player(String name, String id){
+        Player(String name, String id, String win, String lose){
             this.name = name;
             this.id = id;
+            this.win = win;
+            this.lose = lose;
         }
     }
 
     public LobbyActivity2() {
     }
 
-    private void updateLobby(List<String> user){
-        lobbyList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, user));
+    private void updateLobby(List<LobbyPlayer> user){
+        //lobbyList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, user));
+        lobbyList.setAdapter(new MyAdapter(this, R.layout.list_row, user));
     }
 
     @Override
@@ -69,13 +77,12 @@ public class LobbyActivity2 extends Activity{
         setContentView(R.layout.activity_lobby);
 
         bZufall = (Button) findViewById(R.id.bZufall);
-        tZufall = (TextView) findViewById(R.id.tZufall);
         lobbyList = (ListView) findViewById(R.id.lobbyList);
-
 
 
         Bundle extras = getIntent().getExtras();
         users = new ArrayList<String>();
+        lobbyPlayers = new ArrayList<LobbyPlayer>();
         if (extras != null) {
             this.username = extras.getString("username");
         }
@@ -86,9 +93,10 @@ public class LobbyActivity2 extends Activity{
         lobbyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                final Player partner = listItemToName.get(
-                        lobbyList.getItemAtPosition(
-                                position).toString());
+                //final LobbyPlayer partner = listItemToName.get(
+                  //      lobbyList.getItemAtPosition(
+                    //            position).toString());
+                final LobbyPlayer partner = lobbyPlayers.get(position);
                 Log.d("zahl in Liste", lobbyList.getItemAtPosition(position).toString());
 
                 final AlertDialog dialog = new AlertDialog.Builder(LobbyActivity2.this)
@@ -120,7 +128,6 @@ public class LobbyActivity2 extends Activity{
                     }
                 });
 
-                // TODO use mongoid
                 ServerConnection
                         .getInstance()
                         .sendTextMessage(ServerMessage.pair(partner.id));
@@ -132,7 +139,8 @@ public class LobbyActivity2 extends Activity{
             public void onClick(View view) {
                 int random = (int) (Math.random() * users.size());
                 //Log.d("Random Nummer: ", "users: " + users.size() + random);
-                final Player partner = listItemToName.get(lobbyList.getItemAtPosition(random).toString());
+                //final LobbyPlayer partner = listItemToName.get(lobbyList.getItemAtPosition(random).toString());
+                final LobbyPlayer partner = lobbyPlayers.get(random);
                 final AlertDialog dialog = new AlertDialog.Builder(LobbyActivity2.this)
                         .setTitle("Please Wait").setMessage("Waiting for partner")
                         .show();
@@ -173,7 +181,8 @@ public class LobbyActivity2 extends Activity{
 
 
     public void displayLobby(){
-        updateLobby(users);
+        //updateLobby(users);
+        updateLobby(lobbyPlayers);
         lobbyList.setTextFilterEnabled(true);
         ServerConnection.getInstance().setHandler(new ServerConnection.OnMessageHandler() {
 
@@ -232,29 +241,39 @@ public class LobbyActivity2 extends Activity{
 
                         JSONArray userArray = new JSONArray(jObj.getString("names"));
                         users.clear();
+                        lobbyPlayers.clear();
 
                         for (int i = 0; i < userArray.length(); i++) {
-                            String eingabe = userArray.getJSONArray(i)
-                                    .getString(0)
+                            final JSONObject jsonObject = userArray.getJSONObject(i);
+                            String eingabe = jsonObject
+                                    .getString("name")
                                     + "   Gewonnen: "
-                                    + userArray.getJSONArray(i).getString(2)
+                                    + jsonObject.getString("won")
                                     + "   Verloren: "
-                                    + userArray.getJSONArray(i).getString(3);
+                                    + jsonObject.getString("lost");
 
                             users.add(eingabe);
                             listItemToName.put(eingabe,
-                                    new Player(userArray.getJSONArray(i).getString(0),
-                                            userArray.getJSONArray(i).getString(1)));
+                                    new LobbyPlayer(jsonObject.getString("name"),
+                                            jsonObject.getString("_id"),
+                                            jsonObject.getString("won"),
+                                            jsonObject.getString("lost")));
+
+                            lobbyPlayers.add(new LobbyPlayer(jsonObject.getString("name"),
+                                    jsonObject.getString("_id"),
+                                    jsonObject.getString("won"),
+                                    jsonObject.getString("lost")));
                         }
 
-                        updateLobby(users);
+                        //updateLobby(users);
+                        updateLobby(lobbyPlayers);
                     }
                 } catch (JSONException e) {
                     Log.e("JSON Parser", "Error parsing data " + e.toString());
                 }
             }
         });
-    }
+}
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

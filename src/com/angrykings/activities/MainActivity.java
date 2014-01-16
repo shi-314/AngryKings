@@ -7,12 +7,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.angrykings.Action;
+import com.angrykings.Installation;
 import com.angrykings.R;
 import com.angrykings.ServerConnection;
 import com.angrykings.ServerConnection.OnMessageHandler;
@@ -22,6 +24,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MainActivity extends Activity {
+
+    private static final String TAG = "MainActivity";
 
 	private String username;
 	private Button lobbyButton;
@@ -70,13 +74,16 @@ public class MainActivity extends Activity {
 		});
 
 		if(!ServerConnection.getInstance().isConnected()){
+            final String id = Installation.id(this);
+            Log.i(TAG, "The installation ID is " + id);
+
 			ServerConnection.getInstance().start(new OnStartHandler() {
 				
 				@Override
 				public void onStart() {
 					ServerConnection
 					.getInstance()
-					.sendTextMessage(ServerMessage.setId(getImei()));
+					.sendTextMessage(ServerMessage.setId(id));
 				}
 			});
 		}else{
@@ -122,16 +129,6 @@ public class MainActivity extends Activity {
                 startActivity(intent);
             }
         });
-	}
-
-	private String getImei() {
-		getApplicationContext();
-		// IMEI
-		TelephonyManager tManager = (TelephonyManager) getApplicationContext()
-				.getSystemService(Context.TELEPHONY_SERVICE);
-		String imei = tManager.getDeviceId();
-		// Ende IMEI
-		return imei;
 	}
 
 	@Override

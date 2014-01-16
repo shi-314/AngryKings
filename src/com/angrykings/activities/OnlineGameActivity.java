@@ -176,7 +176,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		@Override
 		public void onKeyframe(float time) {
 			try {
-				// Log.i("Player", "me.onKeyframe: "+time);
+				Log.i("Player", "me.onKeyframe: "+time);
 				//Log.i("Player", "cannonball = "+me.getCannonball().getAreaShape().getX()+", "+me.getCannonball().getAreaShape().getY());
 				Keyframe k = new Keyframe(time, me.getCannonball(), partner.getCastle());
 				//Log.i("KEYFRAME", "ball: "+me.getCannonball()+", castle: "+me.getCastle());
@@ -202,7 +202,9 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		@Override
 		public void onHandleTurn(int x, int y, ArrayList<Keyframe> keyframes) {
 			partner.getCannon().pointAt(x, y);
-			me.getCastle().unfreeze();
+			//me.getCastle().unfreeze();
+
+            partner.getCannonball().getBody().setActive(false);
 
 			this.keyframes = keyframes;
 			this.keyframeIndex = 0;
@@ -250,78 +252,70 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 		@Override
 		public void onUpdate(float dt) {
-			if(this.keyframes == null || this.keyframeIndex >= this.keyframes.size())
+			if(this.keyframes == null || this.keyframeIndex+1 >= this.keyframes.size())
 				return;
 
 			this.timeElapsed += dt;
 			this.timeElapsedSinceKeyframe += dt;
 
-			Keyframe k = this.keyframes.get(this.keyframeIndex);
+			Keyframe k = this.keyframes.get(this.keyframeIndex + 1);
 
-			if(this.timeElapsed > k.getTimestampSec()) {
-				//Log.i("keyframe", "simulate partner key frame "+this.timeElapsed+" ("+k.getTimestampSec()+")");
 
-				Cannonball cannonball = partner.getCannonball();
 
-				try {
-					cannonball.fromJson(k.getCannonballJson());
-					me.getCastle().fromJson(k.getCastleJson());
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
+            // Log.i("keyframe", "simulate partner key frame "+this.keyframeIndex+": "+this.timeElapsed+" ("+k.getTimestampSec()+")");
 
-				this.keyframeIndex++;
-				this.timeElapsedSinceKeyframe = 0;
-			} /*else if(this.keyframeIndex > 0) {
-				Keyframe currentKeyframe = this.keyframes.get(this.keyframeIndex - 1);
-				Keyframe nextKeyframe = this.keyframes.get(this.keyframeIndex);
-				Cannonball cannonball = partner.getCannonball();
+            Keyframe currentKeyframe = this.keyframes.get(this.keyframeIndex);
+            Keyframe nextKeyframe = this.keyframes.get(this.keyframeIndex + 1);
+            Cannonball cannonball = partner.getCannonball();
 
-				try {
+            float deltaT = (float) (nextKeyframe.getTimestampSec() - currentKeyframe.getTimestampSec());
+            float t = this.timeElapsedSinceKeyframe / deltaT;
 
-					float x0 = (float) currentKeyframe.getCannonballJson().getDouble("x");
-					float y0 = (float) currentKeyframe.getCannonballJson().getDouble("y");
-					float x1 = (float) nextKeyframe.getCannonballJson().getDouble("x");
-					float y1 = (float) nextKeyframe.getCannonballJson().getDouble("y");
-					float angle0 = (float) currentKeyframe.getCannonballJson().getDouble("r");
-					float angle1 = (float) nextKeyframe.getCannonballJson().getDouble("r");
-					float linX0 = (float) currentKeyframe.getCannonballJson().getDouble("l");
-					float linY0 = (float) currentKeyframe.getCannonballJson().getDouble("m");
-					float linX1 = (float) nextKeyframe.getCannonballJson().getDouble("l");
-					float linY1 = (float) nextKeyframe.getCannonballJson().getDouble("m");
-					float angular0 = (float) currentKeyframe.getCannonballJson().getDouble("a");
-					float angular1 = (float) nextKeyframe.getCannonballJson().getDouble("a");
+            // Log.i("OnlineGame", "["+this.keyframeIndex+"] t="+t);
 
-					float deltaT = (float) (nextKeyframe.getTimestampSec() - currentKeyframe.getTimestampSec());
+            KeyframeData interpolated = currentKeyframe.getCannonballKeyframeData()
+                                        .interpolate(
+                                                nextKeyframe.getCannonballKeyframeData(),
+                                                t
+                                        );
 
-					float t = this.timeElapsedSinceKeyframe / deltaT;
+            cannonball.setKeyframeData(interpolated);
 
-					float x = lerp(x0, x1, t);
-					float y = lerp(y0, y1, t);
-					float angle = lerp(angle0, angle1, t);
-					float linX = lerp(linX0, linX1, t);
-					float linY = lerp(linY0, linY1, t);
-					float angular = lerp(angular0, angular1, t);
+            ArrayList<KeyframeData> currentCastleData = currentKeyframe.getCastleKeyframeData();
+            ArrayList<KeyframeData> nextCastleData = nextKeyframe.getCastleKeyframeData();
+            ArrayList<PhysicalEntity> castleEntities = me.getCastle().getBlocks();
+            Log.i("OnlineGame", "castle key frames: " + currentCastleData.size());
 
-					//Log.i("interpolate", "t: "+t+", timeElapsed: "+timeElapsed+", deltaT: "+deltaT);
+            for(int i = 0; i < currentCastleData.size(); i++) {
 
-					cannonball.getBody().setTransform(x, y, angle);
-					cannonball.getBody().setLinearVelocity(linX, linY);
-					cannonball.getBody().setAngularVelocity(angular);
+                KeyframeData currentKeyframeData = currentCastleData.get(i);
+                KeyframeData nextKeyframeData = nextCastleData.get(i);
+                KeyframeData interpolatedKeyframeData = currentKeyframeData.interpolate(nextKeyframeData, t);
 
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-			}*/
+                PhysicalEntity block = PhysicsManager.getInstance().getEntityById(currentKeyframeData.entityId);
+
+                block.setKeyframeData(interpolatedKeyframeData);
+
+            }
+
+
+            if(this.timeElapsed > k.getTimestampSec()) {
+                //Log.i("keyframe", "simulate partner key frame "+this.keyframeIndex+": "+this.timeElapsed+" ("+k.getTimestampSec()+")");
+
+                try {
+                    cannonball.fromJson(k.getCannonballJson());
+                    me.getCastle().fromJson(k.getCastleJson());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if(this.keyframeIndex+1 <= this.keyframes.size())
+                    this.keyframeIndex++;
+
+                this.timeElapsedSinceKeyframe = 0;
+            }
 		}
 
-		private float lerp(float v0, float v1, float t) {
-			return v0+(v1-v0)*t;
-		}
-
-		Vector2 lerp(Vector2 A, Vector2 B, float t ){
-			return A.mul(t).add(B.mul(1f - t));
-		}
 	}
 
 	@Override

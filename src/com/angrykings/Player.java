@@ -29,7 +29,7 @@ public class Player implements IUpdateHandler {
 	// Attributes
 	//
 
-	private static final int KEYFRAMES_PER_SECOND = 10;
+	private static final int KEYFRAMES_PER_SECOND = 5;
 	private boolean inTurn;
 	private float timeElapsed;
 	private float keyTime;
@@ -105,9 +105,6 @@ public class Player implements IUpdateHandler {
 
 		Log.i(getClass().getName(), "["+this.name+"] handleTurn("+aimX+", "+aimY+")");
 
-		if(this.playerTurnListener != null)
-			this.playerTurnListener.onHandleTurn(aimX, aimY, keyframes);
-
 		final BaseGameActivity gameActivity = GameContext.getInstance().getGameActivity();
 
 		gameActivity.runOnUpdateThread(new Runnable() {
@@ -136,6 +133,10 @@ public class Player implements IUpdateHandler {
 					}
 				});
 
+                if(playerTurnListener != null) {
+                    playerTurnListener.onHandleTurn(aimX, aimY, keyframes);
+                    playerTurnListener.onKeyframe(0f);
+                }
 			}
 		});
 

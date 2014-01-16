@@ -1,5 +1,6 @@
 package com.angrykings;
 
+import org.andengine.entity.Entity;
 import org.andengine.entity.shape.IAreaShape;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
@@ -89,16 +90,37 @@ public abstract class PhysicalEntity implements IJsonSerializable {
 		return this.id;
 	}
 
+    public KeyframeData getKeyframeData() {
+
+        Body body = this.getBody();
+
+        KeyframeData data = new KeyframeData();
+
+        data.position = body.getPosition();
+        data.linearVelocity = body.getLinearVelocity();
+        data.angle = body.getAngle();
+        data.angularVelocity = body.getAngularVelocity();
+
+        return data;
+
+    }
+
+    public void setKeyframeData(KeyframeData data) {
+
+        this.getBody().setTransform(data.position, data.angle);
+        this.getBody().setLinearVelocity(data.linearVelocity);
+        this.getBody().setAngularVelocity(data.angularVelocity);
+
+    }
+
 	@Override
 	public JSONObject toJson() throws JSONException {
 		JSONObject json = new JSONObject();
 
+        json.put("i", this.getId());
 		json.put("x", this.getBody().getPosition().x);
 		json.put("y", this.getBody().getPosition().y);
 		json.put("r", this.getBody().getAngle());
-		json.put("l", this.getBody().getLinearVelocity().x);
-		json.put("m", this.getBody().getLinearVelocity().y);
-		json.put("a", this.getBody().getAngularVelocity());
 
 		return json;
 	}
@@ -108,14 +130,8 @@ public abstract class PhysicalEntity implements IJsonSerializable {
 		final float x = (float) json.getDouble("x");
 		final float y = (float) json.getDouble("y");
 		final float rotation = (float) json.getDouble("r");
-		final float linearVelocityX = (float) json.getDouble("l");
-		final float linearVelocityY = (float) json.getDouble("m");
-		final float angularVelocity = (float) json.getDouble("a");
 
 		this.getBody().setTransform(x, y, rotation);
-
-		this.getBody().setLinearVelocity(linearVelocityX, linearVelocityY);
-		this.getBody().setAngularVelocity(angularVelocity);
 	}
 
 }

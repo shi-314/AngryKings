@@ -182,4 +182,8 @@ public class Castle implements IJsonSerializable{
 			entity.fromJson(json.getJSONObject(String.valueOf(entity.getId())));
 		}
 	}
+
+    public ArrayList<PhysicalEntity> getBlocks() {
+        return this.blocks;
+    }
 }

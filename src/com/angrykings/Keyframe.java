@@ -2,9 +2,14 @@ package com.angrykings;
 
 import com.angrykings.cannons.Cannonball;
 import com.angrykings.castles.Castle;
+import com.badlogic.gdx.math.Vector2;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.jar.JarOutputStream;
 
 public class Keyframe implements IJsonSerializable {
 
@@ -37,6 +42,43 @@ public class Keyframe implements IJsonSerializable {
 	public JSONObject getCastleJson() {
 		return castleJson;
 	}
+
+    public KeyframeData getCannonballKeyframeData() {
+
+        KeyframeData data = new KeyframeData();
+
+        try {
+            data.fromJson(this.cannonballJson);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return data;
+
+    }
+
+    public ArrayList<KeyframeData> getCastleKeyframeData() {
+
+        ArrayList<KeyframeData> dataList = new ArrayList<KeyframeData>();
+
+        Iterator<String> it = this.castleJson.keys();
+        while(it.hasNext()) {
+            String k = it.next();
+
+            KeyframeData keyframeData = new KeyframeData();
+
+            try {
+                keyframeData.fromJson(this.castleJson.getJSONObject(k));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            dataList.add(keyframeData);
+        }
+
+        return dataList;
+
+    }
 
 	@Override
 	public JSONObject toJson() throws JSONException {

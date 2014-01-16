@@ -120,7 +120,6 @@ public class LobbyActivity2 extends Activity{
                     }
                 });
 
-                // TODO use mongoid
                 ServerConnection
                         .getInstance()
                         .sendTextMessage(ServerMessage.pair(partner.id));
@@ -234,17 +233,18 @@ public class LobbyActivity2 extends Activity{
                         users.clear();
 
                         for (int i = 0; i < userArray.length(); i++) {
-                            String eingabe = userArray.getJSONArray(i)
-                                    .getString(0)
+                            final JSONObject jsonObject = userArray.getJSONObject(i);
+                            String eingabe = jsonObject
+                                    .getString("name")
                                     + "   Gewonnen: "
-                                    + userArray.getJSONArray(i).getString(2)
+                                    + jsonObject.getString("won")
                                     + "   Verloren: "
-                                    + userArray.getJSONArray(i).getString(3);
+                                    + jsonObject.getString("lost");
 
                             users.add(eingabe);
                             listItemToName.put(eingabe,
-                                    new Player(userArray.getJSONArray(i).getString(0),
-                                            userArray.getJSONArray(i).getString(1)));
+                                    new Player(jsonObject.getString("name"),
+                                            jsonObject.getString("_id")));
                         }
 
                         updateLobby(users);
@@ -254,7 +254,7 @@ public class LobbyActivity2 extends Activity{
                 }
             }
         });
-    }
+}
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

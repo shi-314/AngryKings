@@ -5,3 +5,4 @@ gen/
 .project
 AngryKings.iml
 project.properties
+.DS_Store

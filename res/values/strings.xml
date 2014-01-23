@@ -12,8 +12,8 @@
 	<string name="weiterSpielenButton">Ich will kämpfen</string>
 	<string name="resignButton">aufgeben :(</string>
     <string name="backToLobby">Zurück zur Lobby</string>
-    <string name="hasWon">Du hast gewonnen!</string>
-    <string name="hasLost">Du hast verloren!</string>
+    <string name="hasWon">Gewonnen!</string>
+    <string name="hasLost">Verloren!</string>
 	<string name="yourTurn">Du bist dran!</string>
 	<string name="enemyTurn">Dein Gegner ist dran!</string>
 	<string name="youResigned">Du hast aufgegeben :(</string>
@@ -23,6 +23,7 @@
     <string name="waitTooLong">Zu Langsam!</string>
     <string name="tZufall">Zufall oder aus der Liste wählen</string>
     <string name="bZufall">Zufallsmatch</string>
+    <string name="win_label">Gewonnen</string>
 
 
 </resources>

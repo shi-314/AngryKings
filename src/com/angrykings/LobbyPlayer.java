@@ -5,10 +5,14 @@ package com.angrykings;
  */
 public class LobbyPlayer {
 
-    public final String name;
-    public final String id;
-    public final String win;
-    public final String lose;
+    public String name;
+    public String id;
+    public String win;
+    public String lose;
+
+    public LobbyPlayer(){
+
+    }
 
     public LobbyPlayer(String name, String id, String win, String lose){
         this.name = name;

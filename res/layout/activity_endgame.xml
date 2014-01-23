@@ -12,7 +12,7 @@
         android:id="@+id/winLoseText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/win_label"
+        android:text=""
         android:textColor="#000"
         android:textSize="37sp"
         android:layout_centerHorizontal="true"

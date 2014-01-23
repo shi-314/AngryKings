@@ -24,7 +24,7 @@ public class Stone extends PhysicalEntity {
 	protected AnimatedSprite stoneSprite;
 	protected final Body stoneBody;
 
-	public final static FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.7f, 0.1f, 0.9f);
+	public final static FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.2f, 0.1f, 0.9f);
 
 	private final static float LINEAR_DAMPING = 0.1f;
 	private final static float ANGULAR_DAMPING = 0.1f;

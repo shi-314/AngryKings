@@ -94,7 +94,7 @@ public class ResourceManager {
                 gradientSource, 0, 0);
         backgroundGradientTexture.load();
 
-        this.backgroundSprite = new Sprite(BasicMap.GROUND_X, 0, 2000, 2000,
+        this.backgroundSprite = new Sprite(BasicMap.GROUND_X, 0, 2000, 1300,
                 backgroundGradientTextureRegion,
                 gameActivity.getVertexBufferObjectManager());
 
@@ -209,8 +209,8 @@ public class ResourceManager {
                         2, 1);
 		textureAtlas.load();
 
-		textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 21,
-				21, TextureOptions.NEAREST);
+		textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 120,
+				66, TextureOptions.NEAREST);
 		this.roofTexture = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(textureAtlas, gameActivity, "roof.png", 0, 0);
 		textureAtlas.load();

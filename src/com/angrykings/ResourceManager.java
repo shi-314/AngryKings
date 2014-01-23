@@ -142,11 +142,8 @@ public class ResourceManager {
 				.createFromAsset(textureAtlas, gameActivity, "ball.png", 0, 0);
 		textureAtlas.load();
 
-<<<<<<< HEAD
-		textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 280, 302, TextureOptions.NEAREST);
-=======
-		textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 280, 306, TextureOptions.BILINEAR);
->>>>>>> 7c8678651dc9ddd4a45b35939cacd7210cd4c360
+		textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 280, 306, TextureOptions.NEAREST);
+
 		this.aimCircleTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(textureAtlas, gameActivity, "aimCircle.png", 0, 0);
 		textureAtlas.load();
 

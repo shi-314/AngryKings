@@ -151,12 +151,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			status = GameStatus.PARTNER_TURN;
 			me.getCannon().hideAimCircle();
 			partner.getCastle().unfreeze();
-<<<<<<< HEAD
-            //followCamera = OWNCANNONBALL;
-            timeElapsed = 0f;
-=======
             followCamera = OWNCANNONBALL;
->>>>>>> 7c8678651dc9ddd4a45b35939cacd7210cd4c360
 		}
 
 		@Override

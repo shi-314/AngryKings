@@ -38,13 +38,13 @@ public class Player implements IUpdateHandler {
 	// Game Objects Positions
 	//
 
-	private static final int LEFT_CANNON_X = -250;
+	private static final int LEFT_CANNON_X = -275;
 	private static final int RIGHT_CANNON_X = 200;
 
-	private static final int LEFT_CASTLE_X = -475;
+	private static final int LEFT_CASTLE_X = -715;
 	private static final int RIGHT_CASTLE_X = 275;
 
-	private static final int LEFT_KING_X = -300;
+	private static final int LEFT_KING_X = -315;
 	private static final int RIGHT_KING_X = 250;
 
 	//

@@ -329,7 +329,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		//
 
 		Scene scene = new Scene();
-		scene.setBackground(rm.getSkySprite());
+		scene.attachChild(rm.getBackgroundSprite());
 		scene.setOnSceneTouchListener(this);
 
 		gc.setScene(scene);

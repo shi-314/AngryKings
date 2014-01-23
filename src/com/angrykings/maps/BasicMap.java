@@ -12,6 +12,8 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
+import java.util.ArrayList;
+
 /**
  * AngryKings
  *
@@ -23,10 +25,14 @@ public class BasicMap extends Entity {
 	public static final float GROUND_X = -1000;
 	public static final float GROUND_Y = 1050;
 	public static final float GRASS_TILES = 150;
-    
+
     private Sprite ground;
 
+    private ArrayList<Sprite> clouds;
+
 	public BasicMap() {
+        this.clouds = new ArrayList<Sprite>();
+
 		GameContext gc = GameContext.getInstance();
 		ResourceManager rm = ResourceManager.getInstance();
 
@@ -36,7 +42,7 @@ public class BasicMap extends Entity {
 
 		float grassWidth = rm.getGrassTexture().getWidth();
 
-        this.ground = new Sprite(BasicMap.GROUND_X, BasicMap.GROUND_Y-55, rm.getGroundTexture(), gc.getVboManager());
+        this.ground = new Sprite(BasicMap.GROUND_X, BasicMap.GROUND_Y-65, rm.getGroundTexture(), gc.getVboManager());
         this.attachChild(this.ground);
 
 		//
@@ -49,7 +55,24 @@ public class BasicMap extends Entity {
 		final FixtureDef wallFixture = PhysicsFactory.createFixtureDef(0, 0.1f, 1.0f);
 		Body body = PhysicsFactory.createBoxBody(gc.getPhysicsWorld(), ground, BodyDef.BodyType.StaticBody, wallFixture);
 
-		//this.attachChild(ground);
+        //
+        // Clouds
+        //
+
+        for(int i = 0; i < 10; i++) {
+            if(i % 3 == 0) {
+                final Sprite cloud1 = new Sprite(BasicMap.GROUND_X+200*i, BasicMap.GROUND_Y-500, rm.getCloudTexture1(), gc.getVboManager());
+                this.attachChild(cloud1);
+            }else if(i % 3 == 1) {
+                final Sprite cloud2 = new Sprite(BasicMap.GROUND_X+260*i, BasicMap.GROUND_Y-600, rm.getCloudTexture2(), gc.getVboManager());
+                this.attachChild(cloud2);
+            }else if(i % 3 == 2) {
+                final Sprite cloud3 = new Sprite(BasicMap.GROUND_X+200*i, BasicMap.GROUND_Y-700, rm.getCloudTexture3(), gc.getVboManager());
+                this.attachChild(cloud3);
+            }
+
+        }
+
 	}
 
 }

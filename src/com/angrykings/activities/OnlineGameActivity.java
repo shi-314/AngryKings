@@ -152,7 +152,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			status = GameStatus.PARTNER_TURN;
 			me.getCannon().hideAimCircle();
 			partner.getCastle().unfreeze();
-            followCamera = OWNCANNONBALL;
+            //followCamera = OWNCANNONBALL;
             timeElapsed = 0f;
 		}
 
@@ -166,7 +166,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			partner.getKing().getSprite().setCurrentTileIndex(1);
 
 			partner.getKing().jump();
-            followCamera = ENEMYCANNON;
+            //followCamera = ENEMYCANNON;
             myTurn = false;
             timeElapsed = 0f;
 		}
@@ -205,7 +205,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			this.timeElapsed = 0;
 			this.timeElapsedSinceKeyframe = 0;
 
-            followCamera = ENEMYCANNONBALL;
+            //followCamera = ENEMYCANNONBALL;
 		}
 
 		@Override
@@ -217,7 +217,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			partner.getKing().getSprite().setCurrentTileIndex(1);
 
 			me.getKing().jump();
-            followCamera = MIDDLE;
+            //followCamera = MIDDLE;
             myTurn = true;
 
 			if(status != GameStatus.LOST)

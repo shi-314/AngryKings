@@ -2,6 +2,7 @@ package com.angrykings.maps;
 
 import org.andengine.entity.Entity;
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.sprite.TiledSprite;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 
@@ -20,9 +21,10 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 public class BasicMap extends Entity {
 
 	public static final float GROUND_X = -1000;
-	public static final float GROUND_Y = 1000;
+	public static final float GROUND_Y = 1050;
 	public static final float GRASS_TILES = 150;
-	public static final float GRASS_ENDING_HEIGHT = 4000;
+    
+    private Sprite ground;
 
 	public BasicMap() {
 		GameContext gc = GameContext.getInstance();
@@ -34,28 +36,8 @@ public class BasicMap extends Entity {
 
 		float grassWidth = rm.getGrassTexture().getWidth();
 
-		for(int i=0; i<BasicMap.GRASS_TILES; i++) {
-			TiledSprite groundSprite = new TiledSprite(
-					i*grassWidth + BasicMap.GROUND_X,
-					BasicMap.GROUND_Y,
-					rm.getGrassTexture(),
-					gc.getVboManager()
-			);
-
-			this.attachChild(groundSprite);
-		}
-
-		Rectangle groundEnding = new Rectangle(
-				BasicMap.GROUND_X,
-				BasicMap.GROUND_Y + rm.getGrassTexture().getHeight(),
-				BasicMap.GRASS_TILES*grassWidth,
-				GRASS_ENDING_HEIGHT,
-				gc.getVboManager()
-		);
-
-		groundEnding.setColor(0.63137f, 0.435294f, 0.250980f);
-
-		this.attachChild(groundEnding);
+        this.ground = new Sprite(BasicMap.GROUND_X, BasicMap.GROUND_Y-55, rm.getGroundTexture(), gc.getVboManager());
+        this.attachChild(this.ground);
 
 		//
 		// Ground Body (Physics)

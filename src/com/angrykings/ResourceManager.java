@@ -35,6 +35,7 @@ public class ResourceManager {
 
 	private RepeatingSpriteBackground skySprite;
 	private TiledTextureRegion grassTexture;
+    private TextureRegion groundTexture;
 	private TextureRegion cannonTexture;
 	private TextureRegion wheelTexture;
 	private TextureRegion ballTexture;
@@ -71,6 +72,11 @@ public class ResourceManager {
 				GameConfig.CAMERA_HEIGHT, gameActivity.getTextureManager(),
 				AssetBitmapTextureAtlasSource.create(gameActivity.getAssets(),
 						"gfx/sky.png"), gameActivity.getVertexBufferObjectManager());
+
+        textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 2000,  319, TextureOptions.BILINEAR);
+        this.groundTexture = BitmapTextureAtlasTextureRegionFactory
+                .createFromAsset(textureAtlas, gameActivity, "ground.png", 0, 0);
+        textureAtlas.load();
 
 		//
 		// cannon textures
@@ -256,4 +262,8 @@ public class ResourceManager {
 	public Font getPlayerNameFont() {
 		return playerNameFont;
 	}
+
+    public TextureRegion getGroundTexture() {
+        return groundTexture;
+    }
 }

@@ -36,7 +36,6 @@ public class GameHUD extends HUD {
 	private final Text leftPlayerNameText;
 	private final Text rightPlayerNameText;
 	private final Text statusText;
-    private final Text countdownText;
 
 	private final static int MAX_TEXT_LENGTH = 256;
 	private final static int HUD_MARGIN = 20;
@@ -164,13 +163,9 @@ public class GameHUD extends HUD {
 		this.statusText = new Text(0, 0, this.statusFont, "", GameHUD.MAX_TEXT_LENGTH, gc.getVboManager());
 		this.attachChild(this.statusText);
 
-        this.countdownText = new Text(0, 0, this.statusFont, "", GameHUD.MAX_TEXT_LENGTH, gc.getVboManager());
-        this.attachChild(this.countdownText);
-
 		this.setLeftPlayerName("Left Player");
 		this.setRightPlayerName("Right Player");
 		this.setStatus("Status Message");
-        this.setCountdown(60);
 	}
 
 	public void setOnAimTouched(Runnable onAimTouched) {
@@ -230,16 +225,4 @@ public class GameHUD extends HUD {
 				GameConfig.CAMERA_HEIGHT / 2 - statusText.getHeight() / 2
 		);
 	}
-
-    public void setCountdown(int time) {
-        if(time < 20)
-            this.countdownText.setText(time + "");
-        else
-            this.countdownText.setText("");
-
-        this.countdownText.setPosition(
-                GameConfig.CAMERA_WIDTH/2 - this.countdownText.getWidth(),
-                GameHUD.HUD_MARGIN
-        );
-    }
 }

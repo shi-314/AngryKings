@@ -56,7 +56,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	private GameHUD hud;
 	private ResourceManager rm;
     private boolean myTurn;
-    private float timeElapsed;
 
 	//
 	// Game Objects
@@ -152,8 +151,12 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			status = GameStatus.PARTNER_TURN;
 			me.getCannon().hideAimCircle();
 			partner.getCastle().unfreeze();
+<<<<<<< HEAD
             //followCamera = OWNCANNONBALL;
             timeElapsed = 0f;
+=======
+            followCamera = OWNCANNONBALL;
+>>>>>>> 7c8678651dc9ddd4a45b35939cacd7210cd4c360
 		}
 
 		@Override
@@ -168,7 +171,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			partner.getKing().jump();
             //followCamera = ENEMYCANNON;
             myTurn = false;
-            timeElapsed = 0f;
 		}
 
 		@Override
@@ -421,7 +423,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		hud.setRightPlayerName(!isLeft ? myName : partnerName);
 
         myTurn = true;
-        timeElapsed = 0f;
 
 		scene.registerUpdateHandler(new IUpdateHandler() {
 			@Override
@@ -432,14 +433,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 				hud.getLeftLifeBar().setValue(1.0f - ((1.0f - leftLife) * 2.0f));
 				hud.getRightLifeBar().setValue(1.0f - ((1.0f - rightLife) * 2.0f));
-
-                if(myTurn){
-                    timeElapsed += pSecondsElapsed;
-                    hud.setCountdown(30 - Math.round(timeElapsed));
-                    if(timeElapsed > 30f){
-                        autoshot();
-                    }
-                }
 
 				if ((left && leftLife < 0.5f || !left && rightLife < 0.5f) && status != GameStatus.LOST) {
 					lost();
@@ -744,18 +737,4 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			Debug.d(this.getClass().getSimpleName() + ".onPauseGame lalala" + " @(Thread: '" + Thread.currentThread().getName() + "')");
 		}
 	}
-
-    private void autoshot() {
-        if (this.me.getCannon().pointAt(100, 100)) {
-            this.aimX = 100;
-            this.aimY = 100;
-        }
-        hud.setStatus(getString(R.string.waitTooLong));
-
-        myTurn = false;
-
-        if (this.status == GameStatus.MY_TURN) {
-            this.me.handleTurn(this.aimX, this.aimY, null);
-        }
-    }
 }

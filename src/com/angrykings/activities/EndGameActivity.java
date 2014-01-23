@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -47,26 +48,13 @@ public class EndGameActivity extends Activity {
 		}
 
 		final TextView winLoseText = (TextView) findViewById(R.id.winLoseText);
-		final TextView leftNameText = (TextView) findViewById(R.id.leftNameText);
-		final TextView rightNameText = (TextView) findViewById(R.id.rightNameText);
-		final ImageView bigKingImageView = (ImageView) findViewById(R.id.bigKingImageView);
+        Typeface type = Typeface.createFromAsset(getAssets(), "font/Rom_Ftl_Srif.ttf");
+        winLoseText.setTypeface(type);
 
 		if (hasWon) {
 			winLoseText.setText(R.string.hasWon);
 		} else {
 			winLoseText.setText(R.string.hasLost);
-		}
-
-		if (isLeft) {
-			leftNameText.setText(username);
-			rightNameText.setText(partnername);
-		} else {
-			leftNameText.setText(partnername);
-			rightNameText.setText(username);
-		}
-
-		if ((isLeft && hasWon) || (!isLeft && !hasWon)) {
-			bigKingImageView.setImageResource(R.drawable.happy_big_king);
 		}
 
 		final AlertDialog dialog = new AlertDialog.Builder(this)

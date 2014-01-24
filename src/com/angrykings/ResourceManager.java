@@ -1,5 +1,6 @@
 package com.angrykings;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
 
 import com.angrykings.maps.BasicMap;
@@ -29,8 +30,10 @@ import org.andengine.ui.activity.BaseGameActivity;
  */
 public class ResourceManager {
 	private static ResourceManager instance = null;
+    private TextureRegion parallax1;
+    private TextureRegion parallax2;
 
-	public static ResourceManager getInstance() {
+    public static ResourceManager getInstance() {
 		if (instance == null)
 			instance = new ResourceManager();
 
@@ -94,7 +97,7 @@ public class ResourceManager {
                 gradientSource, 0, 0);
         backgroundGradientTexture.load();
 
-        this.backgroundSprite = new Sprite(BasicMap.GROUND_X, 0, 2000, 1300,
+        this.backgroundSprite = new Sprite(0, 0, GameConfig.CAMERA_WIDTH, GameConfig.CAMERA_HEIGHT,
                 backgroundGradientTextureRegion,
                 gameActivity.getVertexBufferObjectManager());
 
@@ -118,6 +121,16 @@ public class ResourceManager {
         textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 240,  90, TextureOptions.NEAREST);
         this.cloudTexture3 = BitmapTextureAtlasTextureRegionFactory
                 .createFromAsset(textureAtlas, gameActivity, "cloud3.png", 0, 0);
+        textureAtlas.load();
+
+        textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 1635,  190, TextureOptions.NEAREST);
+        this.parallax1 = BitmapTextureAtlasTextureRegionFactory
+                .createFromAsset(textureAtlas, gameActivity, "parallax1.png", 0, 0);
+        textureAtlas.load();
+
+        textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 1743,  271, TextureOptions.NEAREST);
+        this.parallax2 = BitmapTextureAtlasTextureRegionFactory
+                .createFromAsset(textureAtlas, gameActivity, "parallax2.png", 0, 0);
         textureAtlas.load();
 
 		//
@@ -324,5 +337,13 @@ public class ResourceManager {
 
     public Sprite getBackgroundSprite() {
         return backgroundSprite;
+    }
+
+    public TextureRegion getParallax1() {
+        return parallax1;
+    }
+
+    public TextureRegion getParallax2() {
+        return parallax2;
     }
 }

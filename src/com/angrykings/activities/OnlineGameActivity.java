@@ -24,6 +24,8 @@ import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.modifier.MoveModifier;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.scene.background.ParallaxBackground;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
@@ -93,8 +95,10 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	boolean isLeft;
 
 	GameStatus status;
+    private BasicMap map;
+    private ParallaxBackground parallaxBackground;
 
-	private class AngryKingsMessageHandler extends ServerConnection.OnMessageHandler {
+    private class AngryKingsMessageHandler extends ServerConnection.OnMessageHandler {
 		@Override
 		public void onMessage(String payload) {
 			try {
@@ -151,7 +155,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			status = GameStatus.PARTNER_TURN;
 			me.getCannon().hideAimCircle();
 			partner.getCastle().unfreeze();
-            followCamera = OWNCANNONBALL;
+            //followCamera = OWNCANNONBALL;
 		}
 
 		@Override
@@ -326,7 +330,17 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		//
 
 		Scene scene = new Scene();
-		scene.attachChild(rm.getBackgroundSprite());
+		//scene.attachChild(rm.getBackgroundSprite());
+
+        parallaxBackground = new ParallaxBackground(0f, 0f, 0f);
+        parallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(0f, rm.getBackgroundSprite()));
+
+        parallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(20000f, new Sprite(0, 0, rm.getParallax2(), gc.getVboManager())));
+        parallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(10000f, new Sprite(0, 150, rm.getParallax1(), gc.getVboManager())));
+
+
+        scene.setBackground(parallaxBackground);
+
 		scene.setOnSceneTouchListener(this);
 
 		gc.setScene(scene);
@@ -343,7 +357,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		// initialize the entities
 		//
 
-		BasicMap map = new BasicMap();
+        map = new BasicMap();
 		scene.attachChild(map);
 
 		String myName = "";
@@ -612,6 +626,8 @@ public class OnlineGameActivity extends BaseGameActivity implements
 						 float pDistanceX, float pDistanceY) {
 		ZoomCamera camera = (ZoomCamera) gc.getCamera();
 		final float zoomFactor = camera.getZoomFactor();
+
+        this.parallaxBackground.setParallaxValue(camera.getCenterX() / 100);
 
 		camera.offsetCenter(-pDistanceX / zoomFactor, -pDistanceY / zoomFactor);
 	}

@@ -2,6 +2,7 @@ package com.angrykings.maps;
 
 import org.andengine.entity.Entity;
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.scene.background.ParallaxBackground;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.sprite.TiledSprite;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -54,25 +55,9 @@ public class BasicMap extends Entity {
 
 		final FixtureDef wallFixture = PhysicsFactory.createFixtureDef(0, 0.1f, 1.0f);
 		Body body = PhysicsFactory.createBoxBody(gc.getPhysicsWorld(), ground, BodyDef.BodyType.StaticBody, wallFixture);
-
-        //
-        // Clouds
-        //
-
-        for(int i = 0; i < 10; i++) {
-            if(i % 3 == 0) {
-                final Sprite cloud1 = new Sprite(BasicMap.GROUND_X+200*i, BasicMap.GROUND_Y-500, rm.getCloudTexture1(), gc.getVboManager());
-                this.attachChild(cloud1);
-            }else if(i % 3 == 1) {
-                final Sprite cloud2 = new Sprite(BasicMap.GROUND_X+260*i, BasicMap.GROUND_Y-600, rm.getCloudTexture2(), gc.getVboManager());
-                this.attachChild(cloud2);
-            }else if(i % 3 == 2) {
-                final Sprite cloud3 = new Sprite(BasicMap.GROUND_X+200*i, BasicMap.GROUND_Y-700, rm.getCloudTexture3(), gc.getVboManager());
-                this.attachChild(cloud3);
-            }
-
-        }
-
 	}
 
+    public ArrayList<Sprite> getClouds() {
+        return clouds;
+    }
 }

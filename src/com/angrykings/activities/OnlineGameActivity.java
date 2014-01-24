@@ -24,6 +24,7 @@ import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.modifier.MoveModifier;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.scene.background.AutoParallaxBackground;
 import org.andengine.entity.scene.background.ParallaxBackground;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.util.FPSLogger;
@@ -96,7 +97,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 	GameStatus status;
     private BasicMap map;
-    private ParallaxBackground parallaxBackground;
+    private AngryParallaxBackground parallaxBackground;
 
     private class AngryKingsMessageHandler extends ServerConnection.OnMessageHandler {
 		@Override
@@ -330,13 +331,12 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		//
 
 		Scene scene = new Scene();
-		//scene.attachChild(rm.getBackgroundSprite());
 
-        parallaxBackground = new ParallaxBackground(0f, 0f, 0f);
+        parallaxBackground = new AngryParallaxBackground(0f, 0f, 0f, 1f);
         parallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(0f, rm.getBackgroundSprite()));
 
-        parallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(20000f, new Sprite(0, 0, rm.getParallax2(), gc.getVboManager())));
-        parallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(10000f, new Sprite(0, 150, rm.getParallax1(), gc.getVboManager())));
+        parallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(20f, new Sprite(0, 0, rm.getParallax2(), gc.getVboManager())));
+        parallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(10f, new Sprite(0, 100, rm.getParallax1(), gc.getVboManager())));
 
 
         scene.setBackground(parallaxBackground);
@@ -627,7 +627,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		ZoomCamera camera = (ZoomCamera) gc.getCamera();
 		final float zoomFactor = camera.getZoomFactor();
 
-        this.parallaxBackground.setParallaxValue(camera.getCenterX() / 100);
+        //this.parallaxBackground.setParallaxValue(this.parallaxBackground.getParallaxValue() + camera.getCenterX() / 100);
 
 		camera.offsetCenter(-pDistanceX / zoomFactor, -pDistanceY / zoomFactor);
 	}

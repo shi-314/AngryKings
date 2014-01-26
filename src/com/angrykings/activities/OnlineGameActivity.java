@@ -222,8 +222,8 @@ public class OnlineGameActivity extends BaseGameActivity implements
             //followCamera = MIDDLE;
             myTurn = true;
 
-			if(status != GameStatus.LOST)
-				serverConnection.sendTextMessage(ServerMessage.ready());
+//			if(status != GameStatus.LOST)
+//				serverConnection.sendTextMessage(ServerMessage.ready());
 		}
 
 		@Override
@@ -473,7 +473,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 		pOnCreateSceneCallback.onCreateSceneFinished(scene);
 
-		this.serverConnection.sendTextMessage(ServerMessage.ready());
+//		this.serverConnection.sendTextMessage(ServerMessage.ready());
 		hud.setStatus(this.getString(R.string.yourTurn));
 	}
 

@@ -19,9 +19,6 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.atlas.bitmap.source.AssetBitmapTextureAtlasSource;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
-import org.andengine.ui.IGameInterface.OnCreateResourcesCallback;
-import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
-import org.andengine.ui.IGameInterface.OnPopulateSceneCallback;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.debug.Debug;
 import org.json.JSONException;
@@ -36,7 +33,6 @@ import com.angrykings.GameConfig;
 import com.angrykings.GameContext;
 import com.angrykings.PhysicsManager;
 import com.angrykings.ServerConnection;
-import com.angrykings.activities.LobbyActivity;
 import com.angrykings.cannons.Cannon;
 import com.angrykings.castles.Castle;
 import com.angrykings.maps.BasicMap;
@@ -180,10 +176,10 @@ public class MapTest extends BaseGameActivity implements IOnSceneTouchListener {
 								mTurnSent = false;
 
 							}else if(jObj.getInt("action") == Action.Server.PARTNER_LEFT){
-								Intent intent = new Intent(
-										MapTest.this,
-										LobbyActivity.class);
-								startActivity(intent);
+//								Intent intent = new Intent(
+//										MapTest.this,
+//										LobbyActivity.class);
+//								startActivity(intent);
 							}
 						} catch (JSONException e) {
 

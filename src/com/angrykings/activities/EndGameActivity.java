@@ -89,9 +89,9 @@ public class EndGameActivity extends Activity {
 											public void onClick(
 													DialogInterface dialog,
 													int which) {
-												ServerConnection
-														.getInstance()
-														.sendTextMessage(ServerMessage.acceptChallenge());
+//												ServerConnection
+//														.getInstance()
+//														.sendTextMessage(ServerMessage.enterGame());
 												Intent intent = new Intent(
 														EndGameActivity.this,
 														OnlineGameActivity.class);
@@ -109,16 +109,16 @@ public class EndGameActivity extends Activity {
 												startActivity(intent);
 											}
 										})
-								.setNegativeButton("Deny",
+								.setNegativeButton("Not now",
 										new DialogInterface.OnClickListener() {
 
 											@Override
 											public void onClick(
 													DialogInterface dialog,
 													int which) {
-												ServerConnection
-														.getInstance()
-														.sendTextMessage(ServerMessage.denyChallenge());
+//												ServerConnection
+//														.getInstance()
+//														.sendTextMessage(ServerMessage.denyChallenge());
 											}
 										}).show();
 					}else if (jObj.getInt("action") == Action.Server.PARTNER_LEFT_GAME_OVER) {
@@ -152,17 +152,9 @@ public class EndGameActivity extends Activity {
 				dialog.show();
 				ServerConnection
 				.getInstance()
-				.sendTextMessage(new ServerJSONBuilder().create(Action.Client.REVENGE).build());
+				.sendTextMessage(new ServerJSONBuilder().create(Action.Client.ENTER_GAME).build());
 			}
 
 		});
-	}
-	
-	@Override
-	protected void onStop(){
-		ServerConnection
-		.getInstance()
-		.sendTextMessage(new ServerJSONBuilder().create(Action.Client.LEAVE_GAME_OVER).build());
-		super.onStop();
 	}
 }

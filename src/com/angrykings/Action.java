@@ -22,16 +22,11 @@ public class Action {
 	public class Client {
 		public static final int SET_NAME = 2001;
 		public static final int GO_TO_LOBBY = 2002;
-		public static final int PAIR = 2003;
-		public static final int ACCEPT = 2004;
-		public static final int DENY = 2005;
-		public static final int READY = 2006;
-		public static final int SET_ID = 2007;
-		public static final int LOSE = 2008;
-		public static final int GET_NAME = 2009;
-		public static final int END_TURN = 2010;
-		public static final int LEAVE_LOBBY = 2011;		
-		public static final int REVENGE = 2012;
-		public static final int LEAVE_GAME_OVER = 2013;
+		public static final int ENTER_GAME = 2003;
+		public static final int SET_ID = 2004;
+		public static final int LOSE = 2005;
+		public static final int GET_NAME = 2006;
+		public static final int END_TURN = 2007;
+		public static final int LEAVE_LOBBY = 2008;
 	}
 }

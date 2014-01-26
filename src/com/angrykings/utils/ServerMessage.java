@@ -10,12 +10,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- * AngryKings
- *
  * This class provides static methods to build quickly Json Messages for our game.
- *
- * @author Shivan Taher <zn31415926535@gmail.com>
- * @date 24.10.13
  */
 public class ServerMessage {
 	private ServerMessage() {
@@ -24,10 +19,6 @@ public class ServerMessage {
 
 	public static String lose() {
 		return  new ServerJSONBuilder().create(Action.Client.LOSE).build();
-	}
-
-	public static String ready() {
-		return new ServerJSONBuilder().create(Action.Client.READY).build();
 	}
 
 	// TODO: send keyframes
@@ -76,15 +67,7 @@ public class ServerMessage {
 		return new ServerJSONBuilder().create(Action.Client.LEAVE_LOBBY).build();
 	}
 
-	public static String acceptChallenge() {
-		return new ServerJSONBuilder().create(Action.Client.ACCEPT).build();
-	}
-
-	public static String denyChallenge() {
-		return new ServerJSONBuilder().create(Action.Client.DENY).build();
-	}
-
-	public static String pair(String partnerName) {
-		return new ServerJSONBuilder().create(Action.Client.PAIR).option("partner", partnerName).build();
+	public static String enterGame(int partnerName) {
+		return new ServerJSONBuilder().create(Action.Client.ENTER_GAME).integer("partner", partnerName).build();
 	}
 }

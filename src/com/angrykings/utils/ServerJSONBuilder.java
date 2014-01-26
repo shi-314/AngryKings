@@ -20,6 +20,11 @@ public class ServerJSONBuilder {
 		return this;
 	}
 
+    public ServerJSONBuilder integer(String key, int value) {
+        json += ",\"" + key + "\":" + value;
+        return this;
+    }
+
 	public String build() {
 		return json + "}";
 	}

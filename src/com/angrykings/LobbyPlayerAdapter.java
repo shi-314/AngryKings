@@ -13,16 +13,13 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by ray on 16.01.14.
- */
-public class MyAdapter extends BaseAdapter{
+public class LobbyPlayerAdapter extends BaseAdapter{
 
     private Activity activity;
     private List<LobbyPlayer> data;
     private static LayoutInflater inflater=null;
 
-    public MyAdapter(Activity a, int list_row, List<LobbyPlayer> d){
+    public LobbyPlayerAdapter(Activity a, int list_row, List<LobbyPlayer> d){
         activity = a;
         data = d;
         inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

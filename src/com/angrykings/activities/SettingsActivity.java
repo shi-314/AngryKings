@@ -12,9 +12,6 @@ import com.angrykings.R;
 import com.angrykings.ServerConnection;
 import com.angrykings.utils.ServerMessage;
 
-/**
- * Created by ray on 21.11.13.
- */
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 

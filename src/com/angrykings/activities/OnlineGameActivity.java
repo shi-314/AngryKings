@@ -254,7 +254,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
             ArrayList<KeyframeData> currentCastleData = currentKeyframe.getCastleKeyframeData();
             ArrayList<KeyframeData> nextCastleData = nextKeyframe.getCastleKeyframeData();
-            ArrayList<PhysicalEntity> castleEntities = me.getCastle().getBlocks();
 
             for(int i = 0; i < currentCastleData.size(); i++) {
 
@@ -269,7 +268,9 @@ public class OnlineGameActivity extends BaseGameActivity implements
             }
 
             if(this.timeElapsed > nextKeyframe.getTimestampSec()) {
-                if(this.keyframeIndex+1 <= this.keyframes.size())
+                Log.i("onUpdate", "keyframe " + keyframeIndex + " processed");
+
+                if(this.keyframeIndex+1 < this.keyframes.size())
                     this.keyframeIndex++;
 
                 this.timeElapsedSinceKeyframe = 0;

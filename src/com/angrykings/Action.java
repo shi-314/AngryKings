@@ -4,9 +4,9 @@ public class Action {
 
 	public class Server {
 		public static final int LOBBY_UPDATE = 1001;
-		public static final int REQUEST = 1002;
-		public static final int START = 1003;
-		public static final int DENIED = 1004;
+		public static final int NEW_GAME = 1002;
+		public static final int EXISTING_GAME = 1003;
+//		public static final int DENIED = 1004;
 		public static final int TURN = 1005;
 		public static final int CONFIRM = 1006;
 		public static final int PARTNER_LEFT = 1007;
@@ -15,7 +15,7 @@ public class Action {
 		public static final int KNOWN_USER = 1010;
 		public static final int SEND_NAME = 1011;
 		public static final int END_TURN = 1012;
-		public static final int PARTNER_LEFT_GAME_OVER = 1013;
+//		public static final int PARTNER_LEFT_GAME_OVER = 1013;
 		public static final int DRAW = 1014;
 	}
 

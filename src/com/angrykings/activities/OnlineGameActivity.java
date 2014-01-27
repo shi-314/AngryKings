@@ -9,27 +9,38 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
-import com.angrykings.*;
+
+import com.angrykings.Action;
+import com.angrykings.AngryParallaxBackground;
+import com.angrykings.BuildConfig;
+import com.angrykings.GameConfig;
+import com.angrykings.GameContext;
+import com.angrykings.GameHUD;
+import com.angrykings.GameStatus;
+import com.angrykings.IPlayerTurnListener;
+import com.angrykings.Keyframe;
+import com.angrykings.KeyframeData;
+import com.angrykings.PhysicalEntity;
+import com.angrykings.PhysicsManager;
+import com.angrykings.Player;
+import com.angrykings.R;
+import com.angrykings.ResourceManager;
+import com.angrykings.ServerConnection;
 import com.angrykings.cannons.Cannonball;
 import com.angrykings.castles.Castle;
 import com.angrykings.maps.BasicMap;
 import com.angrykings.utils.ServerMessage;
-import com.badlogic.gdx.math.Vector2;
 
 import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
-import org.andengine.entity.modifier.MoveModifier;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.scene.background.AutoParallaxBackground;
 import org.andengine.entity.scene.background.ParallaxBackground;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.util.FPSLogger;
-import org.andengine.extension.physics.box2d.util.Vector2Pool;
-import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.detector.PinchZoomDetector;
 import org.andengine.input.touch.detector.PinchZoomDetector.IPinchZoomDetectorListener;
@@ -44,12 +55,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/**
- * OnlineGameActivity
- *
- * @author Shivan Taher <zn31415926535@gmail.com>
- * @date 06.06.13
- */
 public class OnlineGameActivity extends BaseGameActivity implements
 		IOnSceneTouchListener, IScrollDetectorListener,
 		IPinchZoomDetectorListener {
@@ -58,7 +63,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	private Handler handler;
 	private GameHUD hud;
 	private ResourceManager rm;
-    private boolean myTurn;
 
 	//
 	// Game Objects
@@ -170,7 +174,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 			partner.getKing().jump();
             //followCamera = ENEMYCANNON;
-            myTurn = false;
 		}
 
 		@Override
@@ -220,7 +223,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 			me.getKing().jump();
             //followCamera = MIDDLE;
-            myTurn = true;
 
 //			if(status != GameStatus.LOST)
 //				serverConnection.sendTextMessage(ServerMessage.ready());
@@ -366,13 +368,13 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		Bundle extras = getIntent().getExtras();
 
 		if (extras != null) {
-			Boolean amILeft = extras.getBoolean("myTurn");
-			this.isLeft = amILeft;
+			this.isLeft = extras.getBoolean("left");
+
 
 			myName = extras.getString("username");
 			partnerName = extras.getString("partnername");
 
-			Log.i(getClass().getName(), "this client is " + (amILeft ? "left" : "right"));
+			Log.i(getClass().getName(), "this client is " + (isLeft ? "left" : "right"));
 		}
 
 		//
@@ -431,7 +433,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		hud.setLeftPlayerName(isLeft ? myName : partnerName);
 		hud.setRightPlayerName(!isLeft ? myName : partnerName);
 
-        myTurn = true;
 
 		scene.registerUpdateHandler(new IUpdateHandler() {
 			@Override

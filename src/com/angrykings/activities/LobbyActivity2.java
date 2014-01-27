@@ -43,20 +43,33 @@ public class LobbyActivity2 extends Activity {
                         new DialogInterface.OnClickListener() {
 
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
+                            public void onClick(final DialogInterface dialog, final int which) {
                                 ServerConnection
                                         .getInstance()
                                         .sendTextMessage(ServerMessage.enterGame(partner.id));
 
-                                Intent intent = new Intent(LobbyActivity2.this, OnlineGameActivity.class);
-                                intent.putExtra("myTurn", false);
-                                intent.putExtra("username", username);
-                                intent.putExtra("partnername", partner.name);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                ServerConnection.getInstance().setHandler(new ServerConnection.OnMessageHandler() {
+                                    @Override
+                                    public void onMessage(String payload) {
+                                        try {
+                                            final JSONObject jObj = new JSONObject(payload);
+                                            if (jObj.getInt("action") == Action.Server.NEW_GAME) {
+                                                dialog.dismiss();
+
+                                                Intent intent = new Intent(LobbyActivity2.this, OnlineGameActivity.class);
+                                                intent.putExtra("left", false);
+                                                intent.putExtra("username", username);
+                                                intent.putExtra("partnername", partner.name);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 //                                        intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY);
-                                // TODO what is that flag?
-                                startActivity(intent);
+                                                // TODO what is that flag?
+                                                startActivity(intent);
+                                            }
+                                        } catch (JSONException e) {
+                                            Log.e("JSON Parser", "Error parsing data " + e.toString());
+                                        }
+                                    }
+                                });
                             }
                         })
                 .setNegativeButton("Lieber nicht",
@@ -71,7 +84,6 @@ public class LobbyActivity2 extends Activity {
 
 
     private void updateLobby(List<LobbyPlayer> user) {
-        //lobbyList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, user));
         lobbyList.setAdapter(new LobbyPlayerAdapter(this, R.layout.list_row, user));
     }
 
@@ -91,6 +103,7 @@ public class LobbyActivity2 extends Activity {
         if (extras != null) {
             this.username = extras.getString("username");
         }
+
         ServerConnection
                 .getInstance()
                 .sendTextMessage(ServerMessage.gotoLobby());

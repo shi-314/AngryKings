@@ -60,76 +60,76 @@ public class EndGameActivity extends Activity {
 		final AlertDialog dialog = new AlertDialog.Builder(this)
 		.setTitle("Please Wait").setMessage("Waiting for partner").create();
 		
-		ServerConnection.getInstance().setHandler(new OnMessageHandler() {
-
-			@Override
-			public void onMessage(String payload) {
-				try {
-					final JSONObject jObj = new JSONObject(payload);
-					if (jObj.getInt("action") == Action.Server.DENIED) {
-						dialog.cancel();
-					} else if (jObj.getInt("action") == Action.Server.START){
-						dialog.dismiss();
-						Intent intent = new Intent(EndGameActivity.this, OnlineGameActivity.class);
-						intent.putExtra("myTurn", false)
-						.putExtra("username", username)
-						.putExtra("partnername", partnername)
-						.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-						startActivity(intent);
-					}else if (jObj.getInt("action") == Action.Server.REQUEST) {
-						new AlertDialog.Builder(EndGameActivity.this)
-								.setTitle("Request")
-								.setMessage(
-										jObj.getString("partner")
-												+ " requested a match!")
-								.setPositiveButton("Okay",
-										new DialogInterface.OnClickListener() {
-
-											@Override
-											public void onClick(
-													DialogInterface dialog,
-													int which) {
-//												ServerConnection
-//														.getInstance()
-//														.sendTextMessage(ServerMessage.enterGame());
-												Intent intent = new Intent(
-														EndGameActivity.this,
-														OnlineGameActivity.class);
-												intent.putExtra("myTurn", true);
-												intent.putExtra("username",
-														username);
-												intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-												try {
-													intent.putExtra("partnername",
-															jObj.getString("partner"));
-												} catch (JSONException e) {
-													e.printStackTrace();
-													intent.putExtra("partnername","Partner");
-												}
-												startActivity(intent);
-											}
-										})
-								.setNegativeButton("Not now",
-										new DialogInterface.OnClickListener() {
-
-											@Override
-											public void onClick(
-													DialogInterface dialog,
-													int which) {
-//												ServerConnection
-//														.getInstance()
-//														.sendTextMessage(ServerMessage.denyChallenge());
-											}
-										}).show();
-					}else if (jObj.getInt("action") == Action.Server.PARTNER_LEFT_GAME_OVER) {
-						revengeButton.setEnabled(false);
-						revengeButton.setBackgroundResource(R.drawable.play_again_button_inaktiv);
-					}
-				} catch (final JSONException e) {
-					e.printStackTrace();
-				}
-			}
-		});
+//		ServerConnection.getInstance().setHandler(new OnMessageHandler() {
+//
+//			@Override
+//			public void onMessage(String payload) {
+//				try {
+//					final JSONObject jObj = new JSONObject(payload);
+//					if (jObj.getInt("action") == Action.Server.DENIED) {
+//						dialog.cancel();
+//					} else if (jObj.getInt("action") == Action.Server.START){
+//						dialog.dismiss();
+//						Intent intent = new Intent(EndGameActivity.this, OnlineGameActivity.class);
+//						intent.putExtra("myTurn", false)
+//						.putExtra("username", username)
+//						.putExtra("partnername", partnername)
+//						.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//						startActivity(intent);
+//					}else if (jObj.getInt("action") == Action.Server.REQUEST) {
+//						new AlertDialog.Builder(EndGameActivity.this)
+//								.setTitle("Request")
+//								.setMessage(
+//										jObj.getString("partner")
+//												+ " requested a match!")
+//								.setPositiveButton("Okay",
+//										new DialogInterface.OnClickListener() {
+//
+//											@Override
+//											public void onClick(
+//													DialogInterface dialog,
+//													int which) {
+////												ServerConnection
+////														.getInstance()
+////														.sendTextMessage(ServerMessage.enterGame());
+//												Intent intent = new Intent(
+//														EndGameActivity.this,
+//														OnlineGameActivity.class);
+//												intent.putExtra("myTurn", true);
+//												intent.putExtra("username",
+//														username);
+//												intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//												try {
+//													intent.putExtra("partnername",
+//															jObj.getString("partner"));
+//												} catch (JSONException e) {
+//													e.printStackTrace();
+//													intent.putExtra("partnername","Partner");
+//												}
+//												startActivity(intent);
+//											}
+//										})
+//								.setNegativeButton("Not now",
+//										new DialogInterface.OnClickListener() {
+//
+//											@Override
+//											public void onClick(
+//													DialogInterface dialog,
+//													int which) {
+////												ServerConnection
+////														.getInstance()
+////														.sendTextMessage(ServerMessage.denyChallenge());
+//											}
+//										}).show();
+//					}else if (jObj.getInt("action") == Action.Server.PARTNER_LEFT_GAME_OVER) {
+//						revengeButton.setEnabled(false);
+//						revengeButton.setBackgroundResource(R.drawable.play_again_button_inaktiv);
+//					}
+//				} catch (final JSONException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
 
 		final Button backToLobbyButton = (Button) findViewById(R.id.backToLobby);
 		backToLobbyButton.setOnClickListener(new OnClickListener() {

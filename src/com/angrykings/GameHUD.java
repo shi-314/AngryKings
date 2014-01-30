@@ -114,7 +114,7 @@ public class GameHUD extends HUD {
 
 		this.whiteFlagButton = new AnimatedSprite(
 				GameConfig.CAMERA_WIDTH - rm.getWhiteFlagButtonTexture().getWidth() - GameHUD.HUD_MARGIN,
-				GameHUD.HUD_MARGIN + GameHUD.BUTTON_OFFSET_Y,
+                GameConfig.CAMERA_HEIGHT - rm.getWhiteFlagButtonTexture().getHeight() - GameHUD.HUD_MARGIN,
 				rm.getWhiteFlagButtonTexture(), gc.getVboManager()) {
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {

@@ -171,11 +171,11 @@ public class ResourceManager {
                         0, 2, 1);
 		textureAtlas.load();
 
-		textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 64, 64,
+		textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 64, 54,
 				TextureOptions.NEAREST);
 		this.whiteFlagButtonTexture = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(textureAtlas, gameActivity,
-                        "white_flag_button.png", 0, 0, 1, 1);
+                        "resign_button.png", 0, 0, 1, 1);
 		textureAtlas.load();
 
 		FontFactory.setAssetBasePath("font/");

@@ -410,13 +410,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 		hud = new GameHUD();
 
-		hud.setOnAimTouched(new Runnable() {
-			@Override
-			public void run() {
-				isAiming = !isAiming;
-			}
-		});
-
 		hud.setOnWhiteFlagTouched(new Runnable() {
 			@Override
 			public void run() {

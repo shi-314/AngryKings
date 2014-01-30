@@ -1,5 +1,7 @@
 package com.angrykings;
 
+import android.graphics.drawable.shapes.RoundRectShape;
+
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
@@ -21,7 +23,6 @@ import org.andengine.util.modifier.IModifier;
  * @date 31.05.13
  */
 public class GameHUD extends HUD {
-	private final AnimatedSprite aimButton;
 	private final AnimatedSprite whiteFlagButton;
 
 	private final Font statusFont;
@@ -87,26 +88,6 @@ public class GameHUD extends HUD {
 
 		this.statusFont = rm.getStatusFont();
 		this.playerNameFont = rm.getPlayerNameFont();
-		
-		//
-		// aim button
-		//
-
-		this.aimButton = new AnimatedSprite(
-				GameHUD.HUD_MARGIN, GameHUD.HUD_MARGIN + GameHUD.BUTTON_OFFSET_Y,
-				rm.getAimButtonTexture(), gc.getVboManager()) {
-			@Override
-			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-				if (pSceneTouchEvent.isActionUp()) {
-					this.setCurrentTileIndex(this.getCurrentTileIndex() == 0 ? 1 : 0);
-					if (onAimTouched != null)
-						onAimTouched.run();
-				}
-				return true;
-			}
-		};
-
-		this.attachChild(this.aimButton);
 
 		//
 		// white flag button
@@ -170,18 +151,9 @@ public class GameHUD extends HUD {
 		this.setStatus("Status Message");
 	}
 
-	public void setOnAimTouched(Runnable onAimTouched) {
-		this.onAimTouched = onAimTouched;
-		this.registerTouchArea(this.aimButton);
-	}
-
 	public void setOnWhiteFlagTouched(Runnable onWhiteFlagTouched) {
 		this.onWhiteFlagTouched = onWhiteFlagTouched;
 		this.registerTouchArea(this.whiteFlagButton);
-	}
-
-	public AnimatedSprite getAimButton() {
-		return aimButton;
 	}
 
 	public AnimatedSprite getWhiteFlagButton() {

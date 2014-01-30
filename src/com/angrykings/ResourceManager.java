@@ -45,7 +45,6 @@ public class ResourceManager {
 	//
 
 	private RepeatingSpriteBackground skySprite;
-	private TiledTextureRegion grassTexture;
     private TextureRegion groundTexture;
     private TextureRegion cloudTexture1, cloudTexture2, cloudTexture3;
 	private TextureRegion cannonTexture;
@@ -54,7 +53,6 @@ public class ResourceManager {
 	private TextureRegion aimCircleTexture;
 	private TiledTextureRegion skyTexture;
     private Sprite backgroundSprite;
-	private TiledTextureRegion aimButtonTexture;
 	private TiledTextureRegion whiteFlagButtonTexture;
 	private TiledTextureRegion stoneTexture;
 	private TiledTextureRegion kingTexture1;
@@ -74,12 +72,8 @@ public class ResourceManager {
 		// map textures
 		//
 
-		BitmapTextureAtlas textureAtlas = new BitmapTextureAtlas(
-				gameActivity.getTextureManager(), 13, 99, TextureOptions.BILINEAR);
-		this.grassTexture = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(textureAtlas, gameActivity, "grass.png", 0, 0, 1,
-                        1); // 32x32
-		textureAtlas.load();
+		BitmapTextureAtlas textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 13, 99, TextureOptions.BILINEAR);
+
 
 		this.skySprite = new RepeatingSpriteBackground(GameConfig.CAMERA_WIDTH,
 				GameConfig.CAMERA_HEIGHT, gameActivity.getTextureManager(),
@@ -163,13 +157,6 @@ public class ResourceManager {
 		//
 		// hud textures
 		//
-
-		textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 128,
-				64, TextureOptions.NEAREST);
-		this.aimButtonTexture = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(textureAtlas, gameActivity, "aim_button.png", 0,
-                        0, 2, 1);
-		textureAtlas.load();
 
 		textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 64, 54,
 				TextureOptions.NEAREST);
@@ -259,10 +246,6 @@ public class ResourceManager {
 		return skySprite;
 	}
 
-	public TiledTextureRegion getGrassTexture() {
-		return grassTexture;
-	}
-
 	public TextureRegion getCannonTexture() {
 		return cannonTexture;
 	}
@@ -281,10 +264,6 @@ public class ResourceManager {
 
 	public TiledTextureRegion getSkyTexture() {
 		return skyTexture;
-	}
-
-	public TiledTextureRegion getAimButtonTexture() {
-		return aimButtonTexture;
 	}
 
 	public TiledTextureRegion getWhiteFlagButtonTexture() {

@@ -7,7 +7,16 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -123,7 +132,7 @@ public class EndGameActivity extends Activity {
 										}).show();
 					}else if (jObj.getInt("action") == Action.Server.PARTNER_LEFT_GAME_OVER) {
 						revengeButton.setEnabled(false);
-						revengeButton.setBackgroundResource(R.drawable.play_again_button_inaktiv);
+                        revengeButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
 					}
 				} catch (final JSONException e) {
 					e.printStackTrace();

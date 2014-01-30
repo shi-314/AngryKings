@@ -126,6 +126,8 @@ public class GameHUD extends HUD {
 			}
 		};
 
+        this.whiteFlagButton.setAlpha(0.8f);
+
 		this.attachChild(this.whiteFlagButton);
 
 		//

@@ -272,6 +272,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
             for(int i = 0; i < currentCastleData.size(); i++) {
 
                 KeyframeData currentKeyframeData = currentCastleData.get(i);
+
                 KeyframeData nextKeyframeData = nextCastleData.get(i);
                 KeyframeData interpolatedKeyframeData = currentKeyframeData.interpolate(nextKeyframeData, t);
 

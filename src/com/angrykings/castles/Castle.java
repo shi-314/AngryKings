@@ -39,6 +39,7 @@ public class Castle implements IJsonSerializable{
 	private final float initialHeight;
 
 	public Castle(float x, float y) {
+
 		this.x = x;
 		this.y = y;
 
@@ -53,9 +54,11 @@ public class Castle implements IJsonSerializable{
 		this.build();
 
 		this.initialHeight = this.getHeight();
+
 	}
 
 	private void addWood(float x, float y) {
+
 		GameContext gc = GameContext.getInstance();
 
 		Wood wood = new Wood(x, y);
@@ -65,9 +68,11 @@ public class Castle implements IJsonSerializable{
 
 		this.blocks.add(wood);
 		PhysicsManager.getInstance().addPhysicalEntity(wood);
+
 	}
 
 	private void addStone(float x, float y) {
+
 		GameContext gc = GameContext.getInstance();
 
 		Stone stone = new Stone(x, y);
@@ -76,9 +81,11 @@ public class Castle implements IJsonSerializable{
 
 		this.blocks.add(stone);
 		PhysicsManager.getInstance().addPhysicalEntity(stone);
+
 	}
 
 	private void addRoof(float x, float y) {
+
 		GameContext gc = GameContext.getInstance();
 
 		Roof roof = new Roof(x, y);
@@ -87,9 +94,11 @@ public class Castle implements IJsonSerializable{
 
 		this.blocks.add(roof);
 		PhysicsManager.getInstance().addPhysicalEntity(roof);
+
 	}
 
 	public float getHeight() {
+
 		float highest = Float.MAX_VALUE;
 		for (PhysicalEntity e : this.blocks) {
 			float y = e.getAreaShape().getY();
@@ -98,6 +107,7 @@ public class Castle implements IJsonSerializable{
 		}
 
 		return BasicMap.GROUND_Y - highest - this.stoneTexture.getHeight();
+
 	}
 
 	public float getInitialHeight() {
@@ -105,6 +115,7 @@ public class Castle implements IJsonSerializable{
 	}
 
 	private void build() {
+
 		float bottomStone1X = x + stoneTexture.getWidth() / 2;
 		float bottomStone1Y = y - stoneTexture.getHeight() / 2;
 		float bottomStone2X = bottomStone1X + woodTexture.getWidth() - stoneTexture.getWidth() / 2;
@@ -144,6 +155,7 @@ public class Castle implements IJsonSerializable{
 		this.addStone(row4Stone2X, row9Stone1Y);
 		this.addRoof(row4Stone1X, row10roof1Y);
 		this.addRoof(row4Stone2X, row10roof1Y);
+
 	}
 
 	private void setFreeze(boolean freeze) {
@@ -170,11 +182,14 @@ public class Castle implements IJsonSerializable{
 
 	@Override
 	public JSONObject toJson() throws JSONException {
+
 		JSONObject json = new JSONObject();
 		for(PhysicalEntity entity : blocks) {
 			json.put(String.valueOf(entity.getId()), entity.getKeyframeData().toJson());
 		}
+
 		return json;
+
 	}
 
 	@Override

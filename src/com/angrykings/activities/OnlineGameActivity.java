@@ -163,6 +163,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		public void onEndTurn() {
 			serverConnection.sendTextMessage(ServerMessage.endTurn(aimX, aimY, this.keyframes));
 
+            partner.getCastle().freeze();
 			hud.setStatus(getString(R.string.enemyTurn));
 
 			me.getKing().getSprite().setCurrentTileIndex(0);
@@ -194,6 +195,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		private int keyframeIndex;
 		private float timeElapsed;
 		private float timeElapsedSinceKeyframe;
+        private boolean keyframeInterlpolationDone;
 
 		@Override
 		public void onHandleTurn(int x, int y, ArrayList<Keyframe> keyframes) {
@@ -203,9 +205,10 @@ public class OnlineGameActivity extends BaseGameActivity implements
             partner.getCannonball().getBody().setActive(false);
 
 			this.keyframes = keyframes;
-			this.keyframeIndex = 0;
+			this.keyframeIndex = -1; // because onKeyframe is called at t=0
 			this.timeElapsed = 0;
 			this.timeElapsedSinceKeyframe = 0;
+            this.keyframeInterlpolationDone = false;
 
             //followCamera = ENEMYCANNONBALL;
 		}
@@ -227,11 +230,22 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		}
 
 		@Override
-		public void onKeyframe(float time) {}
+		public void onKeyframe(float time) {
+            if(this.keyframeIndex == this.keyframes.size() - 1) {
+                return;
+            }
+
+            this.keyframeIndex++;
+            this.timeElapsedSinceKeyframe = 0;
+
+            if(this.keyframeIndex == this.keyframes.size() - 1) {
+                this.keyframeInterlpolationDone = true;
+            }
+        }
 
 		@Override
 		public void onUpdate(float dt) {
-			if(this.keyframes == null || this.keyframeIndex+1 >= this.keyframes.size())
+			if(this.keyframes == null || this.keyframeInterlpolationDone)
 				return;
 
 			this.timeElapsed += dt;
@@ -265,15 +279,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
                 block.setKeyframeData(interpolatedKeyframeData);
 
-            }
-
-            if(this.timeElapsed > nextKeyframe.getTimestampSec()) {
-                Log.i("onUpdate", "keyframe " + keyframeIndex + " processed");
-
-                if(this.keyframeIndex+1 < this.keyframes.size())
-                    this.keyframeIndex++;
-
-                this.timeElapsedSinceKeyframe = 0;
             }
 		}
 

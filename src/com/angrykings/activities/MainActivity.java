@@ -1,15 +1,12 @@
 package com.angrykings.activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.preference.PreferenceManager;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -24,14 +21,12 @@ import com.angrykings.ServerConnection;
 import com.angrykings.ServerConnection.OnMessageHandler;
 import com.angrykings.ServerConnection.OnStartHandler;
 import com.angrykings.utils.ServerMessage;
-import com.google.android.gms.games.Game;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.prefs.Preferences;
 
 public class MainActivity extends Activity {
 

@@ -1,8 +1,5 @@
 package com.angrykings.cannons;
 
-import android.util.Log;
-
-import com.angrykings.GameConfig;
 import com.angrykings.GameContext;
 import com.angrykings.PhysicsManager;
 import com.angrykings.ResourceManager;

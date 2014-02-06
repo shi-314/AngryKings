@@ -1,24 +1,16 @@
 package com.angrykings.cannons;
 
-import org.andengine.engine.camera.ZoomCamera;
-import org.andengine.entity.shape.IAreaShape;
-import org.andengine.entity.sprite.Sprite;
-import org.andengine.extension.physics.box2d.PhysicsFactory;
-import org.andengine.extension.physics.box2d.util.Vector2Pool;
-import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
-import org.andengine.opengl.texture.region.TextureRegion;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.angrykings.GameConfig;
 import com.angrykings.GameContext;
-import com.angrykings.IJsonSerializable;
 import com.angrykings.PhysicalEntity;
 import com.angrykings.ResourceManager;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+
+import org.andengine.entity.shape.IAreaShape;
+import org.andengine.entity.sprite.Sprite;
+import org.andengine.extension.physics.box2d.PhysicsFactory;
+import org.andengine.opengl.texture.region.TextureRegion;
 
 /**
  * Cannonball

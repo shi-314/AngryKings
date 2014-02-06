@@ -1,6 +1,7 @@
 package com.angrykings;
 
 import android.util.Log;
+
 import com.angrykings.cannons.Cannon;
 import com.angrykings.cannons.Cannonball;
 import com.angrykings.castles.Castle;
@@ -10,9 +11,7 @@ import com.angrykings.maps.BasicMap;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
-import org.andengine.entity.Entity;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
-import org.andengine.opengl.view.ConfigChooser;
 import org.andengine.ui.activity.BaseGameActivity;
 
 import java.util.ArrayList;

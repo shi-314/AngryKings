@@ -1,15 +1,11 @@
 package com.angrykings;
 
-import org.andengine.entity.Entity;
-import org.andengine.entity.shape.IAreaShape;
-import org.andengine.extension.physics.box2d.PhysicsConnector;
-import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
-import org.andengine.ui.activity.BaseGameActivity;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+
+import org.andengine.entity.shape.IAreaShape;
+import org.andengine.extension.physics.box2d.PhysicsConnector;
+import org.andengine.ui.activity.BaseGameActivity;
 
 /**
  * AngryKings

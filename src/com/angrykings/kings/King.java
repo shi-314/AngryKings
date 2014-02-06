@@ -1,13 +1,13 @@
 package com.angrykings.kings;
 
+import com.angrykings.GameContext;
+
 import org.andengine.entity.Entity;
 import org.andengine.entity.modifier.LoopEntityModifier;
 import org.andengine.entity.modifier.MoveByModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
-
-import com.angrykings.GameContext;
 
 
 /**

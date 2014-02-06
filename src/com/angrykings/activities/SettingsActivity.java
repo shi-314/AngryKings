@@ -3,8 +3,6 @@ package com.angrykings.activities;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
-import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -13,9 +11,6 @@ import com.angrykings.R;
 import com.angrykings.ServerConnection;
 import com.angrykings.utils.ServerMessage;
 
-/**
- * Created by ray on 21.11.13.
- */
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 

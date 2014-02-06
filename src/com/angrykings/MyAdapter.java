@@ -10,7 +10,6 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**

@@ -34,6 +34,6 @@ public class GcmIntentService extends IntentService {
             Log.i("GCM", "receive: " + message);
         }
 
-        // GcmBroadcastReceiver.completeWakefulIntent(intent);
+        GcmBroadcastReceiver.completeWakefulIntent(intent);
     }
 }

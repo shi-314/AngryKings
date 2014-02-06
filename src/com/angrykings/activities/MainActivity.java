@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -14,14 +17,21 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.angrykings.Action;
+import com.angrykings.GameConfig;
 import com.angrykings.Installation;
 import com.angrykings.R;
 import com.angrykings.ServerConnection;
 import com.angrykings.ServerConnection.OnMessageHandler;
 import com.angrykings.ServerConnection.OnStartHandler;
 import com.angrykings.utils.ServerMessage;
+import com.google.android.gms.games.Game;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.prefs.Preferences;
 
 public class MainActivity extends Activity {
 
@@ -31,8 +41,10 @@ public class MainActivity extends Activity {
 	private Button lobbyButton;
 	private Button introButton;
     private Button settingsButton;
+    private GoogleCloudMessaging gcm;
+    private SharedPreferences settings;
 
-	@Override
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -47,31 +59,46 @@ public class MainActivity extends Activity {
 
 		lobbyButton.setEnabled(false);
 
-        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-		ServerConnection.getInstance().setHandler(new OnMessageHandler() {
+        //
+        // init google registration id for our app
+        //
 
-			@Override
-			public void onMessage(String payload) {
-				try {
-					JSONObject jObj = new JSONObject(payload);
-					if (jObj.getInt("action") == Action.Server.KNOWN_USER || jObj.getInt("action") == Action.Server.SEND_NAME) {
-						username = jObj.getString("name");
-                        settings.edit().putString("username", username);
-						lobbyButton.setBackgroundResource(R.drawable.lobby_button);
-						//bLobby.setText(getString(R.string.lobbyButton));
-						lobbyButton.setEnabled(true);
-					} else if (jObj.getInt("action") == Action.Server.UNKNOWN_USER) {
-						Intent intent = new Intent(MainActivity.this,
-								LogInActivity.class);
-						intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-						startActivity(intent);
-					}
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-			}
-		});
+        registerInBackground(new Runnable() {
+            @Override
+            public void run() {
+
+                //
+                // connect to our server
+                //
+
+                ServerConnection.getInstance().setHandler(new OnMessageHandler() {
+
+                    @Override
+                    public void onMessage(String payload) {
+                        try {
+                            JSONObject jObj = new JSONObject(payload);
+                            if (jObj.getInt("action") == Action.Server.KNOWN_USER || jObj.getInt("action") == Action.Server.SEND_NAME) {
+                                username = jObj.getString("name");
+                                settings.edit().putString("username", username).commit();
+                                lobbyButton.setBackgroundResource(R.drawable.lobby_button);
+                                //bLobby.setText(getString(R.string.lobbyButton));
+                                lobbyButton.setEnabled(true);
+                            } else if (jObj.getInt("action") == Action.Server.UNKNOWN_USER) {
+                                Intent intent = new Intent(MainActivity.this,
+                                        LogInActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                startActivity(intent);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+            }
+        });
 
 		if(!ServerConnection.getInstance().isConnected()){
             final String id = Installation.id(this);
@@ -129,19 +156,79 @@ public class MainActivity extends Activity {
                 startActivity(intent);
             }
         });
+
+
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		//getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
 
     @Override
     protected void onResume() {
         super.onResume();
-        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         username = settings.getString("username", "");
+    }
+
+    /**
+     * Registers the application with GCM servers asynchronously.
+     *
+     * Stores the registration ID in the application's
+     * shared preferences.
+     */
+    private void registerInBackground(final Runnable onDone) {
+
+        //
+        // TODO: Google refreshes their registration ids periodically. Handle changing  IDs :(
+        //
+
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                String registrationId = settings.getString("registrationId", null);
+
+                if(registrationId != null) {
+                    Log.i("GCM", "Device already registered with ID: "+registrationId);
+                    return registrationId;
+                }
+
+                String msg = "";
+
+                try {
+                    if (gcm == null) {
+                        gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
+                    }
+
+                    registrationId = gcm.register(GameConfig.GOOGLE_API_PROJECT_ID);
+
+                    msg = "Registered, registration ID=" + registrationId;
+
+                    Log.i("GCM", msg);
+                    settings.edit().putString("registrationId", registrationId).commit();
+                } catch (IOException ex) {
+                    msg = "Error :" + ex.getMessage();
+
+                    Log.i("GCM", "Registration failed, try again in " + GameConfig.GOOGLE_API_REGISTRATION_DELAY_MILLISEC + "ms");
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            registerInBackground(onDone);
+                        }
+                    }, GameConfig.GOOGLE_API_REGISTRATION_DELAY_MILLISEC);
+                }
+
+                return msg;
+            }
+
+            @Override
+            protected void onPostExecute(String msg) {
+                if(onDone != null)
+                    onDone.run();
+
+            }
+        }.execute(null, null, null);
     }
 }

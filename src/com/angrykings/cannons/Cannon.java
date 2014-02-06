@@ -41,6 +41,8 @@ public class Cannon extends Entity {
 				rm.getAimCircleTexture(),
 				gc.getVboManager()
 		);
+
+        this.aimCircleSprite.setAlpha(0.5f);
 		
 		this.attachChild(this.barrelSprite);
 		this.attachChild(this.wheelSprite);

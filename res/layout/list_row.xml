@@ -1,43 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+                xmlns:tools="http://schemas.android.com/tools" android:orientation="horizontal"
     android:layout_width="fill_parent"
-    android:layout_height="40dp"
-    android:padding="8dp">
+    android:layout_height="wrap_content"
+    android:padding="8dp" tools:context=".activities.LobbyActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/spielername"
-        android:layout_alignParentLeft="true"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="50dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp" android:textColor="#FFFFFF"
+        android:text="Ray the Dummy :D" android:layout_centerVertical="true"/>
 
     <LinearLayout
         android:id="@+id/win_lose"
         android:orientation="horizontal"
-        android:layout_width="400dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
-        android:gravity="center">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true" android:layout_alignParentRight="false"
+        android:layout_alignParentEnd="false" android:gravity="right">
 
         <LinearLayout
+            android:orientation="horizontal"
             android:id="@+id/win"
-            android:layout_height="wrap_content"
-            android:layout_width="1dp"
-            android:background="#00ff00"
+            android:layout_height="16dp"
+            android:layout_width="50dp"
+            android:background="#6600ff00"
             android:padding="4dp">
 
             </LinearLayout>
 
         <LinearLayout
+            android:orientation="horizontal"
             android:id="@+id/lose"
-            android:layout_height="wrap_content"
-            android:layout_width="1dp"
-            android:background="#ff0000"
+            android:layout_height="16dp"
+            android:layout_width="50dp"
+            android:background="#66FF0000"
             android:padding="4dp">
 
             </LinearLayout>

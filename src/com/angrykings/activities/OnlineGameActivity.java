@@ -98,6 +98,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	private ServerConnection serverConnection;
 	int aimX, aimY;
 	boolean isLeft;
+    JSONObject data;
 
 	GameStatus status;
     private BasicMap map;
@@ -108,11 +109,11 @@ public class OnlineGameActivity extends BaseGameActivity implements
 		public void onMessage(String payload) {
 			try {
 				JSONObject jObj = new JSONObject(payload);
+
+
 				if (jObj.getInt("action") == Action.Server.TURN) {
 
-					turn();
-
-				}else if (jObj.getInt("action") == Action.Server.END_TURN) {
+                    Log.d("fuer Shivan 2", jObj.toString());
 
 					final int x = Integer.parseInt(jObj.getString("x"));
 					final int y = Integer.parseInt(jObj.getString("y"));
@@ -133,8 +134,9 @@ public class OnlineGameActivity extends BaseGameActivity implements
 					}
 
 					partner.handleTurn(x, y, keyframes);
+                    turn();
 
-				} else if (jObj.getInt("action") == Action.Server.YOU_WIN || jObj.getInt("action") == Action.Server.PARTNER_LEFT) {
+                } else if (jObj.getInt("action") == Action.Server.YOU_WIN) {
 
 					won();
 
@@ -225,7 +227,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
             //followCamera = MIDDLE;
 
 //			if(status != GameStatus.LOST)
-//				serverConnection.sendTextMessage(ServerMessage.ready());
 		}
 
 		@Override
@@ -374,6 +375,8 @@ public class OnlineGameActivity extends BaseGameActivity implements
 			myName = extras.getString("username");
 			partnerName = extras.getString("partnername");
 
+
+
 			Log.i(getClass().getName(), "this client is " + (isLeft ? "left" : "right"));
 		}
 
@@ -474,9 +477,45 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 		pOnCreateSceneCallback.onCreateSceneFinished(scene);
 
-//		this.serverConnection.sendTextMessage(ServerMessage.ready());
-		hud.setStatus(this.getString(R.string.yourTurn));
-	}
+        turn();
+        if (extras != null){
+
+            if(extras.getBoolean("existingGame")){
+                try{
+                    data = new JSONObject(extras.getString("data"));
+
+                    final int x = Integer.parseInt(data.getString("x"));
+                    final int y = Integer.parseInt(data.getString("y"));
+
+                    ArrayList<Keyframe> keyframes = null;
+
+                    if(data.has("keyframes")) {
+
+                        JSONArray jsonKeyframes = data.getJSONArray("keyframes");
+                        keyframes = new ArrayList<Keyframe>();
+
+                        for(int i = 0; i < jsonKeyframes.length(); ++i) {
+                            keyframes.add(new Keyframe(jsonKeyframes.getJSONObject(i)));
+                        }
+
+                        Log.i(getClass().getName(), "received "+keyframes.size()+" keyframes");
+                    } else {
+                        Log.i(getClass().getName(), "received 0 keyframes");
+                    }
+
+                    partner.handleTurn(x, y, keyframes);
+                    turn();
+
+
+                }catch (JSONException e) {
+                    Log.e("JSON Parser", "Online Game Activity Error parsing data " + e.toString());
+                }
+
+                Log.d("data", extras.getString("data"));
+            }
+
+        }
+    }
 
     private void deactivateFollowCamera(String s) {
         ZoomCamera camera = (ZoomCamera) gc.getCamera();

@@ -18,7 +18,7 @@ public class Wood extends PhysicalEntity {
 	protected final Sprite woodSprite;
 	protected final Body woodBody;
 
-	public final static FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.1f, 0.05f, 0.8f);
+	public final static FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.05f, 0.2f, 0.8f);
 
 	private final static float LINEAR_DAMPING = 0.1f;
 	private final static float ANGULAR_DAMPING = 0.1f;

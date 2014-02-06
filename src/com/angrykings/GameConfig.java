@@ -39,4 +39,6 @@ public final class GameConfig {
     //public static final String WEBSERVICE_URI = "ws://spaeti.pavo.uberspace.de:62937";
 	public static final int WEBSOCKET_MAX_PAYLOAD_SIZE = 1024*1024*6;
 	public static final int WEBSOCKET_MAX_FRAME_SIZE = 1024*1024*10;
+
+    public static final String GOOGLE_API_PROJECT_ID = "310404634133";
 }

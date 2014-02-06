@@ -34,7 +34,7 @@ public final class GameConfig {
 	public static final float CANNON_FORCE = 15;
 	public static final float CANNONBALL_TIME_SEC = 5.0f;
 
-	public static final String WEBSERVICE_URI = "ws://141.64.162.169:8008";
+//	public static final String WEBSERVICE_URI = "ws://141.64.162.169:8008";
     //public static final String WEBSERVICE_URI = "ws://spaeti.pavo.uberspace.de:61224";
 //    public static final String WEBSERVICE_URI = "ws://spaeti.pavo.uberspace.de:62937";
     public static final String WEBSERVICE_URI = "ws://141.64.168.5:62937";

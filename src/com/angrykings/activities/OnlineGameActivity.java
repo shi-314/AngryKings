@@ -113,28 +113,28 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 				if (jObj.getInt("action") == Action.Server.TURN) {
 
-                    Log.d("fuer Shivan 2", jObj.toString());
+                    continuePlaying(jObj);
 
-					final int x = Integer.parseInt(jObj.getString("x"));
-					final int y = Integer.parseInt(jObj.getString("y"));
-
-					ArrayList<Keyframe> keyframes = null;
-
-					if(jObj.has("keyframes")) {
-						JSONArray jsonKeyframes = jObj.getJSONArray("keyframes");
-						keyframes = new ArrayList<Keyframe>();
-
-						for(int i = 0; i < jsonKeyframes.length(); ++i) {
-							keyframes.add(new Keyframe(jsonKeyframes.getJSONObject(i)));
-						}
-
-						Log.i(getClass().getName(), "received "+keyframes.size()+" keyframes");
-					} else {
-						Log.i(getClass().getName(), "received 0 keyframes");
-					}
-
-					partner.handleTurn(x, y, keyframes);
-                    turn();
+//					final int x = Integer.parseInt(jObj.getString("x"));
+//					final int y = Integer.parseInt(jObj.getString("y"));
+//
+//					ArrayList<Keyframe> keyframes = null;
+//
+//					if(jObj.has("keyframes")) {
+//						JSONArray jsonKeyframes = jObj.getJSONArray("keyframes");
+//						keyframes = new ArrayList<Keyframe>();
+//
+//						for(int i = 0; i < jsonKeyframes.length(); ++i) {
+//							keyframes.add(new Keyframe(jsonKeyframes.getJSONObject(i)));
+//						}
+//
+//						Log.i(getClass().getName(), "received "+keyframes.size()+" keyframes");
+//					} else {
+//						Log.i(getClass().getName(), "received 0 keyframes");
+//					}
+//
+//					partner.handleTurn(x, y, keyframes);
+//                    turn();
 
                 } else if (jObj.getInt("action") == Action.Server.YOU_WIN) {
 
@@ -481,38 +481,45 @@ public class OnlineGameActivity extends BaseGameActivity implements
         if (extras != null){
 
             if(extras.getBoolean("existingGame")){
-                try{
-                    data = new JSONObject(extras.getString("data"));
 
-                    final int x = Integer.parseInt(data.getString("x"));
-                    final int y = Integer.parseInt(data.getString("y"));
-
-                    ArrayList<Keyframe> keyframes = null;
-
-                    if(data.has("keyframes")) {
-
-                        JSONArray jsonKeyframes = data.getJSONArray("keyframes");
-                        keyframes = new ArrayList<Keyframe>();
-
-                        for(int i = 0; i < jsonKeyframes.length(); ++i) {
-                            keyframes.add(new Keyframe(jsonKeyframes.getJSONObject(i)));
-                        }
-
-                        Log.i(getClass().getName(), "received "+keyframes.size()+" keyframes");
-                    } else {
-                        Log.i(getClass().getName(), "received 0 keyframes");
-                    }
-
-                    partner.handleTurn(x, y, keyframes);
-                    turn();
-
-
-                }catch (JSONException e) {
-                    Log.e("JSON Parser", "Online Game Activity Error parsing data " + e.toString());
-                }
+                JSONObject data_you = new JSONObject(extras.getString("data_you"));
+                JSONObject data_opponent = new JSONObject(extras.getString("data_opponent"));
+                if(data_you.length() > 1)
+                    continuePlaying(data_you);
+                if(data_opponent.length() > 1)
+                    continuePlaying(data_opponent);
 
                 Log.d("data", extras.getString("data"));
             }
+
+        }
+    }
+
+    private void continuePlaying(JSONObject jObj){
+        try{
+            final int x = Integer.parseInt(jObj.getString("x"));
+            final int y = Integer.parseInt(jObj.getString("y"));
+
+            ArrayList<Keyframe> keyframes = null;
+
+            if(jObj.has("keyframes")) {
+                JSONArray jsonKeyframes = jObj.getJSONArray("keyframes");
+                keyframes = new ArrayList<Keyframe>();
+
+                for(int i = 0; i < jsonKeyframes.length(); ++i) {
+                    keyframes.add(new Keyframe(jsonKeyframes.getJSONObject(i)));
+                }
+
+                Log.i(getClass().getName(), "received "+keyframes.size()+" keyframes");
+            } else {
+                Log.i(getClass().getName(), "received 0 keyframes");
+            }
+
+            partner.handleTurn(x, y, keyframes);
+            turn();
+        }catch (JSONException e) {
+
+            Log.w(getClass().getName(), "JSONException: " + e);
 
         }
     }

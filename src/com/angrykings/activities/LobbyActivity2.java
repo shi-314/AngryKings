@@ -62,8 +62,6 @@ public class LobbyActivity2 extends Activity {
                                                 intent.putExtra("username", username);
                                                 intent.putExtra("partnername", partner.name);
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-//                                        intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY);
-                                                // TODO what is that flag?
                                                 startActivity(intent);
                                             } else if (jObj.getInt("action") == Action.Server.EXISTING_GAME) {
                                                 dialog.dismiss();
@@ -73,14 +71,11 @@ public class LobbyActivity2 extends Activity {
                                                 intent.putExtra("left", jObj.getJSONObject("you").getBoolean("left"));
                                                 intent.putExtra("username", username);
                                                 intent.putExtra("partnername", partner.name);
-                                                if (!jObj.getJSONObject("you").getJSONArray("data").toString().equals("[]")) {
-                                                    Log.d("fuer Shivan", jObj.getJSONObject("you").getJSONObject("data").toString());
-                                                    intent.putExtra("data", jObj.getJSONObject("you").getJSONObject("data").toString());
-                                                } else {
-                                                    Log.d("fuer Shivan", "jetzt ist es leer");
-                                                   intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-//                                        intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY);
-                                                // TODO what is that flag?
+                                                Log.d("fuer shivan you", jObj.getJSONObject("you").getJSONObject("data").toString());
+                                                Log.d("fuer shivan opponent", jObj.getJSONObject("opponent").getJSONObject("data").toString());
+                                                intent.putExtra("data_you", jObj.getJSONObject("you").getJSONObject("data").toString());
+                                                intent.putExtra("data_opponent", jObj.getJSONObject("opponent").getJSONObject("data").toString());
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                                                 startActivity(intent);
                                             }
                                         } catch (JSONException e) {

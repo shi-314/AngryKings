@@ -19,7 +19,7 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
 
         if (extras != null) {
 
-
+            
 
         }
 

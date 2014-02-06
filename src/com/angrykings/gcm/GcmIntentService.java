@@ -30,6 +30,8 @@ public class GcmIntentService extends IntentService {
             if (!GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType))
                 return;
 
+            String message = extras.getString("msg");
+            Log.i("GCM", "receive: " + message);
         }
 
         // GcmBroadcastReceiver.completeWakefulIntent(intent);

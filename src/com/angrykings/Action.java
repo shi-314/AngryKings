@@ -28,5 +28,6 @@ public class Action {
 		public static final int GET_NAME = 2006;
 		public static final int END_TURN = 2007;
 		public static final int LEAVE_LOBBY = 2008;
+        public static final int LEAVE_GAME = 2009;
 	}
 }

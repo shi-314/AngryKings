@@ -17,10 +17,6 @@ public class ServerMessage {
 
 	}
 
-	public static String lose() {
-		return  new ServerJSONBuilder().create(Action.Client.LOSE).build();
-	}
-
 	// TODO: send keyframes
 	public static String endTurn(int x, int y, ArrayList<Keyframe> keyframes) {
 		JSONArray keyframesJson = new JSONArray();
@@ -47,6 +43,10 @@ public class ServerMessage {
 		return msg.toString();
 	}
 
+    public static String lose() {
+        return  new ServerJSONBuilder().create(Action.Client.LOSE).build();
+    }
+
 	public static String setId(String id) {
 		return new ServerJSONBuilder().create(Action.Client.SET_ID).option("id", id).build();
 	}
@@ -70,4 +70,8 @@ public class ServerMessage {
 	public static String enterGame(int partnerName) {
 		return new ServerJSONBuilder().create(Action.Client.ENTER_GAME).integer("partner", partnerName).build();
 	}
+
+    public static String leaveGame() {
+        return new ServerJSONBuilder().create(Action.Client.LEAVE_GAME).build();
+    }
 }

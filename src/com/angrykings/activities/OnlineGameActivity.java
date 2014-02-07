@@ -731,7 +731,33 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-			resign();
+            final Dialog dialog = new Dialog(OnlineGameActivity.this);
+            dialog.setContentView(R.layout.quit_dialog);
+            dialog.setCancelable(true);
+            dialog.getWindow().setBackgroundDrawable(
+                    new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+            Button bCancel = (Button) dialog.findViewById(R.id.bCancel);
+            Button bResign = (Button) dialog.findViewById(R.id.bResign);
+
+            bCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            bResign.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    serverConnection.sendTextMessage(ServerMessage.leaveGame());
+                    dialog.dismiss();
+                    Intent intent = new Intent(OnlineGameActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    startActivity(intent);
+                }
+            });
+            dialog.show();
 			return true;
 		}
 

@@ -1,24 +1,23 @@
 package com.angrykings.castles;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import android.util.Log;
 
+import com.angrykings.GameContext;
 import com.angrykings.IJsonSerializable;
 import com.angrykings.KeyframeData;
-import com.badlogic.gdx.physics.box2d.Body;
-import org.andengine.opengl.texture.region.TextureRegion;
-import org.andengine.opengl.texture.region.TiledTextureRegion;
-
-import com.angrykings.GameContext;
 import com.angrykings.PhysicalEntity;
 import com.angrykings.PhysicsManager;
 import com.angrykings.ResourceManager;
 import com.angrykings.maps.BasicMap;
+import com.badlogic.gdx.physics.box2d.Body;
 
+import org.andengine.opengl.texture.region.TextureRegion;
+import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Castle

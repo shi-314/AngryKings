@@ -27,7 +27,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LobbyActivity2 extends Activity {
+
+public class LobbyActivity extends Activity {
 
     private ListView lobbyList;
 
@@ -36,7 +37,7 @@ public class LobbyActivity2 extends Activity {
     private List<LobbyPlayer> lobbyPlayers;
 
     private void challengePlayer(final LobbyPlayer partner) {
-        new AlertDialog.Builder(LobbyActivity2.this)
+        new AlertDialog.Builder(LobbyActivity.this)
                 .setTitle("Challenge")
                 .setMessage(partner.name + " herausfordern?")
                 .setPositiveButton("Klar!",
@@ -56,7 +57,7 @@ public class LobbyActivity2 extends Activity {
                                             if (jObj.getInt("action") == Action.Server.NEW_GAME) {
                                                 dialog.dismiss();
 
-                                                Intent intent = new Intent(LobbyActivity2.this, OnlineGameActivity.class);
+                                                Intent intent = new Intent(LobbyActivity.this, OnlineGameActivity.class);
                                                 intent.putExtra("existingGame", false);
                                                 intent.putExtra("left", false);
                                                 intent.putExtra("username", username);
@@ -66,7 +67,7 @@ public class LobbyActivity2 extends Activity {
                                             } else if (jObj.getInt("action") == Action.Server.EXISTING_GAME) {
                                                 dialog.dismiss();
 
-                                                Intent intent = new Intent(LobbyActivity2.this, OnlineGameActivity.class);
+                                                Intent intent = new Intent(LobbyActivity.this, OnlineGameActivity.class);
                                                 intent.putExtra("existingGame", true);
                                                 intent.putExtra("left", jObj.getJSONObject("you").getBoolean("left"));
                                                 intent.putExtra("username", username);

@@ -1,18 +1,16 @@
 package com.angrykings;
 
-import android.graphics.drawable.shapes.RoundRectShape;
-
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.Entity;
-import org.andengine.entity.IEntity;
-import org.andengine.entity.modifier.*;
+import org.andengine.entity.modifier.AlphaModifier;
+import org.andengine.entity.modifier.DelayModifier;
+import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.font.Font;
 import org.andengine.util.color.Color;
-import org.andengine.util.modifier.IModifier;
 
 /**
  * GameHUD

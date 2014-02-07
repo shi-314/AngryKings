@@ -1,19 +1,14 @@
 package com.angrykings.maps;
 
-import org.andengine.entity.Entity;
-import org.andengine.entity.primitive.Rectangle;
-import org.andengine.entity.scene.background.ParallaxBackground;
-import org.andengine.entity.sprite.Sprite;
-import org.andengine.entity.sprite.TiledSprite;
-import org.andengine.extension.physics.box2d.PhysicsFactory;
-
 import com.angrykings.GameContext;
 import com.angrykings.ResourceManager;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
-import java.util.ArrayList;
+import org.andengine.entity.Entity;
+import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.sprite.Sprite;
+import org.andengine.extension.physics.box2d.PhysicsFactory;
 
 /**
  * AngryKings

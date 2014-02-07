@@ -5,8 +5,6 @@ package com.angrykings;
  *
  * This class has public static final attributes that declare constants for the game.
  *
- * @author Shivan Taher <zn31415926535@gmail.com>
- * @date 06.06.13
  */
 
 public final class GameConfig {
@@ -31,13 +29,15 @@ public final class GameConfig {
 	public static final int PHYSICS_POSITION_ITERATION = 5;
 	public static final int PHYSICS_MAX_STEPS_PER_UPDATE = 1;
 
-	public static final float CANNON_FORCE = 15;
+	public static final float CANNON_FORCE = 12;
 	public static final float CANNONBALL_TIME_SEC = 5.0f;
 
-//	public static final String WEBSERVICE_URI = "ws://141.64.162.169:8008";
+	//public static final String WEBSERVICE_URI = "ws://141.64.167.170:8008";
     //public static final String WEBSERVICE_URI = "ws://spaeti.pavo.uberspace.de:61224";
-//    public static final String WEBSERVICE_URI = "ws://spaeti.pavo.uberspace.de:62937";
-    public static final String WEBSERVICE_URI = "ws://johanns-mbp:62937";
+    public static final String WEBSERVICE_URI = "ws://spaeti.pavo.uberspace.de:62937";
 	public static final int WEBSOCKET_MAX_PAYLOAD_SIZE = 1024*1024*6;
 	public static final int WEBSOCKET_MAX_FRAME_SIZE = 1024*1024*10;
+
+    public static final String GOOGLE_API_PROJECT_ID = "310404634133";
+    public static final int GOOGLE_API_REGISTRATION_DELAY_MILLISEC = 3000; // when the first attempt fails
 }

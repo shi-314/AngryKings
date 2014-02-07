@@ -1,9 +1,6 @@
 package com.angrykings;
 
-import android.graphics.Bitmap;
 import android.graphics.Color;
-
-import com.angrykings.maps.BasicMap;
 
 import org.andengine.entity.scene.background.RepeatingSpriteBackground;
 import org.andengine.entity.sprite.Sprite;

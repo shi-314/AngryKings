@@ -7,6 +7,7 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.VideoView;
+
 import com.angrykings.R;
 
 public class IntroActivity extends Activity{

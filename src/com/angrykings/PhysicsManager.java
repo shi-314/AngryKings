@@ -1,9 +1,11 @@
 package com.angrykings;
 
 import android.hardware.SensorManager;
+
 import com.angrykings.maps.BasicMap;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;

@@ -18,7 +18,7 @@
     <LinearLayout
         android:id="@+id/win_lose"
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true" android:layout_alignParentRight="false"
         android:layout_alignParentEnd="false" android:gravity="right">

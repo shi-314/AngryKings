@@ -1,10 +1,5 @@
 package com.angrykings.castles;
 
-import org.andengine.entity.shape.IAreaShape;
-import org.andengine.entity.sprite.Sprite;
-import org.andengine.extension.physics.box2d.PhysicsFactory;
-import org.andengine.opengl.texture.region.TextureRegion;
-
 import com.angrykings.GameContext;
 import com.angrykings.PhysicalEntity;
 import com.angrykings.ResourceManager;
@@ -12,13 +7,18 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
+import org.andengine.entity.shape.IAreaShape;
+import org.andengine.entity.sprite.Sprite;
+import org.andengine.extension.physics.box2d.PhysicsFactory;
+import org.andengine.opengl.texture.region.TextureRegion;
+
 public class Wood extends PhysicalEntity {
 
 	protected final TextureRegion woodTexture;
 	protected final Sprite woodSprite;
 	protected final Body woodBody;
 
-	public final static FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.1f, 0.05f, 0.8f);
+	public final static FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0.05f, 0.2f, 0.8f);
 
 	private final static float LINEAR_DAMPING = 0.1f;
 	private final static float ANGULAR_DAMPING = 0.1f;

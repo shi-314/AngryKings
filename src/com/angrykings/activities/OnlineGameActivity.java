@@ -342,7 +342,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 		Scene scene = new Scene();
 
-        parallaxBackground = new AngryParallaxBackground(0f, 0f, 0f, 1f);
+        parallaxBackground = new AngryParallaxBackground(0f, 0f, 0f, 0.5f);
         parallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(0f, rm.getBackgroundSprite()));
 
         parallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(20f, new Sprite(0, 0, rm.getParallax2(), gc.getVboManager())));

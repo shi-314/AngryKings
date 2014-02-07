@@ -1,9 +1,8 @@
 package com.angrykings.activities;
 
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
-import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -19,7 +18,11 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
         addPreferencesFromResource(R.xml.preferences);
+        setContentView(R.layout.activity_preferences);
         final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         settings.registerOnSharedPreferenceChangeListener(this);
     }

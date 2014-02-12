@@ -162,6 +162,19 @@ public class GameActivity extends BaseGameActivity implements
         scene.registerUpdateHandler(me);
         scene.registerUpdateHandler(partner);
 
+        hud.setOnWhiteFlagTouched(new Runnable() {
+            @Override
+            public void run() {
+                onResignDialog();
+            }
+        });
+
+        scene.setOnSceneTouchListener(this);
+        scene.setTouchAreaBindingOnActionDownEnabled(true);
+        scene.registerUpdateHandler(PhysicsManager.getInstance().getPhysicsWorld());
+
+        hud.setStatus(getString(R.string.yourTurn));
+
     }
 
     @Override
@@ -230,31 +243,6 @@ public class GameActivity extends BaseGameActivity implements
         hud.setStatus(getString(R.string.enteringGame));
 
         pOnCreateSceneCallback.onCreateSceneFinished(scene);
-
-    }
-
-    protected void resume() {
-
-        hud.setOnWhiteFlagTouched(new Runnable() {
-            @Override
-            public void run() {
-                onResignDialog();
-            }
-        });
-
-        scene.setOnSceneTouchListener(this);
-        scene.setTouchAreaBindingOnActionDownEnabled(true);
-        scene.registerUpdateHandler(PhysicsManager.getInstance().getPhysicsWorld());
-
-        hud.setStatus(getString(R.string.yourTurn));
-    }
-
-    protected void pause() {
-
-        hud.setOnWhiteFlagTouched(null);
-        scene.setOnSceneTouchListener(null);
-        scene.setOnAreaTouchListener(null);
-        scene.clearUpdateHandlers();
 
     }
 

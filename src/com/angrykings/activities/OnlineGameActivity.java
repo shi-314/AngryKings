@@ -273,7 +273,6 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
                 this.me.setPlayerTurnListener(new MyTurnListener());
                 this.partner.setPlayerTurnListener(new PartnerTurnListener());
 
-                resume();
                 turn();
 
             }
@@ -305,8 +304,6 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
                     partner.getCastle().setKeyframeData(lastFrame.getCastleKeyframeData());
                 }
 
-
-                resume();
                 turn();
 
             }
@@ -342,7 +339,6 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
         } else {
             enterGame();
         }
-
 
     }
 

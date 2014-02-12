@@ -18,7 +18,7 @@ import org.andengine.extension.physics.box2d.PhysicsFactory;
  */
 public class BasicMap extends Entity {
 
-	public static final float GROUND_X = -1000;
+	public static final float GROUND_X = -1500;
 	public static final float GROUND_Y = 1050;
 
     private Sprite ground;

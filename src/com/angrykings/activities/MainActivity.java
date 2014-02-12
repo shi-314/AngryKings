@@ -206,13 +206,18 @@ public class MainActivity extends Activity {
 
                     Log.i("GCM", "Registration failed, try again in " + GameConfig.GOOGLE_API_REGISTRATION_DELAY_MILLISEC + "ms");
 
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            registerInBackground(onDone);
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    registerInBackground(onDone);
+                                }
+                            }, GameConfig.GOOGLE_API_REGISTRATION_DELAY_MILLISEC);
                         }
-                    }, GameConfig.GOOGLE_API_REGISTRATION_DELAY_MILLISEC);
+                    });
                 }
 
                 return msg;

@@ -52,7 +52,6 @@ public class GcmIntentService extends IntentService {
 
         Intent intent = new Intent(context, OnlineGameActivity.class);
         intent.putExtra("existingGame", true);
-        intent.putExtra("blablabla", "MMMMUUUUUH");
         intent.putExtra("partnerId", partnerId);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);

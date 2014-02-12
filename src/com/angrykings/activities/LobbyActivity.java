@@ -50,7 +50,7 @@ public class LobbyActivity extends Activity {
                             @Override
                             public void onClick(final DialogInterface dialog, final int which) {
                                 Intent intent = new Intent(LobbyActivity.this, OnlineGameActivity.class);
-                                intent.putExtra("partnerId", partner.id);
+                                intent.putExtra("partnerId", String.valueOf(partner.id));
                                 startActivity(intent);
                             }
                         })

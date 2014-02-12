@@ -463,4 +463,5 @@ public class GameActivity extends BaseGameActivity implements
             Debug.d(this.getClass().getSimpleName() + ".onPauseGame lalala" + " @(Thread: '" + Thread.currentThread().getName() + "')");
         }
     }
+
 }

@@ -286,18 +286,37 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
         // TODO: Handle existing game intent
         //
 
+        Log.i(TAG, "connected="+this.serverConnection.isConnected());
+
+        if(!this.serverConnection.isConnected())
+            this.serverConnection.start(new ServerConnection.OnStartHandler() {
+                @Override
+                public void onStart() {
+                    enterGame();
+                }
+            });
+        else
+            enterGame();
+
+
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+    }
+
+    private void enterGame() {
+        Log.i(TAG, "enterGame");
         Bundle extras = getIntent().getExtras();
         String partnerIdStr = extras.getString("partnerId");
 
         Log.i(TAG, "entering game with partnerId="+partnerIdStr);
         Log.i(TAG, "EXTRAS=" + extras.toString());
 
-        if(partnerIdStr == null)
-            throw new Exception("partner id is null, bitch!");
-
         Log.i(TAG, "serverConnection=" + this.serverConnection);
         this.serverConnection.sendTextMessage(ServerMessage.enterGame(Integer.valueOf(partnerIdStr)));
-
     }
 
     private void deactivateFollowCamera(String s) {

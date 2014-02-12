@@ -1,55 +1,21 @@
 package com.angrykings.activities;
 
-import android.app.Dialog;
-import android.content.Intent;
-import android.content.ServiceConnection;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Button;
 
 import com.angrykings.Action;
-import com.angrykings.AngryParallaxBackground;
-import com.angrykings.BuildConfig;
 import com.angrykings.GameConfig;
-import com.angrykings.GameContext;
-import com.angrykings.GameHUD;
 import com.angrykings.GameStatus;
 import com.angrykings.IPlayerTurnListener;
 import com.angrykings.Keyframe;
 import com.angrykings.KeyframeData;
 import com.angrykings.PhysicalEntity;
 import com.angrykings.PhysicsManager;
-import com.angrykings.Player;
 import com.angrykings.R;
-import com.angrykings.ResourceManager;
 import com.angrykings.ServerConnection;
 import com.angrykings.cannons.Cannonball;
-import com.angrykings.castles.Castle;
-import com.angrykings.maps.BasicMap;
 import com.angrykings.utils.ServerMessage;
 
 import org.andengine.engine.camera.ZoomCamera;
-import org.andengine.engine.handler.IUpdateHandler;
-import org.andengine.engine.options.EngineOptions;
-import org.andengine.engine.options.ScreenOrientation;
-import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
-import org.andengine.entity.scene.IOnSceneTouchListener;
-import org.andengine.entity.scene.Scene;
-import org.andengine.entity.scene.background.ParallaxBackground;
-import org.andengine.entity.sprite.Sprite;
-import org.andengine.entity.util.FPSLogger;
-import org.andengine.input.touch.TouchEvent;
-import org.andengine.input.touch.detector.PinchZoomDetector;
-import org.andengine.input.touch.detector.PinchZoomDetector.IPinchZoomDetectorListener;
-import org.andengine.input.touch.detector.ScrollDetector;
-import org.andengine.input.touch.detector.ScrollDetector.IScrollDetectorListener;
-import org.andengine.input.touch.detector.SurfaceScrollDetector;
-import org.andengine.ui.activity.BaseGameActivity;
-import org.andengine.util.debug.Debug;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -130,22 +96,18 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
 	private class PartnerTurnListener implements IPlayerTurnListener {
 		private ArrayList<Keyframe> keyframes;
 		private int keyframeIndex;
-		private float timeElapsed;
 		private float timeElapsedSinceKeyframe;
-        private boolean keyframeInterlpolationDone;
+        private boolean keyframeInterpolationDone;
 
 		@Override
 		public void onHandleTurn(int x, int y, ArrayList<Keyframe> keyframes) {
 			partner.getCannon().pointAt(x, y);
-			//me.getCastle().unfreeze();
-
             partner.getCannonball().getBody().setActive(false);
 
 			this.keyframes = keyframes;
 			this.keyframeIndex = -1; // because onKeyframe is called at t=0
-			this.timeElapsed = 0;
 			this.timeElapsedSinceKeyframe = 0;
-            this.keyframeInterlpolationDone = false;
+            this.keyframeInterpolationDone = false;
 
             //followCamera = ENEMYCANNONBALL;
 		}
@@ -175,16 +137,15 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
             this.timeElapsedSinceKeyframe = 0;
 
             if(this.keyframeIndex == this.keyframes.size() - 1) {
-                this.keyframeInterlpolationDone = true;
+                this.keyframeInterpolationDone = true;
             }
         }
 
 		@Override
 		public void onUpdate(float dt) {
-			if(this.keyframes == null || this.keyframeInterlpolationDone)
+			if(this.keyframes == null || this.keyframeInterpolationDone)
 				return;
 
-			this.timeElapsed += dt;
 			this.timeElapsedSinceKeyframe += dt;
 
             Keyframe currentKeyframe = this.keyframes.get(this.keyframeIndex);
@@ -267,7 +228,7 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
 
         }
     }
-    
+
 	@Override
 	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws Exception {
 

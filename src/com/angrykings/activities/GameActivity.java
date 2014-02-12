@@ -203,7 +203,7 @@ public class GameActivity extends BaseGameActivity implements
         hud.setOnWhiteFlagTouched(new Runnable() {
             @Override
             public void run() {
-                onResign();
+                onResignDialog();
             }
         });
 

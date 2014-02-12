@@ -392,7 +392,7 @@ public class OnlineGameActivity extends GameActivity {
     @Override
 	protected void onResign() {
         super.onResign();
-        
+
         hud.setStatus(getString(R.string.youResigned));
         serverConnection.sendTextMessage(ServerMessage.lose());
 

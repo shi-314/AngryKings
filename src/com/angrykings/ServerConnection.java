@@ -97,13 +97,13 @@ public class ServerConnection {
 	 */
 	public void sendTextMessage(String payload) {
 
-		this.connection.sendTextMessage(payload);
-
         int length = payload.length();
         if (length > 128)
             Log.i(TAG, "sent " + length + " bytes: " + payload.substring(0, 128) + " ...");
         else
             Log.i(TAG, "sent " + length + " bytes: " + payload);
+
+		this.connection.sendTextMessage(payload);
 
 	}
 

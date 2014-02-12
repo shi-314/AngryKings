@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.angrykings.Action;
 import com.angrykings.GameConfig;
@@ -24,6 +23,7 @@ import com.angrykings.cannons.Cannonball;
 import com.angrykings.utils.ServerMessage;
 
 import org.andengine.engine.camera.ZoomCamera;
+import org.andengine.engine.options.EngineOptions;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -312,11 +312,16 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
     }
 
     @Override
-    public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws Exception {
+    public EngineOptions onCreateEngineOptions() {
+        this.serverConnection = ServerConnection.getInstance();
+        return super.onCreateEngineOptions();
+    }
+
+    @Override
+	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws Exception {
 
         super.onCreateScene(pOnCreateSceneCallback);
 
-        this.serverConnection = ServerConnection.getInstance();
         this.serverConnection.setHandler(this);
 
         //
@@ -324,16 +329,16 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
         //
 
         Bundle extras = getIntent().getExtras();
+        String partnerIdStr = extras.getString("partnerId");
 
-        int partnerId = extras.getInt("partnerId");
-
-        Log.i(TAG, "entering game with partnerId=" + partnerId);
+        Log.i(TAG, "entering game with partnerId="+partnerIdStr);
         Log.i(TAG, "EXTRAS=" + extras.toString());
 
-        if (partnerId == 0)
-            throw new Exception("partner id is 0, bitch!");
+        if(partnerIdStr == null)
+            throw new Exception("partner id is null, bitch!");
 
-        this.serverConnection.sendTextMessage(ServerMessage.enterGame(partnerId));
+        Log.i(TAG, "serverConnection=" + this.serverConnection);
+        this.serverConnection.sendTextMessage(ServerMessage.enterGame(Integer.valueOf(partnerIdStr)));
 
     }
 

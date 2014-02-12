@@ -16,27 +16,15 @@ import org.andengine.ui.activity.BaseGameActivity;
 
 import java.util.ArrayList;
 
-/**
- * Player
- *
- * @author 	Shivan Taher <zn31415926535@gmail.com>
- * @date 	21.11.13
- */
 public class Player implements IUpdateHandler {
 
-	//
 	// Attributes
-	//
-
 	private static final int KEYFRAMES_PER_SECOND = 5;
 	private boolean inTurn;
 	private float timeElapsed;
 	private float keyTime;
 
-	//
 	// Game Objects Positions
-	//
-
 	private static final int LEFT_CANNON_X = -275;
 	private static final int RIGHT_CANNON_X = 200;
 
@@ -46,10 +34,7 @@ public class Player implements IUpdateHandler {
 	private static final int LEFT_KING_X = -315;
 	private static final int RIGHT_KING_X = 250;
 
-	//
 	// Game Objects
-	//
-
 	private final String name;
 	private final King king;
 	private final Castle castle;
@@ -57,10 +42,7 @@ public class Player implements IUpdateHandler {
 	private final boolean isLeft;
 	private Cannonball cannonball;
 
-	//
 	// Callbacks
-	//
-
 	private IPlayerTurnListener playerTurnListener;
 
 	public Player(String name, boolean isLeft) {

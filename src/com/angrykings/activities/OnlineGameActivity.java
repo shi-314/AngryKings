@@ -12,7 +12,6 @@ import android.widget.Button;
 
 import com.angrykings.Action;
 import com.angrykings.AngryParallaxBackground;
-import com.angrykings.BuildConfig;
 import com.angrykings.GameConfig;
 import com.angrykings.GameContext;
 import com.angrykings.GameHUD;
@@ -48,7 +47,6 @@ import org.andengine.input.touch.detector.ScrollDetector;
 import org.andengine.input.touch.detector.ScrollDetector.IScrollDetectorListener;
 import org.andengine.input.touch.detector.SurfaceScrollDetector;
 import org.andengine.ui.activity.BaseGameActivity;
-import org.andengine.util.debug.Debug;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,34 +54,24 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class OnlineGameActivity extends BaseGameActivity implements
-		IOnSceneTouchListener, IScrollDetectorListener,
-		IPinchZoomDetectorListener {
+        IOnSceneTouchListener, IScrollDetectorListener,
+        IPinchZoomDetectorListener {
 
-	private GameContext gc;
-	private Handler handler;
-	private GameHUD hud;
-	private ResourceManager rm;
+    private GameContext gc;
+    private Handler handler;
+    private GameHUD hud;
+    private ResourceManager rm;
 
-	//
-	// Game Objects
-	//
+    // Game Objects
+    private Player me;
+    private Player partner;
 
-	private Player me;
-	private Player partner;
+    // Navigation Attributes
+    private SurfaceScrollDetector scrollDetector;
+    private PinchZoomDetector pinchZoomDetector;
+    private float pinchZoomStartedCameraZoomFactor;
 
-	//
-	// Navigation Attributes
-	//
-
-	private SurfaceScrollDetector scrollDetector;
-	private PinchZoomDetector pinchZoomDetector;
-	private float pinchZoomStartedCameraZoomFactor;
-	boolean isAiming = true;
-
-    //
     // Camera Positions
-    //
-
     private static final int MIDDLE = 0;
     private static final int OWNCANNONBALL = 1;
     private static final int ENEMYCANNONBALL = 2;
@@ -91,168 +79,163 @@ public class OnlineGameActivity extends BaseGameActivity implements
     private static final int OFF = 4;
     private int followCamera = OFF;
 
-	//
-	// Network
-	//
+    // Network
+    private ServerConnection serverConnection;
+    int aimX, aimY;
+    boolean isLeft;
 
-	private ServerConnection serverConnection;
-	int aimX, aimY;
-	boolean isLeft;
-    JSONObject data;
-
-	GameStatus status;
-    private BasicMap map;
+    GameStatus status;
     private AngryParallaxBackground parallaxBackground;
 
     private class AngryKingsMessageHandler extends ServerConnection.OnMessageHandler {
-		@Override
-		public void onMessage(String payload) {
-			try {
-				JSONObject jObj = new JSONObject(payload);
+        @Override
+        public void onMessage(String payload) {
+            try {
+                JSONObject jObj = new JSONObject(payload);
 
+                if (jObj.getInt("action") == Action.Server.TURN) {
 
-				if (jObj.getInt("action") == Action.Server.TURN) {
+                    try {
+                        final int x = Integer.parseInt(jObj.getString("x"));
+                        final int y = Integer.parseInt(jObj.getString("y"));
 
-                    continuePlaying(jObj);
+                        ArrayList<Keyframe> keyframes = null;
 
-//					final int x = Integer.parseInt(jObj.getString("x"));
-//					final int y = Integer.parseInt(jObj.getString("y"));
-//
-//					ArrayList<Keyframe> keyframes = null;
-//
-//					if(jObj.has("keyframes")) {
-//						JSONArray jsonKeyframes = jObj.getJSONArray("keyframes");
-//						keyframes = new ArrayList<Keyframe>();
-//
-//						for(int i = 0; i < jsonKeyframes.length(); ++i) {
-//							keyframes.add(new Keyframe(jsonKeyframes.getJSONObject(i)));
-//						}
-//
-//						Log.i(getClass().getName(), "received "+keyframes.size()+" keyframes");
-//					} else {
-//						Log.i(getClass().getName(), "received 0 keyframes");
-//					}
-//
-//					partner.handleTurn(x, y, keyframes);
-//                    turn();
+                        if (jObj.has("keyframes")) {
+                            JSONArray jsonKeyframes = jObj.getJSONArray("keyframes");
+                            keyframes = new ArrayList<Keyframe>();
+
+                            for (int i = 0; i < jsonKeyframes.length(); ++i) {
+                                keyframes.add(new Keyframe(jsonKeyframes.getJSONObject(i)));
+                            }
+
+                            Log.i(getClass().getName(), "received " + keyframes.size() + " keyframes");
+                        } else {
+                            Log.i(getClass().getName(), "received 0 keyframes");
+                        }
+
+                        partner.handleTurn(x, y, keyframes);
+                        turn();
+                    } catch (JSONException e) {
+
+                        Log.w(getClass().getName(), "JSONException: " + e);
+
+                    }
 
                 } else if (jObj.getInt("action") == Action.Server.YOU_WIN) {
 
-					won();
+                    won();
+                }
+            } catch (JSONException e) {
 
-				}
-			} catch (JSONException e) {
+                Log.w(getClass().getName(), "JSONException: " + e);
 
-				Log.w(getClass().getName(), "JSONException: " + e);
+            }
+        }
+    }
 
-			}
-		}
-	}
+    private class MyTurnListener implements IPlayerTurnListener {
+        private ArrayList<Keyframe> keyframes;
 
-	private class MyTurnListener implements IPlayerTurnListener {
-		private ArrayList<Keyframe> keyframes;
+        public MyTurnListener() {
+            this.keyframes = new ArrayList<Keyframe>();
+        }
 
-		public MyTurnListener() {
-			this.keyframes = new ArrayList<Keyframe>();
-		}
-
-		@Override
-		public void onHandleTurn(int x, int y, ArrayList<Keyframe> keyframes) {
-			this.keyframes.clear();
-			status = GameStatus.PARTNER_TURN;
-			me.getCannon().hideAimCircle();
-			partner.getCastle().unfreeze();
+        @Override
+        public void onHandleTurn(int x, int y, ArrayList<Keyframe> keyframes) {
+            this.keyframes.clear();
+            status = GameStatus.PARTNER_TURN;
+            me.getCannon().hideAimCircle();
+            partner.getCastle().unfreeze();
             //followCamera = OWNCANNONBALL;
-		}
+        }
 
-		@Override
-		public void onEndTurn() {
-			serverConnection.sendTextMessage(ServerMessage.endTurn(aimX, aimY, this.keyframes));
+        @Override
+        public void onEndTurn() {
+            serverConnection.sendTextMessage(ServerMessage.endTurn(aimX, aimY, this.keyframes));
 
             partner.getCastle().freeze();
-			hud.setStatus(getString(R.string.enemyTurn));
+            hud.setStatus(getString(R.string.enemyTurn));
 
-			me.getKing().getSprite().setCurrentTileIndex(0);
-			partner.getKing().getSprite().setCurrentTileIndex(1);
+            me.getKing().getSprite().setCurrentTileIndex(0);
+            partner.getKing().getSprite().setCurrentTileIndex(1);
 
-			partner.getKing().jump();
+            partner.getKing().jump();
             //followCamera = ENEMYCANNON;
-		}
+        }
 
-		@Override
-		public void onKeyframe(float time) {
-			try {
-				Keyframe k = new Keyframe(time, me.getCannonball(), partner.getCastle());
-				this.keyframes.add(k);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		}
+        @Override
+        public void onKeyframe(float time) {
+            try {
+                Keyframe k = new Keyframe(time, me.getCannonball(), partner.getCastle());
+                this.keyframes.add(k);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
-		@Override
-		public void onUpdate(float dt) {
+        @Override
+        public void onUpdate(float dt) {
 
-		}
-	}
+        }
+    }
 
-	private class PartnerTurnListener implements IPlayerTurnListener {
-		private ArrayList<Keyframe> keyframes;
-		private int keyframeIndex;
-		private float timeElapsed;
-		private float timeElapsedSinceKeyframe;
+    private class PartnerTurnListener implements IPlayerTurnListener {
+        private ArrayList<Keyframe> keyframes;
+        private int keyframeIndex;
+        private float timeElapsed;
+        private float timeElapsedSinceKeyframe;
         private boolean keyframeInterlpolationDone;
 
-		@Override
-		public void onHandleTurn(int x, int y, ArrayList<Keyframe> keyframes) {
-			partner.getCannon().pointAt(x, y);
-			//me.getCastle().unfreeze();
+        @Override
+        public void onHandleTurn(int x, int y, ArrayList<Keyframe> keyframes) {
+            partner.getCannon().pointAt(x, y);
+            //me.getCastle().unfreeze();
 
             partner.getCannonball().getBody().setActive(false);
 
-			this.keyframes = keyframes;
-			this.keyframeIndex = -1; // because onKeyframe is called at t=0
-			this.timeElapsed = 0;
-			this.timeElapsedSinceKeyframe = 0;
+            this.keyframes = keyframes;
+            this.keyframeIndex = -1; // because onKeyframe is called at t=0
+            this.timeElapsed = 0;
+            this.timeElapsedSinceKeyframe = 0;
             this.keyframeInterlpolationDone = false;
 
             //followCamera = ENEMYCANNONBALL;
-		}
+        }
 
-		@Override
-		public void onEndTurn() {
-			this.keyframes = null;
-			me.getCastle().freeze();
+        @Override
+        public void onEndTurn() {
+            this.keyframes = null;
+            me.getCastle().freeze();
 
-			me.getKing().getSprite().setCurrentTileIndex(0);
-			partner.getKing().getSprite().setCurrentTileIndex(1);
+            me.getKing().getSprite().setCurrentTileIndex(0);
+            partner.getKing().getSprite().setCurrentTileIndex(1);
 
-			me.getKing().jump();
+            me.getKing().jump();
             //followCamera = MIDDLE;
+        }
 
-//			if(status != GameStatus.LOST)
-		}
-
-		@Override
-		public void onKeyframe(float time) {
-            if(this.keyframeIndex == this.keyframes.size() - 1) {
+        @Override
+        public void onKeyframe(float time) {
+            if (this.keyframeIndex == this.keyframes.size() - 1) {
                 return;
             }
 
             this.keyframeIndex++;
             this.timeElapsedSinceKeyframe = 0;
 
-            if(this.keyframeIndex == this.keyframes.size() - 1) {
+            if (this.keyframeIndex == this.keyframes.size() - 1) {
                 this.keyframeInterlpolationDone = true;
             }
         }
 
-		@Override
-		public void onUpdate(float dt) {
-			if(this.keyframes == null || this.keyframeInterlpolationDone)
-				return;
+        @Override
+        public void onUpdate(float dt) {
+            if (this.keyframes == null || this.keyframeInterlpolationDone)
+                return;
 
-			this.timeElapsed += dt;
-			this.timeElapsedSinceKeyframe += dt;
+            this.timeElapsed += dt;
+            this.timeElapsedSinceKeyframe += dt;
 
             Keyframe currentKeyframe = this.keyframes.get(this.keyframeIndex);
             Keyframe nextKeyframe = this.keyframes.get(this.keyframeIndex + 1);
@@ -262,17 +245,17 @@ public class OnlineGameActivity extends BaseGameActivity implements
             float t = this.timeElapsedSinceKeyframe / deltaT;
 
             KeyframeData interpolated = currentKeyframe.getCannonballKeyframeData()
-                                        .interpolate(
-                                                nextKeyframe.getCannonballKeyframeData(),
-                                                t
-                                        );
+                    .interpolate(
+                            nextKeyframe.getCannonballKeyframeData(),
+                            t
+                    );
 
             cannonball.setKeyframeData(interpolated);
 
             ArrayList<KeyframeData> currentCastleData = currentKeyframe.getCastleKeyframeData();
             ArrayList<KeyframeData> nextCastleData = nextKeyframe.getCastleKeyframeData();
 
-            for(int i = 0; i < currentCastleData.size(); i++) {
+            for (int i = 0; i < currentCastleData.size(); i++) {
 
                 KeyframeData currentKeyframeData = currentCastleData.get(i);
 
@@ -284,63 +267,60 @@ public class OnlineGameActivity extends BaseGameActivity implements
                 block.setKeyframeData(interpolatedKeyframeData);
 
             }
-		}
+        }
 
-	}
+    }
 
-	@Override
-	public EngineOptions onCreateEngineOptions() {
+    @Override
+    public EngineOptions onCreateEngineOptions() {
         GameContext.clear();
-		gc = GameContext.getInstance();
-		handler = new Handler();
+        gc = GameContext.getInstance();
+        handler = new Handler();
 
-		ZoomCamera camera = new ZoomCamera(GameConfig.CAMERA_X, GameConfig.CAMERA_Y, GameConfig.CAMERA_WIDTH, GameConfig.CAMERA_HEIGHT);
+        ZoomCamera camera = new ZoomCamera(GameConfig.CAMERA_X, GameConfig.CAMERA_Y, GameConfig.CAMERA_WIDTH, GameConfig.CAMERA_HEIGHT);
 
-		camera.setZoomFactor(GameConfig.CAMERA_STARTUP_ZOOM);
-		camera.setBounds(
-				GameConfig.CAMERA_MIN_X, GameConfig.CAMERA_MIN_Y,
-				GameConfig.CAMERA_MAX_X, GameConfig.CAMERA_MAX_Y
-		);
-		camera.setBoundsEnabled(true);
+        camera.setZoomFactor(GameConfig.CAMERA_STARTUP_ZOOM);
+        camera.setBounds(
+                GameConfig.CAMERA_MIN_X, GameConfig.CAMERA_MIN_Y,
+                GameConfig.CAMERA_MAX_X, GameConfig.CAMERA_MAX_Y
+        );
+        camera.setBoundsEnabled(true);
 
-		gc.setCamera(camera);
+        gc.setCamera(camera);
 
-		this.serverConnection = ServerConnection.getInstance();
+        this.serverConnection = ServerConnection.getInstance();
 
-		return new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED,
-				new RatioResolutionPolicy(GameConfig.CAMERA_WIDTH,
-						GameConfig.CAMERA_HEIGHT), camera);
-	}
+        return new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED,
+                new RatioResolutionPolicy(GameConfig.CAMERA_WIDTH,
+                        GameConfig.CAMERA_HEIGHT), camera);
+    }
 
-	@Override
-	public void onCreateResources(OnCreateResourcesCallback pOnCreateResourcesCallback) throws Exception {
-		this.rm = ResourceManager.getInstance();
+    @Override
+    public void onCreateResources(OnCreateResourcesCallback pOnCreateResourcesCallback) throws Exception {
+        this.rm = ResourceManager.getInstance();
 
-		this.rm.load(this);
+        this.rm.load(this);
 
-		pOnCreateResourcesCallback.onCreateResourcesFinished();
-	}
+        pOnCreateResourcesCallback.onCreateResourcesFinished();
+    }
 
-	@Override
-	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws Exception {
-		gc.setGameActivity(this);
+    @Override
+    public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws Exception {
+        gc.setGameActivity(this);
 
-		//
-		// initialize network
-		//
+        // initialize network
+        ServerConnection.getInstance().setHandler(new AngryKingsMessageHandler());
 
-		ServerConnection.getInstance().setHandler(new AngryKingsMessageHandler());
+        gc.setVboManager(this.getVertexBufferObjectManager());
 
-		gc.setVboManager(this.getVertexBufferObjectManager());
+        if (GameConfig.LOG_FPS)
+            this.mEngine.registerUpdateHandler(new FPSLogger());
 
-		if (GameConfig.LOG_FPS)
-			this.mEngine.registerUpdateHandler(new FPSLogger());
+        //
+        // initialize the scene
+        //
 
-		//
-		// initialize the scene
-		//
-
-		Scene scene = new Scene();
+        Scene scene = new Scene();
 
         parallaxBackground = new AngryParallaxBackground(0f, 0f, 0f, 0.5f);
         parallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(0f, rm.getBackgroundSprite()));
@@ -348,180 +328,149 @@ public class OnlineGameActivity extends BaseGameActivity implements
         parallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(20f, new Sprite(0, 0, rm.getParallax2(), gc.getVboManager())));
         parallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(10f, new Sprite(0, 100, rm.getParallax1(), gc.getVboManager())));
 
-
         scene.setBackground(parallaxBackground);
 
-		scene.setOnSceneTouchListener(this);
+        scene.setOnSceneTouchListener(this);
 
-		gc.setScene(scene);
+        gc.setScene(scene);
 
-		//
-		// initialize the physics engine
-		//
+        //
+        // initialize the physics engine
+        //
 
         PhysicsManager.clear();
-		PhysicsManager pm = PhysicsManager.getInstance();
-		pm.clearEntities();
+        PhysicsManager pm = PhysicsManager.getInstance();
+        pm.clearEntities();
 
-		//
-		// initialize the entities
-		//
+        //
+        // initialize the entities
+        //
 
-        map = new BasicMap();
-		scene.attachChild(map);
+        BasicMap map = new BasicMap();
+        scene.attachChild(map);
 
-		String myName = "";
-		String partnerName = "";
+        String myName = "";
+        String partnerName = "";
 
-		Bundle extras = getIntent().getExtras();
+        Bundle extras = getIntent().getExtras();
 
-		if (extras != null) {
-			this.isLeft = extras.getBoolean("left");
+        if (extras != null) {
+            this.isLeft = extras.getBoolean("left");
 
+            myName = extras.getString("username");
+            partnerName = extras.getString("partnername");
 
-			myName = extras.getString("username");
-			partnerName = extras.getString("partnername");
+            Log.i(getClass().getName(), "this client is " + (isLeft ? "left" : "right"));
+        }
 
+        //
+        // This is important because the entity ids are incremented in the order in which we
+        // create the entities :(
+        //
 
+        if (isLeft) {
+            this.me = new Player(myName, isLeft);
+            this.partner = new Player(partnerName, !isLeft);
+        } else {
+            this.partner = new Player(partnerName, !isLeft);
+            this.me = new Player(myName, isLeft);
+        }
 
-			Log.i(getClass().getName(), "this client is " + (isLeft ? "left" : "right"));
-		}
+        this.me.setPlayerTurnListener(new MyTurnListener());
+        this.partner.setPlayerTurnListener(new PartnerTurnListener());
 
-		//
-		// This is important because the entity ids are incremented in the order in which we
-		// create the entities :(
-		//
+        //
+        // initialize navigation
+        //
 
-		if(isLeft) {
-			this.me = new Player(myName, isLeft);
-			this.partner = new Player(partnerName, !isLeft);
-		} else {
-			this.partner = new Player(partnerName, !isLeft);
-			this.me = new Player(myName, isLeft);
-		}
+        this.scrollDetector = new SurfaceScrollDetector(this);
+        this.pinchZoomDetector = new PinchZoomDetector(this);
 
-		this.me.setPlayerTurnListener(new MyTurnListener());
-		this.partner.setPlayerTurnListener(new PartnerTurnListener());
+        scene.setOnSceneTouchListener(this);
+        scene.setTouchAreaBindingOnActionDownEnabled(true);
 
-		//
-		// initialize navigation
-		//
+        hud = new GameHUD();
 
-		this.scrollDetector = new SurfaceScrollDetector(this);
-		this.pinchZoomDetector = new PinchZoomDetector(this);
+        hud.setOnWhiteFlagTouched(new Runnable() {
+            @Override
+            public void run() {
+                resign();
+            }
+        });
 
-		scene.setOnSceneTouchListener(this);
-		scene.setTouchAreaBindingOnActionDownEnabled(true);
+        gc.setHud(hud);
+        gc.getCamera().setHUD(hud);
 
-		hud = new GameHUD();
+        final Castle leftCastle = isLeft ? me.getCastle() : partner.getCastle();
+        final Castle rightCastle = !isLeft ? me.getCastle() : partner.getCastle();
 
-		hud.setOnWhiteFlagTouched(new Runnable() {
-			@Override
-			public void run() {
-				resign();
-			}
-		});
+        final float initialLeftCastleHeight = leftCastle.getInitialHeight();
+        final float initialRightCastleHeight = rightCastle.getInitialHeight();
 
-		gc.setHud(hud);
-		gc.getCamera().setHUD(hud);
+        final boolean left = isLeft;
 
-		final Castle leftCastle = isLeft ? me.getCastle() : partner.getCastle();
-		final Castle rightCastle = !isLeft ? me.getCastle() : partner.getCastle();
-
-		final float initialLeftCastleHeight = leftCastle.getInitialHeight();
-		final float initialRightCastleHeight = rightCastle.getInitialHeight();
-
-		final boolean left = isLeft;
-
-		hud.setLeftPlayerName(isLeft ? myName : partnerName);
-		hud.setRightPlayerName(!isLeft ? myName : partnerName);
+        hud.setLeftPlayerName(isLeft ? myName : partnerName);
+        hud.setRightPlayerName(!isLeft ? myName : partnerName);
 
 
-		scene.registerUpdateHandler(new IUpdateHandler() {
-			@Override
-			public void onUpdate(float pSecondsElapsed) {
+        scene.registerUpdateHandler(new IUpdateHandler() {
+            @Override
+            public void onUpdate(float pSecondsElapsed) {
 
-				float leftLife = leftCastle.getHeight() / initialLeftCastleHeight;
-				float rightLife = rightCastle.getHeight() / initialRightCastleHeight;
+                float leftLife = leftCastle.getHeight() / initialLeftCastleHeight;
+                float rightLife = rightCastle.getHeight() / initialRightCastleHeight;
 
-				hud.getLeftLifeBar().setValue(1.0f - ((1.0f - leftLife) * 2.0f));
-				hud.getRightLifeBar().setValue(1.0f - ((1.0f - rightLife) * 2.0f));
+                hud.getLeftLifeBar().setValue(1.0f - ((1.0f - leftLife) * 2.0f));
+                hud.getRightLifeBar().setValue(1.0f - ((1.0f - rightLife) * 2.0f));
 
-				if ((left && leftLife < 0.5f || !left && rightLife < 0.5f) && status != GameStatus.LOST) {
-					lost();
-				}
-                if(followCamera == OWNCANNONBALL){
+                if ((left && leftLife < 0.5f || !left && rightLife < 0.5f) && status != GameStatus.LOST) {
+                    lost();
+                }
+                if (followCamera == OWNCANNONBALL) {
                     me.getCannon().activateFollowCamera();
-                }else if(followCamera == ENEMYCANNONBALL){
+                } else if (followCamera == ENEMYCANNONBALL) {
                     partner.getCannon().activateFollowCamera();
-                }else if(followCamera == MIDDLE){
+                } else if (followCamera == MIDDLE) {
                     deactivateFollowCamera("mitte");
-                }else if(followCamera == ENEMYCANNON){
+                } else if (followCamera == ENEMYCANNON) {
                     deactivateFollowCamera("gegner");
                 }
-			}
+            }
 
-			@Override
-			public void reset() {
+            @Override
+            public void reset() { }
+        });
 
-			}
-		});
+        scene.registerUpdateHandler(pm.getPhysicsWorld());
 
-		scene.registerUpdateHandler(pm.getPhysicsWorld());
+        this.me.getCastle().freeze();
+        this.partner.getCastle().freeze();
 
-		this.me.getCastle().freeze();
-		this.partner.getCastle().freeze();
+        scene.registerUpdateHandler(this.me);
+        scene.registerUpdateHandler(this.partner);
 
-		scene.registerUpdateHandler(this.me);
-		scene.registerUpdateHandler(this.partner);
+        pOnCreateSceneCallback.onCreateSceneFinished(scene);
 
-		pOnCreateSceneCallback.onCreateSceneFinished(scene);
-
-        turn();
-        if (extras != null){
-
-            if(extras.getBoolean("existingGame")){
+        if (extras != null) {
+            if (extras.getBoolean("existingGame")) {
 
                 JSONObject data_you = new JSONObject(extras.getString("data_you"));
                 JSONObject data_opponent = new JSONObject(extras.getString("data_opponent"));
-                if(data_you.length() > 1)
-                    continuePlaying(data_you);
-                if(data_opponent.length() > 1)
-                    continuePlaying(data_opponent);
-
-                Log.d("data", extras.getString("data"));
-            }
-
-        }
-    }
-
-    private void continuePlaying(JSONObject jObj){
-        try{
-            final int x = Integer.parseInt(jObj.getString("x"));
-            final int y = Integer.parseInt(jObj.getString("y"));
-
-            ArrayList<Keyframe> keyframes = null;
-
-            if(jObj.has("keyframes")) {
-                JSONArray jsonKeyframes = jObj.getJSONArray("keyframes");
-                keyframes = new ArrayList<Keyframe>();
-
-                for(int i = 0; i < jsonKeyframes.length(); ++i) {
-                    keyframes.add(new Keyframe(jsonKeyframes.getJSONObject(i)));
+                if (data_you.length() > 1) {
+                    JSONArray arr = data_you.getJSONArray("keyframes");
+                    JSONObject lastFrameJson = arr.getJSONObject(arr.length() - 1);
+                    Keyframe lastFrame = new Keyframe(lastFrameJson);
+                    me.getCastle().setKeyframeData(lastFrame.getCastleKeyframeData());
                 }
-
-                Log.i(getClass().getName(), "received "+keyframes.size()+" keyframes");
-            } else {
-                Log.i(getClass().getName(), "received 0 keyframes");
+                if (data_opponent.length() > 1) {
+                    JSONArray arr = data_opponent.getJSONArray("keyframes");
+                    JSONObject lastFrameJson = arr.getJSONObject(arr.length() - 1);
+                    Keyframe lastFrame = new Keyframe(lastFrameJson);
+                    partner.getCastle().setKeyframeData(lastFrame.getCastleKeyframeData());
+                }
             }
-
-            partner.handleTurn(x, y, keyframes);
-            turn();
-        }catch (JSONException e) {
-
-            Log.w(getClass().getName(), "JSONException: " + e);
-
         }
+        turn();
     }
 
     private void deactivateFollowCamera(String s) {
@@ -531,38 +480,38 @@ public class OnlineGameActivity extends BaseGameActivity implements
         float cameraY = camera.getCenterY();
         float difX;
         float difY;
-        if(s.equals("mitte")){
-            difX = cameraX - (GameConfig.CAMERA_X + GameConfig.CAMERA_WIDTH/2);
-            difY = cameraY - (GameConfig.CAMERA_Y + GameConfig.CAMERA_HEIGHT/2);
-        }else{
+        if (s.equals("mitte")) {
+            difX = cameraX - (GameConfig.CAMERA_X + GameConfig.CAMERA_WIDTH / 2);
+            difY = cameraY - (GameConfig.CAMERA_Y + GameConfig.CAMERA_HEIGHT / 2);
+        } else {
             difX = cameraX - (partner.getCannon().getX());
             difY = cameraY - (partner.getCannon().getY());
         }
         boolean rightPositionX = false;
         boolean rightPositionY = false;
-        if(difX < -10){
-            cameraX += Math.abs(difX)/5;
+        if (difX < -10) {
+            cameraX += Math.abs(difX) / 5;
             camera.setCenter(cameraX, cameraY);
-        }else if(difX > 10){
-            cameraX -= Math.abs(difX)/5;
+        } else if (difX > 10) {
+            cameraX -= Math.abs(difX) / 5;
             camera.setCenter(cameraX, cameraY);
-        }else{
+        } else {
             rightPositionX = true;
         }
-        if(difY < -10){
-            cameraY += Math.abs(difY)/5;
+        if (difY < -10) {
+            cameraY += Math.abs(difY) / 5;
             camera.setCenter(cameraX, cameraY);
-        }else if(difY > 10){
-            cameraY -= Math.abs(difY)/5;
+        } else if (difY > 10) {
+            cameraY -= Math.abs(difY) / 5;
             camera.setCenter(cameraX, cameraY);
-        }else{
+        } else {
             rightPositionY = true;
         }
-        if(rightPositionX && rightPositionY && s.equals("mitte")){
-            camera.setCenter(GameConfig.CAMERA_X + GameConfig.CAMERA_WIDTH/2, GameConfig.CAMERA_Y + GameConfig.CAMERA_HEIGHT/2);
+        if (rightPositionX && rightPositionY && s.equals("mitte")) {
+            camera.setCenter(GameConfig.CAMERA_X + GameConfig.CAMERA_WIDTH / 2, GameConfig.CAMERA_Y + GameConfig.CAMERA_HEIGHT / 2);
             camera.setZoomFactor(GameConfig.CAMERA_STARTUP_ZOOM);
             followCamera = OFF;
-        }else if(rightPositionX && rightPositionY && s.equals("gegner")){
+        } else if (rightPositionX && rightPositionY && s.equals("gegner")) {
             camera.setCenter(partner.getCannon().getX(), partner.getCannon().getY());
             camera.setZoomFactor(GameConfig.CAMERA_STARTUP_ZOOM);
             followCamera = OFF;
@@ -570,167 +519,167 @@ public class OnlineGameActivity extends BaseGameActivity implements
     }
 
     @Override
-	public void onPopulateScene(Scene pScene, OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception {
-		pOnPopulateSceneCallback.onPopulateSceneFinished();
-	}
+    public void onPopulateScene(Scene pScene, OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception {
+        pOnPopulateSceneCallback.onPopulateSceneFinished();
+    }
 
-	@Override
-	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
-		if (gc.getPhysicsWorld() == null)
-			return false;
+    @Override
+    public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
+        if (gc.getPhysicsWorld() == null)
+            return false;
 
-		double cannonDistanceX = pSceneTouchEvent.getX() - this.me.getCannon().getX();
-		double cannonDistanceY = pSceneTouchEvent.getY() - this.me.getCannon().getY();
-		double cannonDistanceR = Math.sqrt(cannonDistanceX*cannonDistanceX + cannonDistanceY*cannonDistanceY);
+        double cannonDistanceX = pSceneTouchEvent.getX() - this.me.getCannon().getX();
+        double cannonDistanceY = pSceneTouchEvent.getY() - this.me.getCannon().getY();
+        double cannonDistanceR = Math.sqrt(cannonDistanceX * cannonDistanceX + cannonDistanceY * cannonDistanceY);
 
-		// TODO: refactor constant
+        // TODO: refactor constant
 
-		if (cannonDistanceR < rm.getAimCircleTexture().getHeight() &&
+        if (cannonDistanceR < rm.getAimCircleTexture().getHeight() &&
                 ((isLeft && cannonDistanceX > 0) || (!isLeft && cannonDistanceX < 0))) {
 
-			//
-			// aim and fire
-			//
+            //
+            // aim and fire
+            //
 
-			float x = pSceneTouchEvent.getX();
-			float y = pSceneTouchEvent.getY();
+            float x = pSceneTouchEvent.getX();
+            float y = pSceneTouchEvent.getY();
 
-			int iX = (int) x;
-			int iY = (int) y;
+            int iX = (int) x;
+            int iY = (int) y;
 
-			if (this.me.getCannon().pointAt(iX, iY)) {
-				this.aimX = iX;
-				this.aimY = iY;
-			}
+            if (this.me.getCannon().pointAt(iX, iY)) {
+                this.aimX = iX;
+                this.aimY = iY;
+            }
 
-			if (pSceneTouchEvent.isActionUp() && this.status == GameStatus.MY_TURN) {
-				this.me.handleTurn(this.aimX, this.aimY, null);
-			}
+            if (pSceneTouchEvent.isActionUp() && this.status == GameStatus.MY_TURN) {
+                this.me.handleTurn(this.aimX, this.aimY, null);
+            }
 
-		} else {
+        } else {
 
-			//
-			// pinch and zoom
-			//
+            //
+            // pinch and zoom
+            //
 
-			if (pSceneTouchEvent.isActionDown()) {
-				this.scrollDetector.setEnabled(true);
-			}
+            if (pSceneTouchEvent.isActionDown()) {
+                this.scrollDetector.setEnabled(true);
+            }
 
-			this.pinchZoomDetector.onTouchEvent(pSceneTouchEvent);
+            this.pinchZoomDetector.onTouchEvent(pSceneTouchEvent);
 
-			if (this.pinchZoomDetector.isZooming()) {
-				this.scrollDetector.setEnabled(false);
-			} else {
-				this.scrollDetector.onTouchEvent(pSceneTouchEvent);
-			}
+            if (this.pinchZoomDetector.isZooming()) {
+                this.scrollDetector.setEnabled(false);
+            } else {
+                this.scrollDetector.onTouchEvent(pSceneTouchEvent);
+            }
 
-		}
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public void onPinchZoomStarted(PinchZoomDetector pPinchZoomDetector,
-								   TouchEvent pSceneTouchEvent) {
-		ZoomCamera camera = (ZoomCamera) gc.getCamera();
-		this.pinchZoomStartedCameraZoomFactor = camera.getZoomFactor();
-	}
+    @Override
+    public void onPinchZoomStarted(PinchZoomDetector pPinchZoomDetector,
+                                   TouchEvent pSceneTouchEvent) {
+        ZoomCamera camera = (ZoomCamera) gc.getCamera();
+        this.pinchZoomStartedCameraZoomFactor = camera.getZoomFactor();
+    }
 
-	@Override
-	public void onPinchZoom(PinchZoomDetector pPinchZoomDetector,
-							TouchEvent pTouchEvent, float pZoomFactor) {
-		ZoomCamera camera = (ZoomCamera) gc.getCamera();
+    @Override
+    public void onPinchZoom(PinchZoomDetector pPinchZoomDetector,
+                            TouchEvent pTouchEvent, float pZoomFactor) {
+        ZoomCamera camera = (ZoomCamera) gc.getCamera();
 
-		float factor = this.pinchZoomStartedCameraZoomFactor * pZoomFactor;
-		if (factor > GameConfig.CAMERA_ZOOM_MIN
-				&& factor < GameConfig.CAMERA_ZOOM_MAX)
-			camera.setZoomFactor(factor);
-	}
+        float factor = this.pinchZoomStartedCameraZoomFactor * pZoomFactor;
+        if (factor > GameConfig.CAMERA_ZOOM_MIN
+                && factor < GameConfig.CAMERA_ZOOM_MAX)
+            camera.setZoomFactor(factor);
+    }
 
-	@Override
-	public void onPinchZoomFinished(PinchZoomDetector pPinchZoomDetector,
-									TouchEvent pTouchEvent, float pZoomFactor) {
-		ZoomCamera camera = (ZoomCamera) gc.getCamera();
+    @Override
+    public void onPinchZoomFinished(PinchZoomDetector pPinchZoomDetector,
+                                    TouchEvent pTouchEvent, float pZoomFactor) {
+        ZoomCamera camera = (ZoomCamera) gc.getCamera();
 
-		float factor = this.pinchZoomStartedCameraZoomFactor * pZoomFactor;
-		if (factor > GameConfig.CAMERA_ZOOM_MIN
-				&& factor < GameConfig.CAMERA_ZOOM_MAX)
-			camera.setZoomFactor(factor);
-	}
+        float factor = this.pinchZoomStartedCameraZoomFactor * pZoomFactor;
+        if (factor > GameConfig.CAMERA_ZOOM_MIN
+                && factor < GameConfig.CAMERA_ZOOM_MAX)
+            camera.setZoomFactor(factor);
+    }
 
-	@Override
-	public void onScrollStarted(ScrollDetector pScollDetector, int pPointerID,
-								float pDistanceX, float pDistanceY) {
-		ZoomCamera camera = (ZoomCamera) gc.getCamera();
-		final float zoomFactor = camera.getZoomFactor();
+    @Override
+    public void onScrollStarted(ScrollDetector pScollDetector, int pPointerID,
+                                float pDistanceX, float pDistanceY) {
+        ZoomCamera camera = (ZoomCamera) gc.getCamera();
+        final float zoomFactor = camera.getZoomFactor();
 
-		camera.offsetCenter(-pDistanceX / zoomFactor, -pDistanceY / zoomFactor);
-	}
+        camera.offsetCenter(-pDistanceX / zoomFactor, -pDistanceY / zoomFactor);
+    }
 
-	@Override
-	public void onScroll(ScrollDetector pScollDetector, int pPointerID,
-						 float pDistanceX, float pDistanceY) {
-		ZoomCamera camera = (ZoomCamera) gc.getCamera();
-		final float zoomFactor = camera.getZoomFactor();
+    @Override
+    public void onScroll(ScrollDetector pScollDetector, int pPointerID,
+                         float pDistanceX, float pDistanceY) {
+        ZoomCamera camera = (ZoomCamera) gc.getCamera();
+        final float zoomFactor = camera.getZoomFactor();
 
         //this.parallaxBackground.setParallaxValue(this.parallaxBackground.getParallaxValue() + camera.getCenterX() / 100);
 
-		camera.offsetCenter(-pDistanceX / zoomFactor, -pDistanceY / zoomFactor);
-	}
+        camera.offsetCenter(-pDistanceX / zoomFactor, -pDistanceY / zoomFactor);
+    }
 
-	@Override
-	public void onScrollFinished(ScrollDetector pScollDetector, int pPointerID,
-								 float pDistanceX, float pDistanceY) {
-		ZoomCamera camera = (ZoomCamera) gc.getCamera();
-		final float zoomFactor = camera.getZoomFactor();
+    @Override
+    public void onScrollFinished(ScrollDetector pScollDetector, int pPointerID,
+                                 float pDistanceX, float pDistanceY) {
+        ZoomCamera camera = (ZoomCamera) gc.getCamera();
+        final float zoomFactor = camera.getZoomFactor();
 
-		camera.offsetCenter(-pDistanceX / zoomFactor, -pDistanceY / zoomFactor);
-	}
+        camera.offsetCenter(-pDistanceX / zoomFactor, -pDistanceY / zoomFactor);
+    }
 
-	private void resign() {
-		handler.post(new Runnable() {
-			@Override
-			public void run() {
-				final Dialog dialog = new Dialog(OnlineGameActivity.this);
-				dialog.setContentView(R.layout.quit_dialog);
-				dialog.setCancelable(true);
-				dialog.getWindow().setBackgroundDrawable(
-						new ColorDrawable(android.graphics.Color.TRANSPARENT));
+    private void resign() {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                final Dialog dialog = new Dialog(OnlineGameActivity.this);
+                dialog.setContentView(R.layout.quit_dialog);
+                dialog.setCancelable(true);
+                dialog.getWindow().setBackgroundDrawable(
+                        new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-				Button bCancel = (Button) dialog.findViewById(R.id.bCancel);
-				Button bResign = (Button) dialog.findViewById(R.id.bResign);
+                Button bCancel = (Button) dialog.findViewById(R.id.bCancel);
+                Button bResign = (Button) dialog.findViewById(R.id.bResign);
 
-				bCancel.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						dialog.dismiss();
-					}
-				});
+                bCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
 
-				bResign.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						hud.setStatus(getString(R.string.youResigned));
-						serverConnection.sendTextMessage(ServerMessage.lose());
-						dialog.dismiss();
-						Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
-						intent.putExtra("hasWon", false);
-						intent.putExtra("isLeft", OnlineGameActivity.this.isLeft);
-						intent.putExtra("username", me.getName());
-						intent.putExtra("partnername", partner.getName());
-						intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-						startActivity(intent);
-					}
-				});
-				dialog.show();
-			}
-		});
-	}
+                bResign.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        hud.setStatus(getString(R.string.youResigned));
+                        serverConnection.sendTextMessage(ServerMessage.lose());
+                        dialog.dismiss();
+                        Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
+                        intent.putExtra("hasWon", false);
+                        intent.putExtra("isLeft", OnlineGameActivity.this.isLeft);
+                        intent.putExtra("username", me.getName());
+                        intent.putExtra("partnername", partner.getName());
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        startActivity(intent);
+                    }
+                });
+                dialog.show();
+            }
+        });
+    }
 
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             final Dialog dialog = new Dialog(OnlineGameActivity.this);
             dialog.setContentView(R.layout.quit_dialog);
             dialog.setCancelable(true);
@@ -758,67 +707,67 @@ public class OnlineGameActivity extends BaseGameActivity implements
                 }
             });
             dialog.show();
-			return true;
-		}
+            return true;
+        }
 
-		return super.onKeyDown(keyCode, event);
-	}
+        return super.onKeyDown(keyCode, event);
+    }
 
-	private void turn() {
+    private void turn() {
 
-		Log.i(getClass().getName(), "turn()");
+        Log.i(getClass().getName(), "turn()");
 
-		this.hud.setStatus(getString(R.string.yourTurn));
-		this.status = GameStatus.MY_TURN;
+        this.hud.setStatus(getString(R.string.yourTurn));
+        this.status = GameStatus.MY_TURN;
 
-		this.me.getCannon().showAimCircle();
+        this.me.getCannon().showAimCircle();
 
-	}
+    }
 
-	private void won() {
+    private void won() {
 
-		Log.i(getClass().getName(), "won()");
+        Log.i(getClass().getName(), "won()");
 
-		this.status = GameStatus.WON;
+        this.status = GameStatus.WON;
 
-		Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
-		intent.putExtra("hasWon", true);
-		intent.putExtra("isLeft", OnlineGameActivity.this.isLeft);
-		intent.putExtra("username", me.getName());
-		intent.putExtra("partnername", partner.getName());
-		intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
+        intent.putExtra("hasWon", true);
+        intent.putExtra("isLeft", OnlineGameActivity.this.isLeft);
+        intent.putExtra("username", me.getName());
+        intent.putExtra("partnername", partner.getName());
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
-		startActivity(intent);
+        startActivity(intent);
 
-	}
+    }
 
-	private void lost() {
-		Log.i(getClass().getName(), "lost()");
+    private void lost() {
+        Log.i(getClass().getName(), "lost()");
 
-		this.status = GameStatus.LOST;
-		serverConnection.sendTextMessage(ServerMessage.lose());
+        this.status = GameStatus.LOST;
+        serverConnection.sendTextMessage(ServerMessage.lose());
 
-		gc.getHud().setStatus("Du hast verloren!");
-		gc.getHud().setStatus(getString(R.string.hasLost));
+        gc.getHud().setStatus("Du hast verloren!");
+        gc.getHud().setStatus(getString(R.string.hasLost));
 
-		Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
-		intent.putExtra("hasWon", false);
-		intent.putExtra("isLeft", OnlineGameActivity.this.isLeft);
-		intent.putExtra("username", me.getName());
-		intent.putExtra("partnername", partner.getName());
-		intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
+        intent.putExtra("hasWon", false);
+        intent.putExtra("isLeft", OnlineGameActivity.this.isLeft);
+        intent.putExtra("username", me.getName());
+        intent.putExtra("partnername", partner.getName());
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
-		startActivity(intent);
+        startActivity(intent);
 
-	}
+    }
 
-	@Override
-	public synchronized void onPauseGame() {
-		Log.i(getClass().getName(), "onPauseGame()");
-
-		super.onPauseGame();
-		if(BuildConfig.DEBUG) {
-			Debug.d(this.getClass().getSimpleName() + ".onPauseGame lalala" + " @(Thread: '" + Thread.currentThread().getName() + "')");
-		}
-	}
+//	@Override
+//	public synchronized void onPauseGame() {
+//		Log.i(getClass().getName(), "onPauseGame()");
+//
+//		super.onPauseGame();
+//		if(BuildConfig.DEBUG) {
+//			Debug.d(this.getClass().getSimpleName() + ".onPauseGame lalala" + " @(Thread: '" + Thread.currentThread().getName() + "')");
+//		}
+//	}
 }

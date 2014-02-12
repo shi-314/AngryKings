@@ -101,6 +101,7 @@ public class RunningGamesActivity extends Activity{
                             @Override
                             public void onClick(final DialogInterface dialog, final int which) {
                                 Intent intent = new Intent(RunningGamesActivity.this, OnlineGameActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                                 intent.putExtra("partnerId", String.valueOf(partner.id));
                                 startActivity(intent);
                             }

@@ -51,6 +51,7 @@ public class LobbyActivity extends Activity {
                             @Override
                             public void onClick(final DialogInterface dialog, final int which) {
                                 Intent intent = new Intent(LobbyActivity.this, OnlineGameActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                                 intent.putExtra("partnerId", String.valueOf(partner.id));
                                 startActivity(intent);
                             }
@@ -84,7 +85,6 @@ public class LobbyActivity extends Activity {
         zufallButton.setTypeface(font);
         lobbyList = (ListView) findViewById(R.id.lobbyList);
         facebookList = (ListView) findViewById(R.id.facebookList);
-
 
         Bundle extras = getIntent().getExtras();
         facebookPlayers = new ArrayList<FacebookPlayer>();

@@ -273,6 +273,7 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
                 this.me.setPlayerTurnListener(new MyTurnListener());
                 this.partner.setPlayerTurnListener(new PartnerTurnListener());
 
+                resume();
                 turn();
 
             }
@@ -305,6 +306,7 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
                 }
 
 
+                resume();
                 turn();
 
             }
@@ -327,10 +329,6 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
         super.onCreateScene(pOnCreateSceneCallback);
 
         this.serverConnection.setHandler(this);
-
-        //
-        // TODO: Handle existing game intent
-        //
 
         Log.i(TAG, "connected="+this.serverConnection.isConnected());
 

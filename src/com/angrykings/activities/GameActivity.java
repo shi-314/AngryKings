@@ -194,8 +194,6 @@ public class GameActivity extends BaseGameActivity implements
 
         scene.setBackground(parallaxBackground);
 
-        scene.setOnSceneTouchListener(this);
-
         gc.setScene(scene);
 
         //
@@ -220,14 +218,22 @@ public class GameActivity extends BaseGameActivity implements
         scrollDetector = new SurfaceScrollDetector(this);
         pinchZoomDetector = new PinchZoomDetector(this);
 
-        scene.setOnSceneTouchListener(this);
-        scene.setTouchAreaBindingOnActionDownEnabled(true);
-
         //
         // initialize HUD
         //
 
         hud = new GameHUD();
+
+        gc.setHud(hud);
+        gc.getCamera().setHUD(hud);
+
+        hud.setStatus(getString(R.string.enteringGame));
+
+        pOnCreateSceneCallback.onCreateSceneFinished(scene);
+
+    }
+
+    protected void resume() {
 
         hud.setOnWhiteFlagTouched(new Runnable() {
             @Override
@@ -236,15 +242,19 @@ public class GameActivity extends BaseGameActivity implements
             }
         });
 
-        gc.setHud(hud);
-        gc.getCamera().setHUD(hud);
-
-
-        scene.registerUpdateHandler(pm.getPhysicsWorld());
-
-        pOnCreateSceneCallback.onCreateSceneFinished(scene);
+        scene.setOnSceneTouchListener(this);
+        scene.setTouchAreaBindingOnActionDownEnabled(true);
+        scene.registerUpdateHandler(PhysicsManager.getInstance().getPhysicsWorld());
 
         hud.setStatus(getString(R.string.yourTurn));
+    }
+
+    protected void pause() {
+
+        hud.setOnWhiteFlagTouched(null);
+        scene.setOnSceneTouchListener(null);
+        scene.setOnAreaTouchListener(null);
+        scene.clearUpdateHandlers();
 
     }
 

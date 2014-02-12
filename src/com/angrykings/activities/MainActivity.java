@@ -81,8 +81,7 @@ public class MainActivity extends Activity {
                                 //bLobby.setText(getString(R.string.lobbyButton));
                                 lobbyButton.setEnabled(true);
                             } else if (jObj.getInt("action") == Action.Server.UNKNOWN_USER) {
-                                Intent intent = new Intent(MainActivity.this,
-                                        LogInActivity.class);
+                                Intent intent = new Intent(MainActivity.this, LogInActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                                 startActivity(intent);
                             }
@@ -99,13 +98,14 @@ public class MainActivity extends Activity {
             final String id = Installation.id(this);
             Log.i(TAG, "The installation ID is " + id);
 
+            final String registrationId = settings.getString("registrationId", "");
+
 			ServerConnection.getInstance().start(new OnStartHandler() {
-				
 				@Override
 				public void onStart() {
 					ServerConnection
 					.getInstance()
-					.sendTextMessage(ServerMessage.setId(id));
+					.sendTextMessage(ServerMessage.setId(id, registrationId));
 				}
 			});
 		}else{

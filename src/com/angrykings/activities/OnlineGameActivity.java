@@ -80,7 +80,6 @@ public class OnlineGameActivity extends GameActivity {
 
 	private ServerConnection serverConnection;
 	int aimX, aimY;
-	boolean isLeft;
 
 	GameStatus status;
     private BasicMap map;
@@ -277,169 +276,16 @@ public class OnlineGameActivity extends GameActivity {
 	}
 
 	@Override
-	public void onCreateResources(OnCreateResourcesCallback pOnCreateResourcesCallback) throws Exception {
-		this.rm = ResourceManager.getInstance();
-
-		this.rm.load(this);
-
-		pOnCreateResourcesCallback.onCreateResourcesFinished();
-	}
-
-	@Override
 	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws Exception {
-		gc.setGameActivity(this);
 
-		//
-		// initialize network
-		//
+		super.onCreateScene(pOnCreateSceneCallback);
 
 		ServerConnection.getInstance().setHandler(new AngryKingsMessageHandler());
-
-		gc.setVboManager(this.getVertexBufferObjectManager());
-
-		if (GameConfig.LOG_FPS)
-			this.mEngine.registerUpdateHandler(new FPSLogger());
-
-		//
-		// initialize the scene
-		//
-
-		Scene scene = new Scene();
-
-        parallaxBackground = new AngryParallaxBackground(0f, 0f, 0f, 0.5f);
-        parallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(0f, rm.getBackgroundSprite()));
-
-        parallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(20f, new Sprite(0, 0, rm.getParallax2(), gc.getVboManager())));
-        parallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(10f, new Sprite(0, 100, rm.getParallax1(), gc.getVboManager())));
-
-
-        scene.setBackground(parallaxBackground);
-
-		scene.setOnSceneTouchListener(this);
-
-		gc.setScene(scene);
-
-		//
-		// initialize the physics engine
-		//
-
-        PhysicsManager.clear();
-		PhysicsManager pm = PhysicsManager.getInstance();
-		pm.clearEntities();
-
-		//
-		// initialize the entities
-		//
-
-        map = new BasicMap();
-		scene.attachChild(map);
-
-		String myName = "";
-		String partnerName = "";
-
-		Bundle extras = getIntent().getExtras();
-
-		if (extras != null) {
-			Boolean amILeft = extras.getBoolean("myTurn");
-			this.isLeft = amILeft;
-
-			myName = extras.getString("username");
-			partnerName = extras.getString("partnername");
-
-			Log.i(getClass().getName(), "this client is " + (amILeft ? "left" : "right"));
-		}
-
-		//
-		// This is important because the entity ids are incremented in the order in which we
-		// create the entities :(
-		//
-
-		if(isLeft) {
-			this.me = new Player(myName, isLeft);
-			this.partner = new Player(partnerName, !isLeft);
-		} else {
-			this.partner = new Player(partnerName, !isLeft);
-			this.me = new Player(myName, isLeft);
-		}
 
 		this.me.setPlayerTurnListener(new MyTurnListener());
 		this.partner.setPlayerTurnListener(new PartnerTurnListener());
 
-		//
-		// initialize navigation
-		//
-
-		this.scrollDetector = new SurfaceScrollDetector(this);
-		this.pinchZoomDetector = new PinchZoomDetector(this);
-
-		scene.setOnSceneTouchListener(this);
-		scene.setTouchAreaBindingOnActionDownEnabled(true);
-
-		hud = new GameHUD();
-
-		hud.setOnWhiteFlagTouched(new Runnable() {
-			@Override
-			public void run() {
-				resign();
-			}
-		});
-
-		gc.setHud(hud);
-		gc.getCamera().setHUD(hud);
-
-		final Castle leftCastle = isLeft ? me.getCastle() : partner.getCastle();
-		final Castle rightCastle = !isLeft ? me.getCastle() : partner.getCastle();
-
-		final float initialLeftCastleHeight = leftCastle.getInitialHeight();
-		final float initialRightCastleHeight = rightCastle.getInitialHeight();
-
-		final boolean left = isLeft;
-
-		hud.setLeftPlayerName(isLeft ? myName : partnerName);
-		hud.setRightPlayerName(!isLeft ? myName : partnerName);
-
-		scene.registerUpdateHandler(new IUpdateHandler() {
-			@Override
-			public void onUpdate(float pSecondsElapsed) {
-
-				float leftLife = leftCastle.getHeight() / initialLeftCastleHeight;
-				float rightLife = rightCastle.getHeight() / initialRightCastleHeight;
-
-				hud.getLeftLifeBar().setValue(1.0f - ((1.0f - leftLife) * 2.0f));
-				hud.getRightLifeBar().setValue(1.0f - ((1.0f - rightLife) * 2.0f));
-
-				if ((left && leftLife < 0.5f || !left && rightLife < 0.5f) && status != GameStatus.LOST) {
-					lost();
-				}
-                if(followCamera == OWNCANNONBALL){
-                    me.getCannon().activateFollowCamera();
-                }else if(followCamera == ENEMYCANNONBALL){
-                    partner.getCannon().activateFollowCamera();
-                }else if(followCamera == MIDDLE){
-                    deactivateFollowCamera("mitte");
-                }else if(followCamera == ENEMYCANNON){
-                    deactivateFollowCamera("gegner");
-                }
-			}
-
-			@Override
-			public void reset() {
-
-			}
-		});
-
-		scene.registerUpdateHandler(pm.getPhysicsWorld());
-
-		this.me.getCastle().freeze();
-		this.partner.getCastle().freeze();
-
-		scene.registerUpdateHandler(this.me);
-		scene.registerUpdateHandler(this.partner);
-
-		pOnCreateSceneCallback.onCreateSceneFinished(scene);
-
 		this.serverConnection.sendTextMessage(ServerMessage.ready());
-		hud.setStatus(this.getString(R.string.yourTurn));
 	}
 
     private void deactivateFollowCamera(String s) {
@@ -486,11 +332,6 @@ public class OnlineGameActivity extends GameActivity {
             followCamera = OFF;
         }
     }
-
-    @Override
-	public void onPopulateScene(Scene pScene, OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception {
-		pOnPopulateSceneCallback.onPopulateSceneFinished();
-	}
 
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
@@ -548,108 +389,26 @@ public class OnlineGameActivity extends GameActivity {
 		return true;
 	}
 
-	@Override
-	public void onPinchZoomStarted(PinchZoomDetector pPinchZoomDetector,
-								   TouchEvent pSceneTouchEvent) {
-		ZoomCamera camera = (ZoomCamera) gc.getCamera();
-		this.pinchZoomStartedCameraZoomFactor = camera.getZoomFactor();
-	}
+    @Override
+	protected void onResign() {
+        super.onResign();
+        
+        hud.setStatus(getString(R.string.youResigned));
+        serverConnection.sendTextMessage(ServerMessage.lose());
 
-	@Override
-	public void onPinchZoom(PinchZoomDetector pPinchZoomDetector,
-							TouchEvent pTouchEvent, float pZoomFactor) {
-		ZoomCamera camera = (ZoomCamera) gc.getCamera();
-
-		float factor = this.pinchZoomStartedCameraZoomFactor * pZoomFactor;
-		if (factor > GameConfig.CAMERA_ZOOM_MIN
-				&& factor < GameConfig.CAMERA_ZOOM_MAX)
-			camera.setZoomFactor(factor);
-	}
-
-	@Override
-	public void onPinchZoomFinished(PinchZoomDetector pPinchZoomDetector,
-									TouchEvent pTouchEvent, float pZoomFactor) {
-		ZoomCamera camera = (ZoomCamera) gc.getCamera();
-
-		float factor = this.pinchZoomStartedCameraZoomFactor * pZoomFactor;
-		if (factor > GameConfig.CAMERA_ZOOM_MIN
-				&& factor < GameConfig.CAMERA_ZOOM_MAX)
-			camera.setZoomFactor(factor);
-	}
-
-	@Override
-	public void onScrollStarted(ScrollDetector pScollDetector, int pPointerID,
-								float pDistanceX, float pDistanceY) {
-		ZoomCamera camera = (ZoomCamera) gc.getCamera();
-		final float zoomFactor = camera.getZoomFactor();
-
-		camera.offsetCenter(-pDistanceX / zoomFactor, -pDistanceY / zoomFactor);
-	}
-
-	@Override
-	public void onScroll(ScrollDetector pScollDetector, int pPointerID,
-						 float pDistanceX, float pDistanceY) {
-		ZoomCamera camera = (ZoomCamera) gc.getCamera();
-		final float zoomFactor = camera.getZoomFactor();
-
-        //this.parallaxBackground.setParallaxValue(this.parallaxBackground.getParallaxValue() + camera.getCenterX() / 100);
-
-		camera.offsetCenter(-pDistanceX / zoomFactor, -pDistanceY / zoomFactor);
-	}
-
-	@Override
-	public void onScrollFinished(ScrollDetector pScollDetector, int pPointerID,
-								 float pDistanceX, float pDistanceY) {
-		ZoomCamera camera = (ZoomCamera) gc.getCamera();
-		final float zoomFactor = camera.getZoomFactor();
-
-		camera.offsetCenter(-pDistanceX / zoomFactor, -pDistanceY / zoomFactor);
-	}
-
-	private void resign() {
-		new Handler().post(new Runnable() {
-			@Override
-			public void run() {
-				final Dialog dialog = new Dialog(OnlineGameActivity.this);
-				dialog.setContentView(R.layout.quit_dialog);
-				dialog.setCancelable(true);
-				dialog.getWindow().setBackgroundDrawable(
-						new ColorDrawable(android.graphics.Color.TRANSPARENT));
-
-				Button bCancel = (Button) dialog.findViewById(R.id.bCancel);
-				Button bResign = (Button) dialog.findViewById(R.id.bResign);
-
-				bCancel.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						dialog.dismiss();
-					}
-				});
-
-				bResign.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						hud.setStatus(getString(R.string.youResigned));
-						serverConnection.sendTextMessage(ServerMessage.lose());
-						dialog.dismiss();
-						Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
-						intent.putExtra("hasWon", false);
-						intent.putExtra("isLeft", OnlineGameActivity.this.isLeft);
-						intent.putExtra("username", me.getName());
-						intent.putExtra("partnername", partner.getName());
-						intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-						startActivity(intent);
-					}
-				});
-				dialog.show();
-			}
-		});
+        Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
+        intent.putExtra("hasWon", false);
+        intent.putExtra("isLeft", OnlineGameActivity.this.isLeft);
+        intent.putExtra("username", me.getName());
+        intent.putExtra("partnername", partner.getName());
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(intent);
 	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-			resign();
+			super.onResignDialog();
 			return true;
 		}
 
@@ -684,14 +443,13 @@ public class OnlineGameActivity extends GameActivity {
 
 	}
 
-	private void lost() {
+    @Override
+	protected void onLose() {
+        super.onLose();
+
 		Log.i(getClass().getName(), "lost()");
 
-		this.status = GameStatus.LOST;
 		serverConnection.sendTextMessage(ServerMessage.lose());
-
-		gc.getHud().setStatus("Du hast verloren!");
-		gc.getHud().setStatus(getString(R.string.hasLost));
 
 		Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
 		intent.putExtra("hasWon", false);

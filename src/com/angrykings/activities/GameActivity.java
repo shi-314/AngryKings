@@ -64,6 +64,7 @@ public class GameActivity extends BaseGameActivity implements
     protected BasicMap map;
     protected AngryParallaxBackground parallaxBackground;
     protected boolean isLeft;
+    protected int aimX, aimY;
 
     //
     // Navigation Attributes
@@ -266,7 +267,57 @@ public class GameActivity extends BaseGameActivity implements
 
     @Override
     public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
-        return false;
+        if (gc.getPhysicsWorld() == null)
+            return false;
+
+        double cannonDistanceX = pSceneTouchEvent.getX() - this.me.getCannon().getX();
+        double cannonDistanceY = pSceneTouchEvent.getY() - this.me.getCannon().getY();
+        double cannonDistanceR = Math.sqrt(cannonDistanceX*cannonDistanceX + cannonDistanceY*cannonDistanceY);
+
+        if (cannonDistanceR < rm.getAimCircleTexture().getHeight() &&
+                ((isLeft && cannonDistanceX > 0) || (!isLeft && cannonDistanceX < 0))) {
+
+            //
+            // aim and fire
+            //
+
+            float x = pSceneTouchEvent.getX();
+            float y = pSceneTouchEvent.getY();
+
+            int iX = (int) x;
+            int iY = (int) y;
+
+            if(me.getCannon().pointAt(iX, iY)) {
+                aimX = iX;
+                aimY = iY;
+            }
+
+            if (pSceneTouchEvent.isActionUp() && status == GameStatus.MY_TURN) {
+                me.handleTurn(aimX, aimY, null);
+            }
+
+        } else {
+
+            //
+            // pinch and zoom
+            //
+
+            if (pSceneTouchEvent.isActionDown()) {
+                scrollDetector.setEnabled(true);
+            }
+
+            pinchZoomDetector.onTouchEvent(pSceneTouchEvent);
+
+            if (pinchZoomDetector.isZooming()) {
+                scrollDetector.setEnabled(false);
+            } else {
+                scrollDetector.onTouchEvent(pSceneTouchEvent);
+            }
+
+        }
+
+        return true;
+
     }
 
     @Override
@@ -379,6 +430,18 @@ public class GameActivity extends BaseGameActivity implements
     }
 
     protected void onResign() {
+
+        Intent intent = new Intent(GameActivity.this, EndGameActivity.class);
+
+        intent.putExtra("hasWon", false);
+        intent.putExtra("isLeft", GameActivity.this.isLeft);
+        intent.putExtra("username", me.getName());
+        intent.putExtra("partnername", partner.getName());
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+        startActivity(intent);
+
+        hud.setStatus(getString(R.string.youResigned));
 
     }
 

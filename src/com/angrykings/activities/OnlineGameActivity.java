@@ -79,7 +79,6 @@ public class OnlineGameActivity extends GameActivity {
 	//
 
 	private ServerConnection serverConnection;
-	int aimX, aimY;
 
 	GameStatus status;
     private BasicMap map;
@@ -270,12 +269,6 @@ public class OnlineGameActivity extends GameActivity {
 	}
 
 	@Override
-	public EngineOptions onCreateEngineOptions() {
-        this.serverConnection = ServerConnection.getInstance();
-        return super.onCreateEngineOptions();
-	}
-
-	@Override
 	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws Exception {
 
 		super.onCreateScene(pOnCreateSceneCallback);
@@ -285,6 +278,7 @@ public class OnlineGameActivity extends GameActivity {
 		this.me.setPlayerTurnListener(new MyTurnListener());
 		this.partner.setPlayerTurnListener(new PartnerTurnListener());
 
+        this.serverConnection = ServerConnection.getInstance();
 		this.serverConnection.sendTextMessage(ServerMessage.ready());
 	}
 
@@ -333,76 +327,12 @@ public class OnlineGameActivity extends GameActivity {
         }
     }
 
-	@Override
-	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
-		if (gc.getPhysicsWorld() == null)
-			return false;
-
-		double cannonDistanceX = pSceneTouchEvent.getX() - this.me.getCannon().getX();
-		double cannonDistanceY = pSceneTouchEvent.getY() - this.me.getCannon().getY();
-		double cannonDistanceR = Math.sqrt(cannonDistanceX*cannonDistanceX + cannonDistanceY*cannonDistanceY);
-
-		// TODO: refactor constant
-
-		if (cannonDistanceR < rm.getAimCircleTexture().getHeight() &&
-                ((isLeft && cannonDistanceX > 0) || (!isLeft && cannonDistanceX < 0))) {
-
-			//
-			// aim and fire
-			//
-
-			float x = pSceneTouchEvent.getX();
-			float y = pSceneTouchEvent.getY();
-
-			int iX = (int) x;
-			int iY = (int) y;
-
-			if (this.me.getCannon().pointAt(iX, iY)) {
-				this.aimX = iX;
-				this.aimY = iY;
-			}
-
-			if (pSceneTouchEvent.isActionUp() && this.status == GameStatus.MY_TURN) {
-				this.me.handleTurn(this.aimX, this.aimY, null);
-			}
-
-		} else {
-
-			//
-			// pinch and zoom
-			//
-
-			if (pSceneTouchEvent.isActionDown()) {
-				this.scrollDetector.setEnabled(true);
-			}
-
-			this.pinchZoomDetector.onTouchEvent(pSceneTouchEvent);
-
-			if (this.pinchZoomDetector.isZooming()) {
-				this.scrollDetector.setEnabled(false);
-			} else {
-				this.scrollDetector.onTouchEvent(pSceneTouchEvent);
-			}
-
-		}
-
-		return true;
-	}
-
     @Override
 	protected void onResign() {
-        super.onResign();
 
-        hud.setStatus(getString(R.string.youResigned));
+        super.onResign();
         serverConnection.sendTextMessage(ServerMessage.lose());
 
-        Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
-        intent.putExtra("hasWon", false);
-        intent.putExtra("isLeft", OnlineGameActivity.this.isLeft);
-        intent.putExtra("username", me.getName());
-        intent.putExtra("partnername", partner.getName());
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        startActivity(intent);
 	}
 
 	@Override

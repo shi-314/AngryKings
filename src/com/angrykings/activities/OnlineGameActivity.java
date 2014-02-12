@@ -1,9 +1,13 @@
 package com.angrykings.activities;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.Button;
 
 import com.angrykings.Action;
 import com.angrykings.GameConfig;
@@ -38,8 +42,8 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
     private static final int OFF = 4;
     private int followCamera = OFF;
 
-	// Network
-	private ServerConnection serverConnection;
+    // Network
+    private ServerConnection serverConnection;
 
     private class MyTurnListener implements IPlayerTurnListener {
         private ArrayList<Keyframe> keyframes;
@@ -69,38 +73,38 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
 
             partner.getKing().jump();
             //followCamera = ENEMYCANNON;
-		}
+        }
 
-		@Override
-		public void onKeyframe(float time) {
-			try {
-				Keyframe k = new Keyframe(time, me.getCannonball(), partner.getCastle());
-				this.keyframes.add(k);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		}
+        @Override
+        public void onKeyframe(float time) {
+            try {
+                Keyframe k = new Keyframe(time, me.getCannonball(), partner.getCastle());
+                this.keyframes.add(k);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
-		@Override
-		public void onUpdate(float dt) {
+        @Override
+        public void onUpdate(float dt) {
 
-		}
-	}
+        }
+    }
 
-	private class PartnerTurnListener implements IPlayerTurnListener {
-		private ArrayList<Keyframe> keyframes;
-		private int keyframeIndex;
-		private float timeElapsedSinceKeyframe;
+    private class PartnerTurnListener implements IPlayerTurnListener {
+        private ArrayList<Keyframe> keyframes;
+        private int keyframeIndex;
+        private float timeElapsedSinceKeyframe;
         private boolean keyframeInterpolationDone;
 
-		@Override
-		public void onHandleTurn(int x, int y, ArrayList<Keyframe> keyframes) {
-			partner.getCannon().pointAt(x, y);
+        @Override
+        public void onHandleTurn(int x, int y, ArrayList<Keyframe> keyframes) {
+            partner.getCannon().pointAt(x, y);
             partner.getCannonball().getBody().setActive(false);
 
-			this.keyframes = keyframes;
-			this.keyframeIndex = -1; // because onKeyframe is called at t=0
-			this.timeElapsedSinceKeyframe = 0;
+            this.keyframes = keyframes;
+            this.keyframeIndex = -1; // because onKeyframe is called at t=0
+            this.timeElapsedSinceKeyframe = 0;
             this.keyframeInterpolationDone = false;
 
             //followCamera = ENEMYCANNONBALL;
@@ -116,7 +120,7 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
 
             me.getKing().jump();
             //followCamera = MIDDLE;
-		}
+        }
 
         @Override
         public void onKeyframe(float time) {
@@ -127,17 +131,17 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
             this.keyframeIndex++;
             this.timeElapsedSinceKeyframe = 0;
 
-            if(this.keyframeIndex == this.keyframes.size() - 1) {
+            if (this.keyframeIndex == this.keyframes.size() - 1) {
                 this.keyframeInterpolationDone = true;
             }
         }
 
-		@Override
-		public void onUpdate(float dt) {
-			if(this.keyframes == null || this.keyframeInterpolationDone)
-				return;
+        @Override
+        public void onUpdate(float dt) {
+            if (this.keyframes == null || this.keyframeInterpolationDone)
+                return;
 
-			this.timeElapsedSinceKeyframe += dt;
+            this.timeElapsedSinceKeyframe += dt;
 
             Keyframe currentKeyframe = this.keyframes.get(this.keyframeIndex);
             Keyframe nextKeyframe = this.keyframes.get(this.keyframeIndex + 1);
@@ -173,6 +177,43 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
 
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            final Dialog dialog = new Dialog(OnlineGameActivity.this);
+            dialog.setContentView(R.layout.quit_dialog);
+            dialog.setCancelable(true);
+            dialog.getWindow().setBackgroundDrawable(
+                    new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+            Button bCancel = (Button) dialog.findViewById(R.id.bCancel);
+            Button bResign = (Button) dialog.findViewById(R.id.bResign);
+
+            bCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            bResign.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    serverConnection.sendTextMessage(ServerMessage.leaveGame());
+                    dialog.dismiss();
+                    Intent intent = new Intent(OnlineGameActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    startActivity(intent);
+                }
+            });
+            dialog.show();
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+
     private void turn() {
 
         Log.i(getClass().getName(), "turn()");
@@ -196,15 +237,15 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
 
                 ArrayList<Keyframe> keyframes = null;
 
-                if(jObj.has("keyframes")) {
+                if (jObj.has("keyframes")) {
                     JSONArray jsonKeyframes = jObj.getJSONArray("keyframes");
                     keyframes = new ArrayList<Keyframe>();
 
-                    for(int i = 0; i < jsonKeyframes.length(); ++i) {
+                    for (int i = 0; i < jsonKeyframes.length(); ++i) {
                         keyframes.add(new Keyframe(jsonKeyframes.getJSONObject(i)));
                     }
 
-                    Log.i(getClass().getName(), "received "+keyframes.size()+" keyframes");
+                    Log.i(getClass().getName(), "received " + keyframes.size() + " keyframes");
                     turn();
                 } else {
                     Log.w(getClass().getName(), "received 0 keyframes");
@@ -230,7 +271,8 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
 
                 turn();
 
-            } if (jObj.getInt("action") == Action.Server.EXISTING_GAME) {
+            }
+            if (jObj.getInt("action") == Action.Server.EXISTING_GAME) {
 
                 Log.i(TAG, "enter existing game");
 
@@ -278,7 +320,7 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
     @Override
 	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws Exception {
 
-		super.onCreateScene(pOnCreateSceneCallback);
+        super.onCreateScene(pOnCreateSceneCallback);
 
         this.serverConnection.setHandler(this);
 
@@ -365,18 +407,23 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
     }
 
     @Override
-	protected void onResign() {
+    protected void onPause() {
+        serverConnection.sendTextMessage(ServerMessage.leaveGame());
+        super.onPause();
+    }
 
+    @Override
+    protected void onResign() {
         super.onResign();
         serverConnection.sendTextMessage(ServerMessage.lose());
 
-	}
+    }
 
     @Override
-	protected void onLose() {
+    protected void onLose() {
 
-		serverConnection.sendTextMessage(ServerMessage.lose());
+        serverConnection.sendTextMessage(ServerMessage.lose());
         super.onLose();
 
-	}
+    }
 }

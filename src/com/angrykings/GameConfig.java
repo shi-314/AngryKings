@@ -13,7 +13,7 @@ public final class GameConfig {
 	public static final int CAMERA_X = -520;
 	public static final int CAMERA_Y = 520;
 
-	public static final float CAMERA_STARTUP_ZOOM = 0.70f;
+	public static final float CAMERA_STARTUP_ZOOM = 0.5f;
 	public static final float CAMERA_ZOOM_MIN = 0.5f;
 	public static final float CAMERA_ZOOM_MAX = 1f;
 
@@ -29,7 +29,7 @@ public final class GameConfig {
 	public static final int PHYSICS_POSITION_ITERATION = 5;
 	public static final int PHYSICS_MAX_STEPS_PER_UPDATE = 1;
 
-	public static final float CANNON_FORCE = 12;
+	public static final float CANNON_FORCE = 15;
 	public static final float CANNONBALL_TIME_SEC = 5.0f;
 
 	//public static final String WEBSERVICE_URI = "ws://141.64.167.170:8008";

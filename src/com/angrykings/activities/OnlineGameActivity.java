@@ -61,31 +61,7 @@ import java.util.ArrayList;
  * @author Shivan Taher <zn31415926535@gmail.com>
  * @date 06.06.13
  */
-public class OnlineGameActivity extends BaseGameActivity implements
-		IOnSceneTouchListener, IScrollDetectorListener,
-		IPinchZoomDetectorListener {
-
-	private GameContext gc;
-	private Handler handler;
-	private GameHUD hud;
-	private ResourceManager rm;
-    private boolean myTurn;
-
-	//
-	// Game Objects
-	//
-
-	private Player me;
-	private Player partner;
-
-	//
-	// Navigation Attributes
-	//
-
-	private SurfaceScrollDetector scrollDetector;
-	private PinchZoomDetector pinchZoomDetector;
-	private float pinchZoomStartedCameraZoomFactor;
-	boolean isAiming = true;
+public class OnlineGameActivity extends GameActivity {
 
     //
     // Camera Positions
@@ -182,7 +158,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 			partner.getKing().jump();
             //followCamera = ENEMYCANNON;
-            myTurn = false;
 		}
 
 		@Override
@@ -234,7 +209,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 			me.getKing().jump();
             //followCamera = MIDDLE;
-            myTurn = true;
 
 			if(status != GameStatus.LOST)
 				serverConnection.sendTextMessage(ServerMessage.ready());
@@ -298,26 +272,8 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
-        GameContext.clear();
-		gc = GameContext.getInstance();
-		handler = new Handler();
-
-		ZoomCamera camera = new ZoomCamera(GameConfig.CAMERA_X, GameConfig.CAMERA_Y, GameConfig.CAMERA_WIDTH, GameConfig.CAMERA_HEIGHT);
-
-		camera.setZoomFactor(GameConfig.CAMERA_STARTUP_ZOOM);
-		camera.setBounds(
-				GameConfig.CAMERA_MIN_X, GameConfig.CAMERA_MIN_Y,
-				GameConfig.CAMERA_MAX_X, GameConfig.CAMERA_MAX_Y
-		);
-		camera.setBoundsEnabled(true);
-
-		gc.setCamera(camera);
-
-		this.serverConnection = ServerConnection.getInstance();
-
-		return new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED,
-				new RatioResolutionPolicy(GameConfig.CAMERA_WIDTH,
-						GameConfig.CAMERA_HEIGHT), camera);
+        this.serverConnection = ServerConnection.getInstance();
+        return super.onCreateEngineOptions();
 	}
 
 	@Override
@@ -441,8 +397,6 @@ public class OnlineGameActivity extends BaseGameActivity implements
 
 		hud.setLeftPlayerName(isLeft ? myName : partnerName);
 		hud.setRightPlayerName(!isLeft ? myName : partnerName);
-
-        myTurn = true;
 
 		scene.registerUpdateHandler(new IUpdateHandler() {
 			@Override
@@ -653,7 +607,7 @@ public class OnlineGameActivity extends BaseGameActivity implements
 	}
 
 	private void resign() {
-		handler.post(new Runnable() {
+		new Handler().post(new Runnable() {
 			@Override
 			public void run() {
 				final Dialog dialog = new Dialog(OnlineGameActivity.this);

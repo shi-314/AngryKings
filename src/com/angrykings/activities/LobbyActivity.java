@@ -11,10 +11,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.angrykings.Action;
-import com.angrykings.LobbyPlayer;
-import com.angrykings.LobbyPlayerAdapter;
+import com.angrykings.pregame.FacebookPlayer;
+import com.angrykings.pregame.FacebookPlayerAdapter;
+import com.angrykings.pregame.LobbyPlayer;
+import com.angrykings.pregame.LobbyPlayerAdapter;
 import com.angrykings.R;
 import com.angrykings.ServerConnection;
 import com.angrykings.utils.ServerJSONBuilder;
@@ -31,10 +34,11 @@ import java.util.List;
 public class LobbyActivity extends Activity {
 
     private ListView lobbyList;
+    private ListView facebookList;
 
     private String username;
-    private List<String> users;
     private List<LobbyPlayer> lobbyPlayers;
+    private List<FacebookPlayer> facebookPlayers;
 
     private void challengePlayer(final LobbyPlayer partner) {
         new AlertDialog.Builder(LobbyActivity.this)
@@ -60,6 +64,9 @@ public class LobbyActivity extends Activity {
                         }).show();
     }
 
+    private void updateFacebookList(List<FacebookPlayer> user) {
+        facebookList.setAdapter((new FacebookPlayerAdapter(this, R.layout.list_row_facebook, user)));
+    }
 
     private void updateLobby(List<LobbyPlayer> user) {
         lobbyList.setAdapter(new LobbyPlayerAdapter(this, R.layout.list_row, user));
@@ -73,10 +80,11 @@ public class LobbyActivity extends Activity {
 
         Button zufallButton = (Button) findViewById(R.id.bZufall);
         lobbyList = (ListView) findViewById(R.id.lobbyList);
+        facebookList = (ListView) findViewById(R.id.facebookList);
 
 
         Bundle extras = getIntent().getExtras();
-        users = new ArrayList<String>();
+        facebookPlayers = new ArrayList<FacebookPlayer>();
         lobbyPlayers = new ArrayList<LobbyPlayer>();
         if (extras != null) {
             this.username = extras.getString("username");
@@ -85,6 +93,15 @@ public class LobbyActivity extends Activity {
         ServerConnection
                 .getInstance()
                 .sendTextMessage(ServerMessage.gotoLobby());
+
+        facebookList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                CharSequence text = facebookPlayers.get(position).name;
+                Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
 
         lobbyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -96,12 +113,16 @@ public class LobbyActivity extends Activity {
         zufallButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final LobbyPlayer partner = lobbyPlayers.get((int) (Math.random() * users.size()));
+                final LobbyPlayer partner = lobbyPlayers.get((int) (Math.random() * lobbyPlayers.size()));
                 challengePlayer(partner);
 
             }
         });
-
+        FacebookPlayer test1 = new FacebookPlayer("Dummy", 123, "100", "50");
+        FacebookPlayer test2 = new FacebookPlayer("Dummy2", 456, "50", "100");
+        facebookPlayers.add(test1);
+        facebookPlayers.add(test2);
+        updateFacebookList(facebookPlayers);
         updateLobby(lobbyPlayers);
         lobbyList.setTextFilterEnabled(true);
 
@@ -115,19 +136,10 @@ public class LobbyActivity extends Activity {
                         Log.d("AngryKings", "received lobby update: " + jObj.get("names"));
 
                         JSONArray userArray = new JSONArray(jObj.getString("names"));
-                        users.clear();
                         lobbyPlayers.clear();
 
                         for (int i = 0; i < userArray.length(); i++) {
                             final JSONObject jsonObject = userArray.getJSONObject(i);
-                            String eingabe = jsonObject
-                                    .getString("name")
-                                    + "   Gewonnen: "
-                                    + jsonObject.getString("won")
-                                    + "   Verloren: "
-                                    + jsonObject.getString("lost");
-
-                            users.add(eingabe);
 
                             lobbyPlayers.add(new LobbyPlayer(jsonObject.getString("name"),
                                     jsonObject.getInt("public_id"),
@@ -143,6 +155,9 @@ public class LobbyActivity extends Activity {
             }
         });
     }
+
+
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

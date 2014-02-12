@@ -34,6 +34,7 @@ public class MainActivity extends Activity {
 
 	private String username;
 	private Button lobbyButton;
+    private Button runningGamesButton;
 	private Button introButton;
     private Button settingsButton;
     private GoogleCloudMessaging gcm;
@@ -49,6 +50,7 @@ public class MainActivity extends Activity {
 
 		lobbyButton = (Button) findViewById(R.id.lobbyButton);
 		lobbyButton.setBackgroundResource(R.drawable.verbinde_button);
+        runningGamesButton = (Button) findViewById(R.id.runningGamesButton);
 
         settingsButton = (Button) findViewById(R.id.settingsButton);
 
@@ -147,6 +149,15 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        runningGamesButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), RunningGamesActivity.class);
+                intent.putExtra("username", username);
                 startActivity(intent);
             }
         });

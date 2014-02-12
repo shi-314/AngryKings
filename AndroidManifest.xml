@@ -59,6 +59,9 @@
             android:name=".activities.LobbyActivity"
             android:screenOrientation="landscape">
         </activity>
+        <activity android:name=".activities.RunningGamesActivity"
+            android:screenOrientation="landscape">
+        </activity>
         <activity
             android:name="com.angrykings.activities.LogInActivity"
             android:screenOrientation="landscape" >

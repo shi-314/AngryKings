@@ -7,13 +7,41 @@
     android:padding="8dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="120dp">
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lobbyList"
+            android:layout_marginRight="25dp"
+            android:layout_weight="1"/>
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/facebookList"
+            android:layout_weight="1"/>
+
+
+    </LinearLayout>
+
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/lobbyList"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="120dp"
         android:layout_marginRight="25dp"/>
+
+    <ListView
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/facebookList"
+        android:layout_marginTop="120dp"
+        android:layout_toRightOf="@id/lobbyList"/>
 
 
     <Button

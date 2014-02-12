@@ -23,6 +23,7 @@
     <string name="waitTooLong">Zu Langsam!</string>
     <string name="tZufall">Zufall oder aus der Liste wählen</string>
     <string name="bZufall">Zufallsmatch</string>
+    <string name="tRunningGames">Laufende Spiele</string>
 
     <string name="notificationsVibrate">Vibrate</string>
     <string name="notificationsVibrateDescription">Vibrate when new notification are received</string>

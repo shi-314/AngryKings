@@ -25,14 +25,15 @@ public class Player implements IUpdateHandler {
 	private float keyTime;
 
 	// Game Objects Positions
-	private static final int LEFT_CANNON_X = -275;
-	private static final int RIGHT_CANNON_X = 200;
 
-	private static final int LEFT_CASTLE_X = -715;
-	private static final int RIGHT_CASTLE_X = 275;
+	private static final int LEFT_CANNON_X = -375;
+	private static final int RIGHT_CANNON_X = 300;
 
-	private static final int LEFT_KING_X = -315;
-	private static final int RIGHT_KING_X = 250;
+	private static final int LEFT_CASTLE_X = -1015;
+	private static final int RIGHT_CASTLE_X = 375;
+
+	private static final int LEFT_KING_X = -415;
+	private static final int RIGHT_KING_X = 350;
 
 	// Game Objects
 	private final String name;

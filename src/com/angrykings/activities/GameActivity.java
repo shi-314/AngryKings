@@ -42,7 +42,7 @@ import org.andengine.util.debug.Debug;
 
 public class GameActivity extends BaseGameActivity implements
         IOnSceneTouchListener, ScrollDetector.IScrollDetectorListener,
-        PinchZoomDetector.IPinchZoomDetectorListener  {
+        PinchZoomDetector.IPinchZoomDetectorListener {
 
     //
     // Core
@@ -76,7 +76,6 @@ public class GameActivity extends BaseGameActivity implements
     protected boolean isAiming = true;
 
     private static final String TAG = "GameActivity";
-
 
 
     @Override
@@ -117,7 +116,7 @@ public class GameActivity extends BaseGameActivity implements
         // This is important because the entity ids are incremented in the order in which we
         // create the entities :(
 
-        if(isLeft) {
+        if (isLeft) {
             this.me = new Player(playerNamer, isLeft);
             this.partner = new Player(partnerName, !isLeft);
         } else {
@@ -263,7 +262,7 @@ public class GameActivity extends BaseGameActivity implements
 
         double cannonDistanceX = pSceneTouchEvent.getX() - this.me.getCannon().getX();
         double cannonDistanceY = pSceneTouchEvent.getY() - this.me.getCannon().getY();
-        double cannonDistanceR = Math.sqrt(cannonDistanceX*cannonDistanceX + cannonDistanceY*cannonDistanceY);
+        double cannonDistanceR = Math.sqrt(cannonDistanceX * cannonDistanceX + cannonDistanceY * cannonDistanceY);
 
         if (cannonDistanceR < rm.getAimCircleTexture().getHeight() &&
                 ((isLeft && cannonDistanceX > 0) || (!isLeft && cannonDistanceX < 0))) {
@@ -278,7 +277,7 @@ public class GameActivity extends BaseGameActivity implements
             int iX = (int) x;
             int iY = (int) y;
 
-            if(me.getCannon().pointAt(iX, iY)) {
+            if (me.getCannon().pointAt(iX, iY)) {
                 aimX = iX;
                 aimY = iY;
             }
@@ -392,7 +391,7 @@ public class GameActivity extends BaseGameActivity implements
     }
 
     protected void onResignDialog() {
-        new Handler().post(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 final Dialog dialog = new Dialog(GameActivity.this);
@@ -437,30 +436,5 @@ public class GameActivity extends BaseGameActivity implements
 
         hud.setStatus(getString(R.string.youResigned));
 
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-            return true;
-        }
-
-        return super.onKeyDown(keyCode, event);
-
-    }
-
-    //
-    // TODO: What the hell? Do we need this?
-    //
-
-    @Override
-    public synchronized void onPauseGame() {
-        Log.i(getClass().getName(), "onPauseGame()");
-
-        super.onPauseGame();
-        if(BuildConfig.DEBUG) {
-            Debug.d(this.getClass().getSimpleName() + ".onPauseGame lalala" + " @(Thread: '" + Thread.currentThread().getName() + "')");
-        }
     }
 }

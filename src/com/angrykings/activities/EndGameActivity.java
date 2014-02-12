@@ -2,10 +2,7 @@ package com.angrykings.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
@@ -16,12 +13,7 @@ import android.widget.TextView;
 import com.angrykings.Action;
 import com.angrykings.R;
 import com.angrykings.ServerConnection;
-import com.angrykings.ServerConnection.OnMessageHandler;
 import com.angrykings.utils.ServerJSONBuilder;
-import com.angrykings.utils.ServerMessage;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class EndGameActivity extends Activity {
 	

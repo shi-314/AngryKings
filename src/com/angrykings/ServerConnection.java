@@ -11,8 +11,8 @@ public class ServerConnection {
 
 	private static final String TAG = "com.angrykings.ServerConnection";
 
-	public static abstract class OnMessageHandler {
-		public abstract void onMessage(String payload);
+	public interface OnMessageHandler {
+		void onMessage(String payload);
 	}
 
 	public static abstract class OnStartHandler{

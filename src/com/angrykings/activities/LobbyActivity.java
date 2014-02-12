@@ -60,7 +60,6 @@ public class LobbyActivity extends Activity {
                                                 Intent intent = new Intent(LobbyActivity.this, OnlineGameActivity.class);
                                                 intent.putExtra("existingGame", false);
                                                 intent.putExtra("left", false);
-                                                intent.putExtra("turn", jObj.getJSONObject("you").getInt("turn"));
                                                 intent.putExtra("username", username);
                                                 intent.putExtra("partnername", partner.name);
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -71,7 +70,6 @@ public class LobbyActivity extends Activity {
                                                 Intent intent = new Intent(LobbyActivity.this, OnlineGameActivity.class);
                                                 intent.putExtra("existingGame", true);
                                                 intent.putExtra("left", jObj.getJSONObject("you").getBoolean("left"));
-                                                intent.putExtra("turn", jObj.getJSONObject("you").getInt("turn"));
                                                 intent.putExtra("username", username);
                                                 intent.putExtra("partnername", partner.name);
                                                 intent.putExtra("data_you", jObj.getJSONObject("you").getJSONObject("data").toString());

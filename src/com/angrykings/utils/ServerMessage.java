@@ -13,11 +13,8 @@ import java.util.ArrayList;
  * This class provides static methods to build quickly Json Messages for our game.
  */
 public class ServerMessage {
-	private ServerMessage() {
+	private ServerMessage() { }
 
-	}
-
-	// TODO: send keyframes
 	public static String endTurn(int x, int y, ArrayList<Keyframe> keyframes) {
 		JSONArray keyframesJson = new JSONArray();
 
@@ -43,12 +40,11 @@ public class ServerMessage {
 		return msg.toString();
 	}
 
-    public static String lose() {
-        return  new ServerJSONBuilder().create(Action.Client.LOSE).build();
-    }
-
-	public static String setId(String id) {
-		return new ServerJSONBuilder().create(Action.Client.SET_ID).option("id", id).build();
+	public static String setId(String id, String registrationId) {
+		return new ServerJSONBuilder().create(Action.Client.SET_ID)
+                .option("id", id)
+                .option("registration_id", registrationId)
+                .build();
 	}
 
 	public static String getName() {
@@ -74,4 +70,9 @@ public class ServerMessage {
     public static String leaveGame() {
         return new ServerJSONBuilder().create(Action.Client.LEAVE_GAME).build();
     }
+
+    public static String lose() {
+        return  new ServerJSONBuilder().create(Action.Client.LOSE).build();
+    }
+
 }

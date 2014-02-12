@@ -14,6 +14,7 @@ import android.util.Log;
 
 import com.angrykings.R;
 import com.angrykings.activities.MainActivity;
+import com.angrykings.activities.OnlineGameActivity;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 public class GcmIntentService extends IntentService {
@@ -51,7 +52,10 @@ public class GcmIntentService extends IntentService {
 
         // TODO: Set game id or something on the intent and handle it in MainActivity
 
-        PendingIntent intent = PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), 0);
+        Intent intent = new Intent(context, OnlineGameActivity.class);
+        intent.putExtra("existingGame", "yeeeep");
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
         Notification.Builder notificationBuilder =
                 new Notification.Builder(context)
@@ -60,7 +64,7 @@ public class GcmIntentService extends IntentService {
                         .setContentText(msg)
                         .setStyle(new Notification.BigTextStyle().bigText(msg));
 
-        notificationBuilder.setContentIntent(intent);
+        notificationBuilder.setContentIntent(pendingIntent);
 
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         notificationBuilder.setSound(alarmSound);

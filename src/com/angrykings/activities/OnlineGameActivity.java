@@ -80,7 +80,6 @@ public class OnlineGameActivity extends GameActivity {
 
 	private ServerConnection serverConnection;
 
-	GameStatus status;
     private BasicMap map;
     private AngryParallaxBackground parallaxBackground;
 

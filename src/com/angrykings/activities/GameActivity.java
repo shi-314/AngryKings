@@ -75,7 +75,7 @@ public class GameActivity extends BaseGameActivity implements
     protected float pinchZoomStartedCameraZoomFactor;
     protected boolean isAiming = true;
 
-
+    private static final String TAG = "GameActivity";
 
 
 
@@ -293,6 +293,7 @@ public class GameActivity extends BaseGameActivity implements
             }
 
             if (pSceneTouchEvent.isActionUp() && status == GameStatus.MY_TURN) {
+                Log.i(TAG, "fire");
                 me.handleTurn(aimX, aimY, null);
             }
 

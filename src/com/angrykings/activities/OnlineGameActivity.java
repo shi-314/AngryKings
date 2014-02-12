@@ -3,6 +3,7 @@ package com.angrykings.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.angrykings.Action;
 import com.angrykings.GameConfig;
@@ -186,6 +187,9 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
     public void onMessage(String payload) {
         try {
             JSONObject jObj = new JSONObject(payload);
+
+            Log.i(TAG, "MUH: "+jObj.toString());
+
             if (jObj.getInt("action") == Action.Server.TURN) {
 
                 final int x = Integer.parseInt(jObj.getString("x"));
@@ -213,48 +217,55 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
 
                 onWin();
 
-            } else if (jObj.getInt("action") == Action.Server.NEW_GAME) {
+            } else if (jObj.getInt("action") == Action.Server.NEW_GAME || jObj.getInt("action") == Action.Server.EXISTING_GAME) {
 
                 Log.i(TAG, "enter new game");
 
-//                Intent intent = new Intent(LobbyActivity.this, OnlineGameActivity.class);
-//
-//                intent.putExtra("existingGame", false);
-//                intent.putExtra("left", false);
-//                intent.putExtra("username", username);
-//                intent.putExtra("partnername", partner.name);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-//                startActivity(intent);
+                JSONObject meJson = jObj.getJSONObject("you");
+                JSONObject partnerJson = jObj.getJSONObject("opponent");
 
-            } else if (jObj.getInt("action") == Action.Server.EXISTING_GAME) {
-
-                Log.i(TAG, "enter existing game");
-
-                JSONObject me = jObj.getJSONObject("you");
-                JSONObject partner = jObj.getJSONObject("opponent");
-
-                initializePlayer(me.getBoolean("left"), me.getString("name"), partner.getString("name"));
+                initializePlayer(meJson.getBoolean("left"), meJson.getString("name"), partnerJson.getString("name"));
 
                 this.me.setPlayerTurnListener(new MyTurnListener());
                 this.partner.setPlayerTurnListener(new PartnerTurnListener());
+
                 turn();
 
+            } if (jObj.getInt("action") == Action.Server.EXISTING_GAME) {
 
-//                Intent intent = new Intent(LobbyActivity.this, OnlineGameActivity.class);
-//
-//                intent.putExtra("existingGame", true);
-//                intent.putExtra("left", jObj.getJSONObject("you").getBoolean("left"));
-//                intent.putExtra("username", username);
-//                intent.putExtra("partnername", partner.name);
-//                intent.putExtra("data_you", jObj.getJSONObject("you").getJSONObject("data").toString());
-//                intent.putExtra("data_opponent", jObj.getJSONObject("opponent").getJSONObject("data").toString());
-//                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-//                startActivity(intent);
+                Log.i(TAG, "enter existing game");
+
+                JSONObject meJson = jObj.getJSONObject("you");
+                JSONObject partnerJson = jObj.getJSONObject("opponent");
+
+                initializePlayer(meJson.getBoolean("left"), meJson.getString("name"), partnerJson.getString("name"));
+
+                this.me.setPlayerTurnListener(new MyTurnListener());
+                this.partner.setPlayerTurnListener(new PartnerTurnListener());
+
+                JSONObject data_you = meJson.getJSONObject("data");
+                JSONObject data_opponent = partnerJson.getJSONObject("data");
+
+                if (data_you.length() > 1) {
+                    JSONArray arr = data_you.getJSONArray("keyframes");
+                    JSONObject lastFrameJson = arr.getJSONObject(arr.length() - 1);
+                    Keyframe lastFrame = new Keyframe(lastFrameJson);
+                    me.getCastle().setKeyframeData(lastFrame.getCastleKeyframeData());
+                }
+                if (data_opponent.length() > 1) {
+                    JSONArray arr = data_opponent.getJSONArray("keyframes");
+                    JSONObject lastFrameJson = arr.getJSONObject(arr.length() - 1);
+                    Keyframe lastFrame = new Keyframe(lastFrameJson);
+                    partner.getCastle().setKeyframeData(lastFrame.getCastleKeyframeData());
+                }
+
+
+                turn();
 
             }
         } catch (JSONException e) {
 
-            Log.w(getClass().getName(), "JSONException: " + e);
+            Log.e(getClass().getName(), "JSONException: " + e);
 
         }
     }
@@ -264,9 +275,8 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
 
 		super.onCreateScene(pOnCreateSceneCallback);
 
-		ServerConnection.getInstance().setHandler(this);
-
         this.serverConnection = ServerConnection.getInstance();
+        this.serverConnection.setHandler(this);
 
         //
         // TODO: Handle existing game intent
@@ -276,9 +286,9 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
 
         int partnerId = extras.getInt("partnerId");
 
-        ServerConnection
-                .getInstance()
-                .sendTextMessage(ServerMessage.enterGame(partnerId));
+        Log.i(TAG, "entering game with partnerId="+partnerId);
+
+        this.serverConnection.sendTextMessage(ServerMessage.enterGame(partnerId));
 
     }
 

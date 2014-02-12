@@ -38,22 +38,25 @@ public class GcmIntentService extends IntentService {
             if (!GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType))
                 return;
 
-            int playerId = extras.getInt("id");
-            Log.i("GCM", "receive: " + extras.toString());
+            String playerId = extras.getString("id");
 
-            sendNotification(this, "AngryKings", "Player turn: " + playerId, playerId);
+            Log.i("GCM", "receive: " + extras.toString());
+            Log.i("GCM", "msg: "+extras.getString("msg"));
+
+            sendNotification(this, "AngryKings", "such turn: " + playerId, playerId);
         }
 
         GcmBroadcastReceiver.completeWakefulIntent(intent);
     }
 
-    public static void sendNotification(Context context, String title, String msg, int playerId) {
+    public static void sendNotification(Context context, String title, String msg, String playerId) {
         NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         // TODO: Set game id or something on the intent and handle it in MainActivity
 
         Intent intent = new Intent(context, OnlineGameActivity.class);
-        intent.putExtra("existingGame", "yeeeep");
+        intent.putExtra("existingGame", true);
+        intent.putExtra("playerId", playerId);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 

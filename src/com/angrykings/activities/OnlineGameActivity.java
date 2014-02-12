@@ -1,5 +1,6 @@
 package com.angrykings.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -209,7 +210,46 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
                 partner.handleTurn(x, y, keyframes);
 
             } else if (jObj.getInt("action") == Action.Server.YOU_WIN) {
+
                 onWin();
+
+            } else if (jObj.getInt("action") == Action.Server.NEW_GAME) {
+
+                Log.i(TAG, "enter new game");
+
+//                Intent intent = new Intent(LobbyActivity.this, OnlineGameActivity.class);
+//
+//                intent.putExtra("existingGame", false);
+//                intent.putExtra("left", false);
+//                intent.putExtra("username", username);
+//                intent.putExtra("partnername", partner.name);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//                startActivity(intent);
+
+            } else if (jObj.getInt("action") == Action.Server.EXISTING_GAME) {
+
+                Log.i(TAG, "enter existing game");
+
+                JSONObject me = jObj.getJSONObject("you");
+                JSONObject partner = jObj.getJSONObject("opponent");
+
+                initializePlayer(me.getBoolean("left"), me.getString("name"), partner.getString("name"));
+
+                this.me.setPlayerTurnListener(new MyTurnListener());
+                this.partner.setPlayerTurnListener(new PartnerTurnListener());
+                turn();
+
+
+//                Intent intent = new Intent(LobbyActivity.this, OnlineGameActivity.class);
+//
+//                intent.putExtra("existingGame", true);
+//                intent.putExtra("left", jObj.getJSONObject("you").getBoolean("left"));
+//                intent.putExtra("username", username);
+//                intent.putExtra("partnername", partner.name);
+//                intent.putExtra("data_you", jObj.getJSONObject("you").getJSONObject("data").toString());
+//                intent.putExtra("data_opponent", jObj.getJSONObject("opponent").getJSONObject("data").toString());
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//                startActivity(intent);
 
             }
         } catch (JSONException e) {
@@ -226,9 +266,6 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
 
 		ServerConnection.getInstance().setHandler(this);
 
-        this.me.setPlayerTurnListener(new MyTurnListener());
-        this.partner.setPlayerTurnListener(new PartnerTurnListener());
-
         this.serverConnection = ServerConnection.getInstance();
 
         //
@@ -237,26 +274,12 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
 
         Bundle extras = getIntent().getExtras();
 
-        if (extras != null) {
-            if (extras.getBoolean("existingGame")) {
+        int partnerId = extras.getInt("partnerId");
 
-                JSONObject data_you = new JSONObject(extras.getString("data_you"));
-                JSONObject data_opponent = new JSONObject(extras.getString("data_opponent"));
-                if (data_you.length() > 1) {
-                    JSONArray arr = data_you.getJSONArray("keyframes");
-                    JSONObject lastFrameJson = arr.getJSONObject(arr.length() - 1);
-                    Keyframe lastFrame = new Keyframe(lastFrameJson);
-                    me.getCastle().setKeyframeData(lastFrame.getCastleKeyframeData());
-                }
-                if (data_opponent.length() > 1) {
-                    JSONArray arr = data_opponent.getJSONArray("keyframes");
-                    JSONObject lastFrameJson = arr.getJSONObject(arr.length() - 1);
-                    Keyframe lastFrame = new Keyframe(lastFrameJson);
-                    partner.getCastle().setKeyframeData(lastFrame.getCastleKeyframeData());
-                }
-            }
-        }
-        turn();
+        ServerConnection
+                .getInstance()
+                .sendTextMessage(ServerMessage.enterGame(partnerId));
+
     }
 
     private void deactivateFollowCamera(String s) {

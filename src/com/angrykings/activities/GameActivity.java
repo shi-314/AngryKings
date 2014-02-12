@@ -109,6 +109,62 @@ public class GameActivity extends BaseGameActivity implements
         pOnCreateResourcesCallback.onCreateResourcesFinished();
     }
 
+    protected void initializePlayer(boolean isLeft, String playerNamer, String partnerName) {
+        this.isLeft = isLeft;
+
+        Log.i(getClass().getName(), "this client is " + (isLeft ? "left" : "right"));
+
+        // This is important because the entity ids are incremented in the order in which we
+        // create the entities :(
+
+        if(isLeft) {
+            this.me = new Player(playerNamer, isLeft);
+            this.partner = new Player(partnerName, !isLeft);
+        } else {
+            this.partner = new Player(partnerName, !isLeft);
+            this.me = new Player(playerNamer, isLeft);
+        }
+
+        hud.setLeftPlayerName(isLeft ? playerNamer : partnerName);
+        hud.setRightPlayerName(!isLeft ? playerNamer : partnerName);
+
+        final Castle leftCastle = isLeft ? me.getCastle() : partner.getCastle();
+        final Castle rightCastle = !isLeft ? me.getCastle() : partner.getCastle();
+
+        final float initialLeftCastleHeight = leftCastle.getInitialHeight();
+        final float initialRightCastleHeight = rightCastle.getInitialHeight();
+
+        final boolean left = isLeft;
+
+        scene.registerUpdateHandler(new IUpdateHandler() {
+            @Override
+            public void onUpdate(float pSecondsElapsed) {
+
+                float leftLife = leftCastle.getHeight() / initialLeftCastleHeight;
+                float rightLife = rightCastle.getHeight() / initialRightCastleHeight;
+
+                hud.getLeftLifeBar().setValue(1.0f - ((1.0f - leftLife) * 2.0f));
+                hud.getRightLifeBar().setValue(1.0f - ((1.0f - rightLife) * 2.0f));
+
+                if ((left && leftLife < 0.5f || !left && rightLife < 0.5f) && status != GameStatus.LOST) {
+                    onLose();
+                }
+            }
+
+            @Override
+            public void reset() {
+
+            }
+        });
+
+        me.getCastle().freeze();
+        partner.getCastle().freeze();
+
+        scene.registerUpdateHandler(me);
+        scene.registerUpdateHandler(partner);
+
+    }
+
     @Override
     public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws Exception {
         gc.setGameActivity(this);
@@ -155,34 +211,8 @@ public class GameActivity extends BaseGameActivity implements
         // initialize the entities
         //
 
-        String myName = "";
-        String partnerName = "";
-
-        Bundle extras = getIntent().getExtras();
-
-        if (extras != null) {
-            Boolean amILeft = extras.getBoolean("myTurn");
-            this.isLeft = amILeft;
-
-            myName = extras.getString("username");
-            partnerName = extras.getString("partnername");
-
-            Log.i(getClass().getName(), "this client is " + (amILeft ? "left" : "right"));
-        }
-
         map = new BasicMap();
         scene.attachChild(map);
-
-        // This is important because the entity ids are incremented in the order in which we
-        // create the entities :(
-
-        if(isLeft) {
-            this.me = new Player(myName, isLeft);
-            this.partner = new Player(partnerName, !isLeft);
-        } else {
-            this.partner = new Player(partnerName, !isLeft);
-            this.me = new Player(myName, isLeft);
-        }
 
         //
         // initialize navigation
@@ -210,46 +240,8 @@ public class GameActivity extends BaseGameActivity implements
         gc.setHud(hud);
         gc.getCamera().setHUD(hud);
 
-        hud.setLeftPlayerName(isLeft ? myName : partnerName);
-        hud.setRightPlayerName(!isLeft ? myName : partnerName);
-
-        final Castle leftCastle = isLeft ? me.getCastle() : partner.getCastle();
-        final Castle rightCastle = !isLeft ? me.getCastle() : partner.getCastle();
-
-        final float initialLeftCastleHeight = leftCastle.getInitialHeight();
-        final float initialRightCastleHeight = rightCastle.getInitialHeight();
-
-        final boolean left = isLeft;
-
-        scene.registerUpdateHandler(new IUpdateHandler() {
-            @Override
-            public void onUpdate(float pSecondsElapsed) {
-
-                float leftLife = leftCastle.getHeight() / initialLeftCastleHeight;
-                float rightLife = rightCastle.getHeight() / initialRightCastleHeight;
-
-                hud.getLeftLifeBar().setValue(1.0f - ((1.0f - leftLife) * 2.0f));
-                hud.getRightLifeBar().setValue(1.0f - ((1.0f - rightLife) * 2.0f));
-
-                if ((left && leftLife < 0.5f || !left && rightLife < 0.5f) && status != GameStatus.LOST) {
-                    onLose();
-                }
-            }
-
-            @Override
-            public void reset() {
-
-            }
-        });
-
 
         scene.registerUpdateHandler(pm.getPhysicsWorld());
-
-        me.getCastle().freeze();
-        partner.getCastle().freeze();
-
-        scene.registerUpdateHandler(me);
-        scene.registerUpdateHandler(partner);
 
         pOnCreateSceneCallback.onCreateSceneFinished(scene);
 

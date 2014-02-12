@@ -63,8 +63,8 @@ public class ServerMessage {
 		return new ServerJSONBuilder().create(Action.Client.LEAVE_LOBBY).build();
 	}
 
-	public static String enterGame(int partnerName) {
-		return new ServerJSONBuilder().create(Action.Client.ENTER_GAME).integer("partner", partnerName).build();
+	public static String enterGame(int partnerId) {
+		return new ServerJSONBuilder().create(Action.Client.ENTER_GAME).integer("partner", partnerId).build();
 	}
 
     public static String leaveGame() {

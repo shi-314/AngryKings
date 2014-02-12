@@ -320,9 +320,29 @@ public class GameActivity extends BaseGameActivity implements
     protected void onLose() {
         status = GameStatus.LOST;
         gc.getHud().setStatus(getString(R.string.hasLost));
+
+        Intent intent = new Intent(GameActivity.this, EndGameActivity.class);
+        intent.putExtra("hasWon", false);
+        intent.putExtra("isLeft", GameActivity.this.isLeft);
+        intent.putExtra("username", me.getName());
+        intent.putExtra("partnername", partner.getName());
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+        startActivity(intent);
     }
 
     protected void onWin() {
+
+        this.status = GameStatus.WON;
+
+        Intent intent = new Intent(GameActivity.this, EndGameActivity.class);
+        intent.putExtra("hasWon", true);
+        intent.putExtra("isLeft", GameActivity.this.isLeft);
+        intent.putExtra("username", me.getName());
+        intent.putExtra("partnername", partner.getName());
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+        startActivity(intent);
 
     }
 

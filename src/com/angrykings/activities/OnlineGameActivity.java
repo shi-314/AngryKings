@@ -118,7 +118,7 @@ public class OnlineGameActivity extends GameActivity {
 
 				} else if (jObj.getInt("action") == Action.Server.YOU_WIN || jObj.getInt("action") == Action.Server.PARTNER_LEFT) {
 
-					won();
+					onWin();
 
 				}
 			} catch (JSONException e) {
@@ -426,39 +426,11 @@ public class OnlineGameActivity extends GameActivity {
 
 	}
 
-	private void won() {
-
-		Log.i(getClass().getName(), "won()");
-
-		this.status = GameStatus.WON;
-
-		Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
-		intent.putExtra("hasWon", true);
-		intent.putExtra("isLeft", OnlineGameActivity.this.isLeft);
-		intent.putExtra("username", me.getName());
-		intent.putExtra("partnername", partner.getName());
-		intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-
-		startActivity(intent);
-
-	}
-
     @Override
 	protected void onLose() {
-        super.onLose();
-
-		Log.i(getClass().getName(), "lost()");
 
 		serverConnection.sendTextMessage(ServerMessage.lose());
-
-		Intent intent = new Intent(OnlineGameActivity.this, EndGameActivity.class);
-		intent.putExtra("hasWon", false);
-		intent.putExtra("isLeft", OnlineGameActivity.this.isLeft);
-		intent.putExtra("username", me.getName());
-		intent.putExtra("partnername", partner.getName());
-		intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-
-		startActivity(intent);
+        super.onLose();
 
 	}
 

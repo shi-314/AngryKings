@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="11"
         android:targetSdkVersion="17" />
 
     <uses-feature
@@ -56,11 +56,7 @@
             android:screenOrientation="landscape" >
         </activity>
         <activity
-            android:name="com.angrykings.activities.LobbyActivity"
-            android:screenOrientation="landscape" >
-        </activity>
-        <activity
-            android:name=".activities.LobbyActivity2"
+            android:name=".activities.LobbyActivity"
             android:screenOrientation="landscape">
         </activity>
         <activity

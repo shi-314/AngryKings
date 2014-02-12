@@ -1,19 +1,22 @@
 package com.angrykings.activities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.angrykings.Action;
+import com.angrykings.LobbyPlayer;
+import com.angrykings.LobbyPlayerAdapter;
+import com.angrykings.R;
 import com.angrykings.ServerConnection;
-import com.angrykings.ServerConnection.OnMessageHandler;
 import com.angrykings.utils.ServerJSONBuilder;
 import com.angrykings.utils.ServerMessage;
 
@@ -22,190 +25,178 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class LobbyActivity extends ListActivity {
 
-	private String username;
-	private List<String> users;
-	private Map<String, Player> listItemToName = new HashMap<String, Player>();
-	
-	private class Player{
-		final String name;
-		final String id;
-		
-		Player(String name, String id){
-			this.name = name;
-			this.id = id;
-		}
-	}
+public class LobbyActivity extends Activity {
 
-	private void updateLobby(List<String> user) {
-		setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, user));
-	}
+    private ListView lobbyList;
 
-	/** Called when the activity is first created. */
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		Bundle extras = getIntent().getExtras();
-		users = new ArrayList<String>();
-		if (extras != null) {
-			this.username = extras.getString("username");
-		}
-		ServerConnection
-				.getInstance()
-				.sendTextMessage(ServerMessage.gotoLobby());
+    private String username;
+    private List<String> users;
+    private List<LobbyPlayer> lobbyPlayers;
 
-		displayLobby();
-	}
+    private void challengePlayer(final LobbyPlayer partner) {
+        new AlertDialog.Builder(LobbyActivity.this)
+                .setTitle("Challenge")
+                .setMessage(partner.name + " herausfordern?")
+                .setPositiveButton("Klar!",
+                        new DialogInterface.OnClickListener() {
 
-	private void displayLobby() {
-		updateLobby(users);
-		getListView().setTextFilterEnabled(true);
-		ServerConnection.getInstance().setHandler(new OnMessageHandler() {
+                            @Override
+                            public void onClick(final DialogInterface dialog, final int which) {
+                                ServerConnection
+                                        .getInstance()
+                                        .sendTextMessage(ServerMessage.enterGame(partner.id));
 
-			@Override
-			public void onMessage(String payload) {
-				try {
-					final JSONObject jObj = new JSONObject(payload);
-					if (jObj.getInt("action") == Action.Server.REQUEST) {
-						new AlertDialog.Builder(LobbyActivity.this)
-								.setTitle("Request")
-								.setMessage(
-										jObj.getString("partner")
-												+ " requested a match!")
-								.setPositiveButton("Okay",
-										new DialogInterface.OnClickListener() {
+                                ServerConnection.getInstance().setHandler(new ServerConnection.OnMessageHandler() {
+                                    @Override
+                                    public void onMessage(String payload) {
+                                        try {
+                                            final JSONObject jObj = new JSONObject(payload);
+                                            if (jObj.getInt("action") == Action.Server.NEW_GAME) {
+                                                dialog.dismiss();
 
-											@Override
-											public void onClick(
-													DialogInterface dialog,
-													int which) {
-												ServerConnection
-														.getInstance()
-														.sendTextMessage(ServerMessage.acceptChallenge());
-												Intent intent = new Intent(
-														LobbyActivity.this,
-														OnlineGameActivity.class);
-												intent.putExtra("myTurn", true);
-												intent.putExtra("username",
-														username);
-												//intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-												intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY);
-												try {
-													intent.putExtra("partnername",
-															jObj.getString("partner"));
-												} catch (JSONException e) {
-													e.printStackTrace();
-													intent.putExtra("partnername","Partner");
-												}
-												startActivity(intent);
-											}
-										})
-								.setNegativeButton("Deny",
-										new DialogInterface.OnClickListener() {
+                                                Intent intent = new Intent(LobbyActivity.this, OnlineGameActivity.class);
+                                                intent.putExtra("existingGame", false);
+                                                intent.putExtra("left", false);
+                                                intent.putExtra("turn", jObj.getJSONObject("you").getInt("turn"));
+                                                intent.putExtra("username", username);
+                                                intent.putExtra("partnername", partner.name);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                                startActivity(intent);
+                                            } else if (jObj.getInt("action") == Action.Server.EXISTING_GAME) {
+                                                dialog.dismiss();
 
-											@Override
-											public void onClick(
-													DialogInterface dialog,
-													int which) {
-												ServerConnection
-														.getInstance()
-														.sendTextMessage(ServerMessage.denyChallenge());
-											}
-										}).show();
-					} else if (jObj.getInt("action") == Action.Server.LOBBY_UPDATE) {
-						Log.d("AngryKings", "received lobby update: "+jObj.get("names"));
+                                                Intent intent = new Intent(LobbyActivity.this, OnlineGameActivity.class);
+                                                intent.putExtra("existingGame", true);
+                                                intent.putExtra("left", jObj.getJSONObject("you").getBoolean("left"));
+                                                intent.putExtra("turn", jObj.getJSONObject("you").getInt("turn"));
+                                                intent.putExtra("username", username);
+                                                intent.putExtra("partnername", partner.name);
+                                                intent.putExtra("data_you", jObj.getJSONObject("you").getJSONObject("data").toString());
+                                                intent.putExtra("data_opponent", jObj.getJSONObject("opponent").getJSONObject("data").toString());
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                                startActivity(intent);
+                                            }
+                                        } catch (JSONException e) {
+                                            Log.e("JSON Parser", "Error parsing data " + e.toString());
+                                        }
+                                    }
+                                });
+                            }
+                        })
+                .setNegativeButton("Lieber nicht",
+                        new DialogInterface.OnClickListener() {
 
-						JSONArray userArray = new JSONArray(jObj.getString("names"));
-						users.clear();
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        }).show();
+    }
 
-						for (int i = 0; i < userArray.length(); i++) {
-							String eingabe = userArray.getJSONArray(i)
-									.getString(0)
-									+ "   Gewonnen: "
-									+ userArray.getJSONArray(i).getString(2)
-									+ "   Verloren: "
-									+ userArray.getJSONArray(i).getString(3);
 
-							users.add(eingabe);
-							listItemToName.put(eingabe, 
-									new Player(userArray.getJSONArray(i).getString(0),
-											userArray.getJSONArray(i).getString(1)));
-						}
+    private void updateLobby(List<LobbyPlayer> user) {
+        lobbyList.setAdapter(new LobbyPlayerAdapter(this, R.layout.list_row, user));
+    }
 
-						updateLobby(users);
-					}
-				} catch (JSONException e) {
-					Log.e("JSON Parser", "Error parsing data " + e.toString());
-				}
-			}
-		});
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-			ServerConnection
-			.getInstance()
-			.sendTextMessage(ServerMessage.leaveLobby());
-		}
+        setContentView(R.layout.activity_lobby);
 
-		return super.onKeyDown(keyCode, event);
-	}
-	
-	@Override
-	protected void onListItemClick(final ListView l, final View v, final int position, final long id) {
-		super.onListItemClick(l, v, position, id);
+        Button zufallButton = (Button) findViewById(R.id.bZufall);
+        lobbyList = (ListView) findViewById(R.id.lobbyList);
 
-		final Player partner = listItemToName.get(
-				getListView().getItemAtPosition(
-						position).toString());
-		
-		final AlertDialog dialog = new AlertDialog.Builder(this)
-				.setTitle("Please Wait").setMessage("Waiting for partner")
-				.show();
 
-		ServerConnection.getInstance().setHandler(new OnMessageHandler() {
+        Bundle extras = getIntent().getExtras();
+        users = new ArrayList<String>();
+        lobbyPlayers = new ArrayList<LobbyPlayer>();
+        if (extras != null) {
+            this.username = extras.getString("username");
+        }
 
-			@Override
-			public void onMessage(final String payload) {
-				try {
-					final JSONObject jObj = new JSONObject(payload);
-					// TODO revert logic: if confirmed
-					if (jObj.getInt("action") == Action.Server.DENIED) {
-						dialog.cancel();
-						displayLobby();
-					} else {
-						dialog.dismiss();
-						Intent intent = new Intent(LobbyActivity.this, OnlineGameActivity.class);
-						intent.putExtra("myTurn", false)
-						.putExtra("username", username)
-						.putExtra("partnername", partner.name)
-						.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-						startActivity(intent);
-					}
-				} catch (final JSONException e) {
-					e.printStackTrace();
-				}
-			}
-		});
+        ServerConnection
+                .getInstance()
+                .sendTextMessage(ServerMessage.gotoLobby());
 
-		// TODO use mongoid
-		ServerConnection
-				.getInstance()
-				.sendTextMessage(ServerMessage.pair(partner.id));
+        lobbyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                challengePlayer(lobbyPlayers.get(position));
+            }
+        });
 
-	}
-	
-	@Override
-	protected void onStop(){
-		ServerConnection
-		.getInstance()
-		.sendTextMessage(new ServerJSONBuilder().create(Action.Client.LEAVE_LOBBY).build());
-		super.onStop();
-	}
+        zufallButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final LobbyPlayer partner = lobbyPlayers.get((int) (Math.random() * users.size()));
+                challengePlayer(partner);
+
+            }
+        });
+
+        updateLobby(lobbyPlayers);
+        lobbyList.setTextFilterEnabled(true);
+
+        ServerConnection.getInstance().setHandler(new ServerConnection.OnMessageHandler() {
+
+            @Override
+            public void onMessage(String payload) {
+                try {
+                    final JSONObject jObj = new JSONObject(payload);
+                    if (jObj.getInt("action") == Action.Server.LOBBY_UPDATE) {
+                        Log.d("AngryKings", "received lobby update: " + jObj.get("names"));
+
+                        JSONArray userArray = new JSONArray(jObj.getString("names"));
+                        users.clear();
+                        lobbyPlayers.clear();
+
+                        for (int i = 0; i < userArray.length(); i++) {
+                            final JSONObject jsonObject = userArray.getJSONObject(i);
+                            String eingabe = jsonObject
+                                    .getString("name")
+                                    + "   Gewonnen: "
+                                    + jsonObject.getString("won")
+                                    + "   Verloren: "
+                                    + jsonObject.getString("lost");
+
+                            users.add(eingabe);
+
+                            lobbyPlayers.add(new LobbyPlayer(jsonObject.getString("name"),
+                                    jsonObject.getInt("public_id"),
+                                    jsonObject.getString("won"),
+                                    jsonObject.getString("lost")));
+                        }
+
+                        updateLobby(lobbyPlayers);
+                    }
+                } catch (JSONException e) {
+                    Log.e("JSON Parser", "Error parsing data " + e.toString());
+                }
+            }
+        });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            ServerConnection
+                    .getInstance()
+                    .sendTextMessage(ServerMessage.leaveLobby());
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onStop() {
+        ServerConnection
+                .getInstance()
+                .sendTextMessage(new ServerJSONBuilder().create(Action.Client.LEAVE_LOBBY).build());
+        super.onStop();
+    }
+
 }

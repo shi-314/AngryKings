@@ -188,8 +188,6 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
         try {
             JSONObject jObj = new JSONObject(payload);
 
-            Log.i(TAG, "MUH: "+jObj.toString());
-
             if (jObj.getInt("action") == Action.Server.TURN) {
 
                 final int x = Integer.parseInt(jObj.getString("x"));
@@ -217,7 +215,7 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
 
                 onWin();
 
-            } else if (jObj.getInt("action") == Action.Server.NEW_GAME || jObj.getInt("action") == Action.Server.EXISTING_GAME) {
+            } else if (jObj.getInt("action") == Action.Server.NEW_GAME) {
 
                 Log.i(TAG, "enter new game");
 
@@ -287,6 +285,10 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
         int partnerId = extras.getInt("partnerId");
 
         Log.i(TAG, "entering game with partnerId="+partnerId);
+        Log.i(TAG, "EXTRAS=" + extras.toString());
+
+        if(partnerId == 0)
+            throw new Exception("partner id is 0, bitch!");
 
         this.serverConnection.sendTextMessage(ServerMessage.enterGame(partnerId));
 

@@ -2,6 +2,7 @@ package com.angrykings.activities;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -61,7 +62,7 @@ import java.util.ArrayList;
  * @author Shivan Taher <zn31415926535@gmail.com>
  * @date 06.06.13
  */
-public class OnlineGameActivity extends GameActivity {
+public class OnlineGameActivity extends GameActivity implements ServerConnection.OnMessageHandler {
 
     //
     // Camera Positions
@@ -79,53 +80,6 @@ public class OnlineGameActivity extends GameActivity {
 	//
 
 	private ServerConnection serverConnection;
-
-    private BasicMap map;
-    private AngryParallaxBackground parallaxBackground;
-
-    private class AngryKingsMessageHandler extends ServerConnection.OnMessageHandler {
-		@Override
-		public void onMessage(String payload) {
-			try {
-				JSONObject jObj = new JSONObject(payload);
-				if (jObj.getInt("action") == Action.Server.TURN) {
-
-					turn();
-
-				}else if (jObj.getInt("action") == Action.Server.END_TURN) {
-
-					final int x = Integer.parseInt(jObj.getString("x"));
-					final int y = Integer.parseInt(jObj.getString("y"));
-
-					ArrayList<Keyframe> keyframes = null;
-
-					if(jObj.has("keyframes")) {
-						JSONArray jsonKeyframes = jObj.getJSONArray("keyframes");
-						keyframes = new ArrayList<Keyframe>();
-
-						for(int i = 0; i < jsonKeyframes.length(); ++i) {
-							keyframes.add(new Keyframe(jsonKeyframes.getJSONObject(i)));
-						}
-
-						Log.i(getClass().getName(), "received "+keyframes.size()+" keyframes");
-					} else {
-						Log.i(getClass().getName(), "received 0 keyframes");
-					}
-
-					partner.handleTurn(x, y, keyframes);
-
-				} else if (jObj.getInt("action") == Action.Server.YOU_WIN || jObj.getInt("action") == Action.Server.PARTNER_LEFT) {
-
-					onWin();
-
-				}
-			} catch (JSONException e) {
-
-				Log.w(getClass().getName(), "JSONException: " + e);
-
-			}
-		}
-	}
 
 	private class MyTurnListener implements IPlayerTurnListener {
 		private ArrayList<Keyframe> keyframes;
@@ -267,18 +221,71 @@ public class OnlineGameActivity extends GameActivity {
 
 	}
 
+    @Override
+    public void onMessage(String payload) {
+        try {
+            JSONObject jObj = new JSONObject(payload);
+            if (jObj.getInt("action") == Action.Server.TURN) {
+
+                Log.i(getClass().getName(), "turn()");
+
+                hud.setStatus(getString(R.string.yourTurn));
+                status = GameStatus.MY_TURN;
+
+                me.getCannon().showAimCircle();
+
+            }else if (jObj.getInt("action") == Action.Server.END_TURN) {
+
+                final int x = Integer.parseInt(jObj.getString("x"));
+                final int y = Integer.parseInt(jObj.getString("y"));
+
+                ArrayList<Keyframe> keyframes = null;
+
+                if(jObj.has("keyframes")) {
+                    JSONArray jsonKeyframes = jObj.getJSONArray("keyframes");
+                    keyframes = new ArrayList<Keyframe>();
+
+                    for(int i = 0; i < jsonKeyframes.length(); ++i) {
+                        keyframes.add(new Keyframe(jsonKeyframes.getJSONObject(i)));
+                    }
+
+                    Log.i(getClass().getName(), "received "+keyframes.size()+" keyframes");
+                } else {
+                    Log.w(getClass().getName(), "received 0 keyframes");
+                }
+
+                partner.handleTurn(x, y, keyframes);
+
+            } else if (jObj.getInt("action") == Action.Server.YOU_WIN || jObj.getInt("action") == Action.Server.PARTNER_LEFT) {
+
+                onWin();
+
+            }
+        } catch (JSONException e) {
+
+            Log.w(getClass().getName(), "JSONException: " + e);
+
+        }
+    }
+    
 	@Override
 	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws Exception {
 
 		super.onCreateScene(pOnCreateSceneCallback);
 
-		ServerConnection.getInstance().setHandler(new AngryKingsMessageHandler());
+		ServerConnection.getInstance().setHandler(this);
 
 		this.me.setPlayerTurnListener(new MyTurnListener());
 		this.partner.setPlayerTurnListener(new PartnerTurnListener());
 
         this.serverConnection = ServerConnection.getInstance();
 		this.serverConnection.sendTextMessage(ServerMessage.ready());
+
+        //
+        // TODO: Handle existing game intent
+        //
+
+
 	}
 
     private void deactivateFollowCamera(String s) {
@@ -331,17 +338,6 @@ public class OnlineGameActivity extends GameActivity {
 
         super.onResign();
         serverConnection.sendTextMessage(ServerMessage.lose());
-
-	}
-
-	private void turn() {
-
-		Log.i(getClass().getName(), "turn()");
-
-		this.hud.setStatus(getString(R.string.yourTurn));
-		this.status = GameStatus.MY_TURN;
-
-		this.me.getCannon().showAimCircle();
 
 	}
 

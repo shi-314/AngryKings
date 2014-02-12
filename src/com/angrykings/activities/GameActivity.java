@@ -140,7 +140,6 @@ public class GameActivity extends BaseGameActivity implements
                 new ParallaxBackground.ParallaxEntity(10f, new Sprite(0, 100, rm.getParallax1(), gc.getVboManager()))
         );
 
-
         scene.setBackground(parallaxBackground);
 
         scene.setOnSceneTouchListener(this);
@@ -458,6 +457,7 @@ public class GameActivity extends BaseGameActivity implements
         }
 
         return super.onKeyDown(keyCode, event);
+
     }
 
     //

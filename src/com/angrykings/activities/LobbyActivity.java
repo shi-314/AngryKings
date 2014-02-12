@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -79,6 +80,8 @@ public class LobbyActivity extends Activity {
         setContentView(R.layout.activity_lobby);
 
         Button zufallButton = (Button) findViewById(R.id.bZufall);
+        Typeface font = Typeface.createFromAsset(getAssets(), "font/Rom_Ftl_Srif.ttf");
+        zufallButton.setTypeface(font);
         lobbyList = (ListView) findViewById(R.id.lobbyList);
         facebookList = (ListView) findViewById(R.id.facebookList);
 

@@ -3,6 +3,7 @@ package com.angrykings.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -49,10 +50,13 @@ public class MainActivity extends Activity {
 		introButton = (Button) findViewById(R.id.introButton);
 
 		lobbyButton = (Button) findViewById(R.id.lobbyButton);
-		lobbyButton.setBackgroundResource(R.drawable.verbinde_button);
+        lobbyButton.setText(getString(R.string.bConnecting));
         runningGamesButton = (Button) findViewById(R.id.runningGamesButton);
-
         settingsButton = (Button) findViewById(R.id.settingsButton);
+
+        Typeface font = Typeface.createFromAsset(getAssets(), "font/Rom_Ftl_Srif.ttf");
+        runningGamesButton.setTypeface(font);
+        lobbyButton.setTypeface(font);
 
 		lobbyButton.setEnabled(false);
 
@@ -79,8 +83,9 @@ public class MainActivity extends Activity {
                             if (jObj.getInt("action") == Action.Server.KNOWN_USER || jObj.getInt("action") == Action.Server.SEND_NAME) {
                                 username = jObj.getString("name");
                                 settings.edit().putString("username", username).commit();
-                                lobbyButton.setBackgroundResource(R.drawable.lobby_button);
+                                //lobbyButton.setBackgroundResource(R.drawable.lobby_button);
                                 //bLobby.setText(getString(R.string.lobbyButton));
+                                lobbyButton.setText(getString(R.string.bNewGame));
                                 lobbyButton.setEnabled(true);
                             } else if (jObj.getInt("action") == Action.Server.UNKNOWN_USER) {
                                 Intent intent = new Intent(MainActivity.this, LogInActivity.class);

@@ -45,10 +45,12 @@
 
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="120dp"
+        android:layout_height="41dp"
         android:id="@+id/bZufall"
-        android:background="@drawable/zufallsmatch_button"
+        android:background="@drawable/button"
+        android:textSize="18dp"
+        android:text="@string/bZufall"
         android:layout_marginTop="5dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"/>

@@ -94,9 +94,9 @@ public class ResourceManager {
 
 
 
-        textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 2001,  320, TextureOptions.NEAREST);
+        textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 3001,  320, TextureOptions.NEAREST);
         this.groundTexture = BitmapTextureAtlasTextureRegionFactory
-                .createFromAsset(textureAtlas, gameActivity, "ground.png", 0, 0);
+                .createFromAsset(textureAtlas, gameActivity, "ground copy.png", 0, 0);
         textureAtlas.load();
 
         textureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 211,  91, TextureOptions.NEAREST);

@@ -75,4 +75,8 @@ public class ServerMessage {
         return  new ServerJSONBuilder().create(Action.Client.LOSE).build();
     }
 
+    public static String getRunningGames() {
+        return new ServerJSONBuilder().create(Action.Client.GET_RUNNING_GAMES).build();
+    }
+
 }

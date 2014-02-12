@@ -13,7 +13,7 @@ public final class GameConfig {
 	public static final int CAMERA_X = -520;
 	public static final int CAMERA_Y = 520;
 
-	public static final float CAMERA_STARTUP_ZOOM = 0.5f;
+	public static final float CAMERA_STARTUP_ZOOM = 0.60f;
 	public static final float CAMERA_ZOOM_MIN = 0.5f;
 	public static final float CAMERA_ZOOM_MAX = 1f;
 

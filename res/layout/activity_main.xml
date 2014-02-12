@@ -27,13 +27,23 @@
 		/>
 
     <Button
+        android:id="@+id/runningGamesButton"
+        android:layout_width="120dp"
+        android:layout_height="41dp"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/intro_button"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/lobbyButton"
+        android:layout_marginBottom="20dp"/>
+
+    <Button
         android:id="@+id/introButton"
         android:layout_width="120dp"
         android:layout_height="41dp"
         android:layout_gravity="center_vertical"
 		android:background="@drawable/intro_button"
 		android:layout_centerHorizontal="true"
-		android:layout_below="@+id/lobbyButton"/>
+		android:layout_below="@+id/runningGamesButton"/>
 
     <Button
         android:id="@+id/settingsButton"

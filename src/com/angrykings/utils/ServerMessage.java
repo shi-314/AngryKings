@@ -56,8 +56,11 @@ public class ServerMessage {
 		return msg.toString();
 	}
 
-	public static String setId(String id) {
-		return new ServerJSONBuilder().create(Action.Client.SET_ID).option("id", id).build();
+	public static String setId(String id, String registrationId) {
+		return new ServerJSONBuilder().create(Action.Client.SET_ID)
+                .option("id", id)
+                .option("registration_id", registrationId)
+                .build();
 	}
 
 	public static String getName() {

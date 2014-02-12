@@ -6,10 +6,12 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 
 import com.angrykings.AngryParallaxBackground;
+import com.angrykings.BuildConfig;
 import com.angrykings.GameConfig;
 import com.angrykings.GameContext;
 import com.angrykings.GameHUD;
@@ -39,6 +41,7 @@ import org.andengine.input.touch.detector.ScrollDetector;
 import org.andengine.input.touch.detector.SurfaceScrollDetector;
 import org.andengine.ui.IGameInterface;
 import org.andengine.ui.activity.BaseGameActivity;
+import org.andengine.util.debug.Debug;
 
 public class GameActivity extends BaseGameActivity implements
         IOnSceneTouchListener, ScrollDetector.IScrollDetectorListener,
@@ -446,4 +449,28 @@ public class GameActivity extends BaseGameActivity implements
 
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            onResignDialog();
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    //
+    // TODO: What the hell? Do we need this?
+    //
+
+    @Override
+    public synchronized void onPauseGame() {
+        Log.i(getClass().getName(), "onPauseGame()");
+
+        super.onPauseGame();
+        if(BuildConfig.DEBUG) {
+            Debug.d(this.getClass().getSimpleName() + ".onPauseGame lalala" + " @(Thread: '" + Thread.currentThread().getName() + "')");
+        }
+    }
 }

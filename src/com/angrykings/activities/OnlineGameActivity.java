@@ -334,16 +334,6 @@ public class OnlineGameActivity extends GameActivity {
 
 	}
 
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-			super.onResignDialog();
-			return true;
-		}
-
-		return super.onKeyDown(keyCode, event);
-	}
-
 	private void turn() {
 
 		Log.i(getClass().getName(), "turn()");
@@ -363,13 +353,4 @@ public class OnlineGameActivity extends GameActivity {
 
 	}
 
-	@Override
-	public synchronized void onPauseGame() {
-		Log.i(getClass().getName(), "onPauseGame()");
-
-		super.onPauseGame();
-		if(BuildConfig.DEBUG) {
-			Debug.d(this.getClass().getSimpleName() + ".onPauseGame lalala" + " @(Thread: '" + Thread.currentThread().getName() + "')");
-		}
-	}
 }

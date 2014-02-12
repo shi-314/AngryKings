@@ -51,11 +51,11 @@ public class GcmIntentService extends IntentService {
         NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         Intent intent = new Intent(context, OnlineGameActivity.class);
+
         intent.putExtra("existingGame", true);
         intent.putExtra("partnerId", partnerId);
-        intent.putExtra("FUCK", "THIS SHIT");
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, NOTIFICATION_ID, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification.Builder notificationBuilder =
                 new Notification.Builder(context)

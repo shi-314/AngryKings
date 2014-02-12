@@ -2,8 +2,10 @@ package com.angrykings.activities;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -13,6 +15,7 @@ import com.angrykings.Action;
 import com.angrykings.GameConfig;
 import com.angrykings.GameStatus;
 import com.angrykings.IPlayerTurnListener;
+import com.angrykings.Installation;
 import com.angrykings.Keyframe;
 import com.angrykings.KeyframeData;
 import com.angrykings.PhysicalEntity;
@@ -29,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.prefs.Preferences;
 
 public class OnlineGameActivity extends GameActivity implements ServerConnection.OnMessageHandler {
 
@@ -330,15 +334,16 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
 
         Log.i(TAG, "connected="+this.serverConnection.isConnected());
 
-        if(!this.serverConnection.isConnected())
+        if(!this.serverConnection.isConnected()) {
             this.serverConnection.start(new ServerConnection.OnStartHandler() {
                 @Override
                 public void onStart() {
                     enterGame();
                 }
             });
-        else
+        } else {
             enterGame();
+        }
 
 
     }
@@ -350,6 +355,17 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
     }
 
     private void enterGame() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        final String id = Installation.id(this);
+        final String registrationId = settings.getString("registrationId", "");
+
+        Log.i(TAG, "The installation ID is " + id);
+
+        ServerConnection
+                .getInstance()
+                .sendTextMessage(ServerMessage.setId(id, registrationId));
+
         Log.i(TAG, "enterGame");
         Bundle extras = getIntent().getExtras();
         String partnerIdStr = extras.getString("partnerId");

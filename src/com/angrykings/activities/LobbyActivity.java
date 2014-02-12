@@ -118,9 +118,9 @@ public class LobbyActivity extends Activity {
             public void onClick(View view) {
                 final LobbyPlayer partner = lobbyPlayers.get((int) (Math.random() * lobbyPlayers.size()));
                 challengePlayer(partner);
-
             }
         });
+
         FacebookPlayer test1 = new FacebookPlayer("Dummy", 123, "100", "50");
         FacebookPlayer test2 = new FacebookPlayer("Dummy2", 456, "50", "100");
         facebookPlayers.add(test1);
@@ -158,9 +158,6 @@ public class LobbyActivity extends Activity {
             }
         });
     }
-
-
-
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

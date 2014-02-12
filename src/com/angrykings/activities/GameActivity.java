@@ -372,6 +372,7 @@ public class GameActivity extends BaseGameActivity implements
     }
 
     protected void onLose() {
+
         status = GameStatus.LOST;
         gc.getHud().setStatus(getString(R.string.hasLost));
 
@@ -383,6 +384,7 @@ public class GameActivity extends BaseGameActivity implements
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
         startActivity(intent);
+
     }
 
     protected void onWin() {

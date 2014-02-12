@@ -1,5 +1,6 @@
 package com.angrykings.activities;
 
+import android.os.Bundle;
 import android.util.Log;
 
 import com.angrykings.Action;
@@ -29,6 +30,8 @@ import java.util.ArrayList;
  * @date 06.06.13
  */
 public class OnlineGameActivity extends GameActivity implements ServerConnection.OnMessageHandler {
+
+    private static final String TAG = "OnlineGameActivity";
 
     //
     // Camera Positions
@@ -246,8 +249,19 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
         // TODO: Handle existing game intent
         //
 
+        Bundle extras = getIntent().getExtras();
 
-	}
+        if (extras != null) {
+            String existingGame = extras.getString("existingGame");
+
+            Log.i(TAG, "existingGame="+existingGame);
+
+            if(existingGame != null) {
+
+            }
+        }
+
+    }
 
     private void deactivateFollowCamera(String s) {
         ZoomCamera camera = (ZoomCamera) gc.getCamera();

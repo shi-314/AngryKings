@@ -112,6 +112,7 @@ public class LobbyActivity extends Activity {
                 CharSequence text = facebookPlayers.get(position).name;
                 Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
                 toast.show();
+                challengePlayer(facebookPlayers.get(position));
             }
         });
 

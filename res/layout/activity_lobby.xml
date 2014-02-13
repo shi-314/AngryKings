@@ -19,7 +19,7 @@
             android:id="@+id/lobbyList"
             android:layout_marginRight="25dp"
             android:divider="#22FFFFFF"
-            android:dividerHeight="1dp"
+            android:dividerHeight="2dp"
             android:layout_weight="1"/>
 
         <ListView

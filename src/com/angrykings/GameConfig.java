@@ -34,8 +34,8 @@ public final class GameConfig {
 
 	//public static final String WEBSERVICE_URI = "ws://141.64.167.170:8008";
     //public static final String WEBSERVICE_URI = "ws://spaeti.pavo.uberspace.de:61224";
-//    public static final String WEBSERVICE_URI = "ws://spaeti.pavo.uberspace.de:62937";
-    public static final String WEBSERVICE_URI = "ws://johanns-mbp:62937";
+    public static final String WEBSERVICE_URI = "ws://spaeti.pavo.uberspace.de:62937";
+//    public static final String WEBSERVICE_URI = "ws://johanns-mbp:62937";
 	public static final int WEBSOCKET_MAX_PAYLOAD_SIZE = 1024*1024*6;
 	public static final int WEBSOCKET_MAX_FRAME_SIZE = 1024*1024*10;
 

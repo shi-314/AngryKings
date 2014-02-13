@@ -430,9 +430,9 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
     }
 
     @Override
-    protected void onPause() {
+    protected void onDestroy() {
         serverConnection.sendTextMessage(ServerMessage.leaveGame());
-        super.onPause();
+        super.onDestroy();
     }
 
     @Override

@@ -145,25 +145,25 @@ public class Cannon extends Entity {
             boolean rightPositionY = false;
             if(difX < -20){
                 cameraX += Math.abs(difX)/3;
-                camera.setCenter(cameraX, cameraY);
+                //camera.setCenter(cameraX, cameraY);
             }else if(difX > 20){
                 cameraX -= Math.abs(difX)/3;
-                camera.setCenter(cameraX, cameraY);
+                //camera.setCenter(cameraX, cameraY);
             }else{
                 rightPositionX = true;
             }
             if(difY < -50){
                 cameraY += Math.abs(difY)/2;
-                camera.setCenter(cameraX, cameraY);
+                //camera.setCenter(cameraX, cameraY);
             }else if(difY > 50){
                 cameraY -= Math.abs(difY)/2;
-                camera.setCenter(cameraX, cameraY);
+                //camera.setCenter(cameraX, cameraY);
             }else{
                 rightPositionY = true;
             }
 
             if(rightPositionX && rightPositionY){
-                camera.setChaseEntity(this.ball.getAreaShape());
+                //camera.setChaseEntity(this.ball.getAreaShape());
                 //camera.setZoomFactor(GameConfig.CAMERA_STARTUP_ZOOM);
             }
         }

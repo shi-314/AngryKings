@@ -13,7 +13,6 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageView;
 
 import com.angrykings.Action;
 import com.angrykings.GameConfig;
@@ -30,7 +29,6 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.model.GraphObject;
 import com.facebook.model.GraphUser;
-import com.facebook.widget.ProfilePictureView;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.json.JSONArray;
@@ -38,10 +36,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 
 public class MainActivity extends Activity {
 
@@ -243,6 +238,9 @@ public class MainActivity extends Activity {
                             .putString("profilePicture", profilePicture)
                             .putString("facebookId", user.getId())
                             .commit();
+
+
+                    ServerConnection.getInstance().sendTextMessage(ServerMessage.facebookId(user.getId()));
 
                     //
                     // TODO: Set player name to facebook name :D

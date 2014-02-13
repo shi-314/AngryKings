@@ -14,6 +14,7 @@ public class Action {
 		public static final int SEND_NAME = 1009;
 		public static final int DRAW = 1010;
         public static final int GAMES = 1011;
+        public static final int FRIENDS = 1012;
 	}
 
 	public class Client {
@@ -28,5 +29,7 @@ public class Action {
         public static final int LEAVE_GAME = 2009;
         public static final int GET_RUNNING_GAMES = 2010;
         public static final int WIN = 2011;
+        public static final int FIND_FRIENDS = 2012;
+        public static final int FACEBOOK_ID = 2013;
 	}
 }

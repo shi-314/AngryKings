@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.angrykings.Action;
+import com.angrykings.gcm.GcmIntentService;
 import com.angrykings.pregame.FacebookPlayer;
 import com.angrykings.pregame.FacebookPlayerAdapter;
 import com.angrykings.pregame.LobbyPlayer;
@@ -141,7 +142,7 @@ public class LobbyActivity extends Activity {
                 try {
                     final JSONObject jObj = new JSONObject(payload);
                     if (jObj.getInt("action") == Action.Server.LOBBY_UPDATE) {
-                        Log.d("AngryKings", "received lobby update: " + jObj.get("names"));
+                        Log.d("AngryKings maan", "received lobby update: " + jObj.get("names"));
 
                         JSONArray userArray = new JSONArray(jObj.getString("names"));
                         lobbyPlayers.clear();

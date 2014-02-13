@@ -71,6 +71,10 @@ public class ServerMessage {
         return new ServerJSONBuilder().create(Action.Client.LEAVE_GAME).build();
     }
 
+    public static String win() {
+        return  new ServerJSONBuilder().create(Action.Client.WIN).build();
+    }
+
     public static String lose() {
         return  new ServerJSONBuilder().create(Action.Client.LOSE).build();
     }

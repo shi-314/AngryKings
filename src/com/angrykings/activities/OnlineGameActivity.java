@@ -69,13 +69,19 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
         public void onEndTurn() {
             serverConnection.sendTextMessage(ServerMessage.endTurn(aimX, aimY, this.keyframes));
 
-            partner.getCastle().freeze();
-            hud.setStatus(getString(R.string.enemyTurn));
+            me.setTurn(me.getTurn() + 1);
+            if (me.getTurn() <= partner.getTurn()) {
+                turn();
+            } else {
+                partner.getCastle().freeze();
+                hud.setStatus(getString(R.string.enemyTurn));
 
-            me.getKing().getSprite().setCurrentTileIndex(0);
-            partner.getKing().getSprite().setCurrentTileIndex(1);
+                me.getKing().getSprite().setCurrentTileIndex(0);
+                partner.getKing().getSprite().setCurrentTileIndex(1);
 
-            partner.getKing().jump();
+                partner.getKing().jump();
+            }
+
             //followCamera = ENEMYCANNON;
         }
 
@@ -224,7 +230,7 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
         this.hud.setStatus(getString(R.string.yourTurn));
         this.status = GameStatus.MY_TURN;
 
-        this.me.getCannon().showAimCircle();
+        me.getCannon().showAimCircle();
 
     }
 
@@ -234,6 +240,8 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
             JSONObject jObj = new JSONObject(payload);
 
             if (jObj.getInt("action") == Action.Server.TURN) {
+
+                partner.setTurn(partner.getTurn() + 1);
 
                 final int x = Integer.parseInt(jObj.getString("x"));
                 final int y = Integer.parseInt(jObj.getString("y"));
@@ -269,12 +277,11 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
 
                 initializePlayer(meJson.getBoolean("left"), meJson.getString("name"), partnerJson.getString("name"));
 
-                this.me.setPlayerTurnListener(new MyTurnListener());
+                me.setPlayerTurnListener(new MyTurnListener());
                 this.partner.setPlayerTurnListener(new PartnerTurnListener());
 
                 turn();
                 fadeIn();
-
             }
 
             if (jObj.getInt("action") == Action.Server.EXISTING_GAME) {
@@ -286,7 +293,7 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
 
                 initializePlayer(meJson.getBoolean("left"), meJson.getString("name"), partnerJson.getString("name"));
 
-                this.me.setPlayerTurnListener(new MyTurnListener());
+                me.setPlayerTurnListener(new MyTurnListener());
                 this.partner.setPlayerTurnListener(new PartnerTurnListener());
 
                 JSONObject data_you = meJson.getJSONObject("data");
@@ -305,9 +312,9 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
                     partner.getCastle().setKeyframeData(lastFrame.getCastleKeyframeData());
                 }
 
-                int myTurns = meJson.getInt("turn");
-                int partnerTurns = partnerJson.getInt("turn");
-                if(myTurns <= partnerTurns){
+                me.setTurn(meJson.getInt("turn"));
+                partner.setTurn(partnerJson.getInt("turn"));
+                if (me.getTurn() <= partner.getTurn()) {
                     turn();
                 }
                 fadeIn();
@@ -327,15 +334,15 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
     }
 
     @Override
-	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws Exception {
+    public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws Exception {
 
         super.onCreateScene(pOnCreateSceneCallback);
 
         this.serverConnection.setHandler(this);
 
-        Log.i(TAG, "connected="+this.serverConnection.isConnected());
+        Log.i(TAG, "connected=" + this.serverConnection.isConnected());
 
-        if(!this.serverConnection.isConnected()) {
+        if (!this.serverConnection.isConnected()) {
             this.serverConnection.start(new ServerConnection.OnStartHandler() {
                 @Override
                 public void onStart() {
@@ -370,7 +377,11 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
         Bundle extras = getIntent().getExtras();
         String partnerIdStr = extras.getString("partnerId");
 
-        Log.i(TAG, "entering game with partnerId="+partnerIdStr);
+        if(partnerIdStr.equals("1")){
+            this.dummyGame = true;
+        }
+
+        Log.i(TAG, "entering game with partnerId=" + partnerIdStr);
         Log.i(TAG, "EXTRAS=" + extras.toString());
 
         Log.i(TAG, "serverConnection=" + this.serverConnection);
@@ -423,9 +434,17 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
     }
 
     @Override
-    protected void onPause() {
+    protected void onWin() {
+        if(dummyGame){
+            serverConnection.sendTextMessage(ServerMessage.win());
+        }
+        super.onWin();
+    }
+
+    @Override
+    protected void onDestroy() {
         serverConnection.sendTextMessage(ServerMessage.leaveGame());
-        super.onPause();
+        super.onDestroy();
     }
 
     @Override

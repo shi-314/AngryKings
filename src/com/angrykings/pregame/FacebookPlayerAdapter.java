@@ -48,6 +48,7 @@ public class FacebookPlayerAdapter extends BaseAdapter{
         if(view == null){
             vi = inflater.inflate(R.layout.list_row_facebook, null);
         }
+
         ImageView fb = (ImageView)vi.findViewById(R.id.facebookpicture);
         TextView name = (TextView)vi.findViewById(R.id.spielername);
         LinearLayout winlose = (LinearLayout)vi.findViewById(R.id.win_lose);

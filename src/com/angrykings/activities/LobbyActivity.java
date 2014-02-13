@@ -121,8 +121,9 @@ public class LobbyActivity extends Activity {
             }
         });
 
-        FacebookPlayer test1 = new FacebookPlayer("Dummy", 123, "100", "50");
-        FacebookPlayer test2 = new FacebookPlayer("Dummy2", 456, "50", "100");
+        FacebookPlayer test1 = new FacebookPlayer("Harald", 123, "100", "50", "halgurd.taher");
+        FacebookPlayer test2 = new FacebookPlayer("Dustin", 456, "50", "100", "ohyaweird");
+
         facebookPlayers.add(test1);
         facebookPlayers.add(test2);
         updateFacebookList(facebookPlayers);

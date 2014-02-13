@@ -107,6 +107,26 @@ public class MainActivity extends Activity {
                     }
                 });
 
+                if(!ServerConnection.getInstance().isConnected()){
+                    final String id = Installation.id(MainActivity.this);
+                    Log.i(TAG, "The installation ID is " + id);
+
+                    final String registrationId = settings.getString("registrationId", "");
+
+                    ServerConnection.getInstance().start(new OnStartHandler() {
+                        @Override
+                        public void onStart() {
+                            ServerConnection
+                                    .getInstance()
+                                    .sendTextMessage(ServerMessage.setId(id, registrationId));
+                        }
+                    });
+                }else{
+                    ServerConnection
+                            .getInstance()
+                            .sendTextMessage(ServerMessage.getName());
+                }
+
                 // look for facebook login
 
                 Session.openActiveSession(MainActivity.this, false, new Session.StatusCallback() {
@@ -121,31 +141,6 @@ public class MainActivity extends Activity {
 
             }
         });
-
-        //
-        // TODO: This should happen when the gcm registration went well
-        //
-
-		if(!ServerConnection.getInstance().isConnected()){
-            final String id = Installation.id(this);
-            Log.i(TAG, "The installation ID is " + id);
-
-            final String registrationId = settings.getString("registrationId", "");
-
-			ServerConnection.getInstance().start(new OnStartHandler() {
-				@Override
-				public void onStart() {
-					ServerConnection
-					.getInstance()
-					.sendTextMessage(ServerMessage.setId(id, registrationId));
-				}
-			});
-		}else{
-			ServerConnection
-			.getInstance()
-			.sendTextMessage(ServerMessage.getName());
-		}
-
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {

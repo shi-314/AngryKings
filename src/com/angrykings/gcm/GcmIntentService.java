@@ -6,9 +6,11 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -85,11 +87,17 @@ public class GcmIntentService extends IntentService {
 
         notificationBuilder.setContentIntent(pendingIntent);
 
-        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        notificationBuilder.setSound(alarmSound);
+        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
 
-        long[] pattern = {0,250,0};
-        notificationBuilder.setVibrate(pattern);
+        if(settings.getBoolean("notificationsSound", false)) {
+            Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            notificationBuilder.setSound(alarmSound);
+        }
+
+        if(settings.getBoolean("notificationsVibration", false)) {
+            long[] pattern = {0,250,0};
+            notificationBuilder.setVibrate(pattern);
+        }
 
         nm.notify(NOTIFICATION_ID++, notificationBuilder.build());
     }

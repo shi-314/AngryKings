@@ -28,6 +28,7 @@ import java.util.List;
 
 public class RunningGamesActivity extends Activity{
 
+    private static final String TAG = "RunningGamesActivity";
     private ListView runningGamesList;
     private TextView text;
     private TextView info;
@@ -70,6 +71,7 @@ public class RunningGamesActivity extends Activity{
 
             @Override
             public void onMessage(String payload) {
+                Log.i(TAG, "running games=" + payload);
                 try {
                     final JSONObject jObj = new JSONObject(payload);
                     if (jObj.getInt("action") == Action.Server.GAMES) {

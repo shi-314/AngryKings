@@ -12,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.angrykings.R;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.util.List;
 
@@ -68,6 +70,9 @@ public class FacebookPlayerAdapter extends BaseAdapter{
         win.requestLayout();
         lose.requestLayout();
         vi.requestLayout();
+
+        String profilePicture = "http://graph.facebook.com/" + data.get(position).fbID + "/picture";
+        ImageLoader.getInstance().displayImage(profilePicture, fb);
 
         return vi;
     }

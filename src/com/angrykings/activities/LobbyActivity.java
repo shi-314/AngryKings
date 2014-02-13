@@ -23,6 +23,8 @@ import com.angrykings.R;
 import com.angrykings.ServerConnection;
 import com.angrykings.utils.ServerJSONBuilder;
 import com.angrykings.utils.ServerMessage;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -80,6 +82,8 @@ public class LobbyActivity extends Activity {
 
         setContentView(R.layout.activity_lobby);
 
+        ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this));
+
         Button zufallButton = (Button) findViewById(R.id.bZufall);
         Typeface font = Typeface.createFromAsset(getAssets(), "font/Rom_Ftl_Srif.ttf");
         zufallButton.setTypeface(font);
@@ -121,7 +125,7 @@ public class LobbyActivity extends Activity {
             }
         });
 
-        FacebookPlayer test1 = new FacebookPlayer("Harald", 123, "100", "50", "halgurd.taher");
+        FacebookPlayer test1 = new FacebookPlayer("Michi", 123, "100", "50", "michi.wutte.1");
         FacebookPlayer test2 = new FacebookPlayer("Dustin", 456, "50", "100", "ohyaweird");
 
         facebookPlayers.add(test1);

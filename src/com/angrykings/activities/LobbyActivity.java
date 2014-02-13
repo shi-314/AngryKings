@@ -157,18 +157,26 @@ public class LobbyActivity extends Activity {
                         }
 
                         updateLobby(lobbyPlayers);
-                    }else if (jObj.getInt("action") == Action.Server.FRIENDS) {
+                    } else if (jObj.getInt("action") == Action.Server.FRIENDS) {
                         JSONArray friendArray = new JSONArray(jObj.getString("friends"));
 
                         Log.d("FRIENDSLIST", friendArray.toString());
 
-                        // TODO SHIVAN HIER
+                        for (int i = 0; i < friendArray.length(); i++) {
 
-                        FacebookPlayer test1 = new FacebookPlayer("Michi", 123, "100", "50", "michi.wutte.1");
-                        FacebookPlayer test2 = new FacebookPlayer("Dustin", 456, "50", "100", "ohyaweird");
+                            JSONObject playerJson = friendArray.getJSONObject(i);
 
-                        facebookPlayers.add(test1);
-                        facebookPlayers.add(test2);
+                            facebookPlayers.add(
+                                    new FacebookPlayer(
+                                            playerJson.getString("name"),
+                                            playerJson.getInt("public_id"),
+                                            playerJson.getString("won"),
+                                            playerJson.getString("lost"),
+                                            playerJson.getString("facebook_id")
+                                    )
+                            );
+                        }
+
                         updateFacebookList(facebookPlayers);
                         updateLobby(lobbyPlayers);
                         lobbyList.setTextFilterEnabled(true);

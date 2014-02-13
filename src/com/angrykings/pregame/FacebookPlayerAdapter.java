@@ -70,7 +70,9 @@ public class FacebookPlayerAdapter extends BaseAdapter{
         name.setText(player.name);
         Integer summe = Integer.parseInt(player.win) + Integer.parseInt(player.lose);
         Integer max = winlose.getLayoutParams().width;
-        Log.d("WinLose Breite:    ", max.toString());
+
+        // Log.d("WinLose Breite:    ", max.toString());
+
         win.getLayoutParams().width = Integer.parseInt(player.win) * max / (summe + 1);
         lose.getLayoutParams().width = Integer.parseInt(player.lose) * max / (summe + 1);
         win.requestLayout();

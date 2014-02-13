@@ -102,6 +102,10 @@ public class ServerConnection {
             Log.i(TAG, "sent " + length + " bytes: " + payload.substring(0, 128) + " ...");
         else
             Log.i(TAG, "sent " + length + " bytes: " + payload);
+
+        if(this.connection != null)
+            Log.e(TAG, "connection is null :/");
+
 		this.connection.sendTextMessage(payload);
 
 	}

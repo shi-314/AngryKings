@@ -23,18 +23,25 @@ import com.angrykings.ServerConnection;
 import com.angrykings.ServerConnection.OnMessageHandler;
 import com.angrykings.ServerConnection.OnStartHandler;
 import com.angrykings.utils.ServerMessage;
+import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
+import com.facebook.model.GraphObject;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.ProfilePictureView;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MainActivity extends Activity {
 
@@ -237,13 +244,54 @@ public class MainActivity extends Activity {
                             .putString("facebookId", user.getId())
                             .commit();
 
+                    //
+                    // TODO: Set player name to facebook name :D
+                    //
+
                 } else {
                     Log.w(TAG, "facebook login failed, response=" + response.toString());
                 }
             }
         }).executeAsync();
 
+        final String fqlQuery = "SELECT uid,name FROM user WHERE uid IN " +
+                "(SELECT uid2 FROM friend WHERE uid1 = me())";
 
+        final Bundle params = new Bundle();
+        params.putString("q", fqlQuery);
+
+        new Request(session,
+                "/fql",
+                params,
+                HttpMethod.GET,
+                new Request.Callback(){
+                    public void onCompleted(Response response) {
+                        Log.i(TAG, "Result: " + response.toString());
+
+                        try{
+                            GraphObject graphObject = response.getGraphObject();
+                            JSONObject jsonObject = graphObject.getInnerJSONObject();
+
+                            JSONArray array = jsonObject.getJSONArray("data");
+                            HashSet<String> friends = new HashSet<String>();
+
+                            for(int i=0;i<array.length();i++){
+                                JSONObject f = array.getJSONObject(i);
+                                //Log.d("uid",f.getString("uid"));
+                                //Log.d("name", friend.getString("name"));
+                                friends.add(f.getString("uid"));
+                            }
+
+                            Log.i(TAG, "Facebook: I have " + friends.size() + " friends");
+
+                            settings.edit()
+                                    .putStringSet("facebookFriends", friends)
+                                    .commit();
+                        }catch(JSONException e){
+                            e.printStackTrace();
+                        }
+                    }
+                }).executeAsync();
     }
 
     /**

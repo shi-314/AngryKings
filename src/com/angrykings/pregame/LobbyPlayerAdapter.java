@@ -53,8 +53,6 @@ public class LobbyPlayerAdapter extends BaseAdapter{
 
         final LobbyPlayer player = data.get(position);
 
-        Log.d("Lobbyplayer:    " , "win: " + player.win + " lose: " + player.lose);
-
         name.setText(player.name);
 
         vi.requestLayout();

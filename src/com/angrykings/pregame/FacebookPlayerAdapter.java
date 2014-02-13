@@ -65,8 +65,6 @@ public class FacebookPlayerAdapter extends BaseAdapter{
 
         FacebookPlayer player = data.get(position);
 
-        Log.d("Lobbyplayer:    " , player.win);
-
         name.setText(player.name);
 
         vi.requestLayout();

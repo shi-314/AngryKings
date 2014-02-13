@@ -128,6 +128,7 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
             partner.getKing().getSprite().setCurrentTileIndex(1);
 
             me.getKing().jump();
+            turn();
             //followCamera = MIDDLE;
         }
 
@@ -257,7 +258,6 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
                     }
 
                     Log.i(getClass().getName(), "received " + keyframes.size() + " keyframes");
-                    turn();
                 } else {
                     Log.w(getClass().getName(), "received 0 keyframes");
                 }
@@ -451,14 +451,11 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
     protected void onResign() {
         super.onResign();
         serverConnection.sendTextMessage(ServerMessage.lose());
-
     }
 
     @Override
     protected void onLose() {
-
         serverConnection.sendTextMessage(ServerMessage.lose());
         super.onLose();
-
     }
 }

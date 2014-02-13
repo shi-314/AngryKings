@@ -44,29 +44,37 @@ public class LobbyPlayerAdapter extends BaseAdapter{
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
+
         View vi = view;
         if(view == null){
             vi = inflater.inflate(R.layout.list_row, null);
         }
         TextView name = (TextView)vi.findViewById(R.id.spielername);
-        LinearLayout winlose = (LinearLayout)vi.findViewById(R.id.win_lose);
-        LinearLayout win = (LinearLayout)vi.findViewById(R.id.win);
-        LinearLayout lose = (LinearLayout)vi.findViewById(R.id.lose);
+        final LinearLayout winlose = (LinearLayout)vi.findViewById(R.id.win_lose);
+        final LinearLayout win = (LinearLayout)vi.findViewById(R.id.win);
+        final LinearLayout lose = (LinearLayout)vi.findViewById(R.id.lose);
 
-        LobbyPlayer player = data.get(position);
+        final LobbyPlayer player = data.get(position);
 
-        Log.d("Lobbyplayer:    " , player.win);
+        Log.d("Lobbyplayer:    " , "win: " + player.win + " lose: " + player.lose);
 
         name.setText(player.name);
-        Integer summe = Integer.parseInt(player.win) + Integer.parseInt(player.lose);
-        Integer max = winlose.getLayoutParams().width;
-        Log.d("WinLose Breite:    ", max.toString());
-        win.getLayoutParams().width = Integer.parseInt(player.win) * max / (summe + 1);
-        lose.getLayoutParams().width = Integer.parseInt(player.lose) * max / (summe + 1);
-        win.requestLayout();
-        lose.requestLayout();
-        vi.requestLayout();
+        final Integer summe = Integer.parseInt(player.win) + Integer.parseInt(player.lose);
+        winlose.post(new Runnable() {
+            @Override
+            public void run() {
+                Integer max = winlose.getWidth();
+                win.getLayoutParams().width = Integer.parseInt(player.win) * max / (summe + 1);
+                lose.getLayoutParams().width = Integer.parseInt(player.lose) * max / (summe + 1);
+                winlose.requestLayout();
+                win.requestLayout();
+                lose.requestLayout();
+            }
+        });
+
+        //vi.requestLayout();
 
         return vi;
     }
+
 }

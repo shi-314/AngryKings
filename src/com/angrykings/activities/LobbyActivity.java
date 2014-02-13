@@ -136,7 +136,7 @@ public class LobbyActivity extends Activity {
                 try {
                     final JSONObject jObj = new JSONObject(payload);
                     if (jObj.getInt("action") == Action.Server.LOBBY_UPDATE) {
-                        Log.d("AngryKings", "received lobby update: " + jObj.get("names"));
+                        Log.d("AngryKings maan", "received lobby update: " + jObj.get("names"));
 
                         JSONArray userArray = new JSONArray(jObj.getString("names"));
                         lobbyPlayers.clear();

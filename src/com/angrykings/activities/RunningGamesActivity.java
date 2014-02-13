@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.angrykings.Action;
 import com.angrykings.pregame.LobbyPlayer;
@@ -27,6 +29,8 @@ import java.util.List;
 public class RunningGamesActivity extends Activity{
 
     private ListView runningGamesList;
+    private TextView text;
+    private TextView info;
     private String username;
     private List<LobbyPlayer> runningGames;
 
@@ -36,6 +40,11 @@ public class RunningGamesActivity extends Activity{
 
         setContentView(R.layout.activity_runninggames);
         runningGamesList = (ListView) findViewById(R.id.runningGamesList);
+        text = (TextView) findViewById(R.id.tRunningGames);
+        info = (TextView) findViewById(R.id.tRunningGamesInfo);
+        Typeface font = Typeface.createFromAsset(getAssets(), "font/Rom_Ftl_Srif.ttf");
+        text.setTypeface(font);
+        info.setTypeface(font);
 
         runningGames = new ArrayList<LobbyPlayer>();
 
@@ -77,7 +86,11 @@ public class RunningGamesActivity extends Activity{
                                     "0",
                                     "0"));
                         }
-
+                        if(runningGames.isEmpty()){
+                            info.setText(getString(R.string.tRunningGamesInfo));
+                        }else{
+                            info.setText("");
+                        }
                         updateRunningGames(runningGames);
                     }
                 } catch (JSONException e) {

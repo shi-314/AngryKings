@@ -1,17 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/lobby_background"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:padding="8dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/preferences_background">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/newGame"
+        android:textSize="25dp"
+        android:id="@+id/lobbyTitle"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="20dp"/>
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:orientation="horizontal"
-        android:layout_marginTop="120dp">
+        android:layout_marginTop="120dp"
+        android:background="#22000000">
 
         <ListView
             android:layout_width="wrap_content"
@@ -29,7 +42,6 @@
             android:divider="#22FFFFFF"
             android:dividerHeight="2dp"
             android:layout_weight="1"/>
-
 
     </LinearLayout>
 

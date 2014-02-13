@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.angrykings.Action;
@@ -43,6 +44,7 @@ public class LobbyActivity extends Activity {
 
     private ListView lobbyList;
     private ListView facebookList;
+    private TextView title;
 
     private String username;
     private List<LobbyPlayer> lobbyPlayers;
@@ -92,6 +94,8 @@ public class LobbyActivity extends Activity {
         Typeface font = Typeface.createFromAsset(getAssets(), "font/Rom_Ftl_Srif.ttf");
         lobbyList = (ListView) findViewById(R.id.lobbyList);
         facebookList = (ListView) findViewById(R.id.facebookList);
+        title = (TextView) findViewById(R.id.lobbyTitle);
+        title.setTypeface(font);
 
         Bundle extras = getIntent().getExtras();
         facebookPlayers = new ArrayList<FacebookPlayer>();

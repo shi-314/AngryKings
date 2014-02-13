@@ -68,6 +68,7 @@ public class GameActivity extends BaseGameActivity implements
     protected BasicMap map;
     protected AngryParallaxBackground parallaxBackground;
     protected boolean isLeft;
+    protected boolean dummyGame;
     protected int aimX, aimY;
 
     //
@@ -149,7 +150,9 @@ public class GameActivity extends BaseGameActivity implements
                 hud.getLeftLifeBar().setValue(1.0f - ((1.0f - leftLife) * 2.0f));
                 hud.getRightLifeBar().setValue(1.0f - ((1.0f - rightLife) * 2.0f));
 
-                if ((left && leftLife < 0.5f || !left && rightLife < 0.5f) && status != GameStatus.LOST) {
+                if (dummyGame && leftLife < 0.5f && status != GameStatus.LOST) {
+                    onWin();
+                }else if ((left && leftLife < 0.5f || !left && rightLife < 0.5f) && status != GameStatus.LOST) {
                     onLose();
                 }
             }

@@ -29,7 +29,7 @@ public final class GameConfig {
 	public static final int PHYSICS_POSITION_ITERATION = 5;
 	public static final int PHYSICS_MAX_STEPS_PER_UPDATE = 1;
 
-	public static final float CANNON_FORCE = 18;
+	public static final float CANNON_FORCE = 28;
 	public static final float CANNONBALL_TIME_SEC = 5.0f;
 
 	//public static final String WEBSERVICE_URI = "ws://141.64.167.170:8008";

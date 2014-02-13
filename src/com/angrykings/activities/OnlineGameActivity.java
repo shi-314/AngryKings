@@ -377,6 +377,10 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
         Bundle extras = getIntent().getExtras();
         String partnerIdStr = extras.getString("partnerId");
 
+        if(partnerIdStr.equals("1")){
+            this.dummyGame = true;
+        }
+
         Log.i(TAG, "entering game with partnerId=" + partnerIdStr);
         Log.i(TAG, "EXTRAS=" + extras.toString());
 
@@ -427,6 +431,14 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
             camera.setZoomFactor(GameConfig.CAMERA_STARTUP_ZOOM);
             followCamera = OFF;
         }
+    }
+
+    @Override
+    protected void onWin() {
+        if(dummyGame){
+            serverConnection.sendTextMessage(ServerMessage.win());
+        }
+        super.onWin();
     }
 
     @Override

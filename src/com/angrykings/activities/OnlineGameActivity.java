@@ -274,8 +274,10 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
                 this.partner.setPlayerTurnListener(new PartnerTurnListener());
 
                 turn();
+                fadeIn();
 
             }
+
             if (jObj.getInt("action") == Action.Server.EXISTING_GAME) {
 
                 Log.i(TAG, "enter existing game");
@@ -305,6 +307,7 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
                 }
 
                 turn();
+                fadeIn();
 
             }
         } catch (JSONException e) {

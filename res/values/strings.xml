@@ -29,6 +29,7 @@
     <string name="bNewGame">Neues Spiel</string>
     <string name="bConnecting">Verbinden...</string>
     <string name="tRunningGamesInfo">keine offenen Spiele</string>
+    <string name="notificationText">Deine Burg wird attackiert!</string>
 
     <string name="notificationsVibrate">Vibrate</string>
     <string name="notificationsVibrateDescription">Vibrate when new notification are received</string>

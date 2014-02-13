@@ -41,7 +41,8 @@ public class GcmIntentService extends IntentService {
             String partnerIdStr = extras.getString("id");
             Log.i("GCM", "extras="+extras.toString());
 
-            sendNotification(this, "AngryKings", "such turn: " + partnerIdStr, partnerIdStr);
+            sendNotification(this, "AngryKings", getString(R.string.notificationText), partnerIdStr);
+
         }
 
         GcmBroadcastReceiver.completeWakefulIntent(intent);

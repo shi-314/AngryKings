@@ -124,10 +124,7 @@ public class LobbyActivity extends Activity {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Set<String> friends = settings.getStringSet("facebookFriends", new HashSet<String>());
 
-        Log.d("HASHSET", friends.toString());
-
         ServerConnection.getInstance().setHandler(new ServerConnection.OnMessageHandler() {
-
             @Override
             public void onMessage(String payload) {
                 try {
@@ -152,6 +149,8 @@ public class LobbyActivity extends Activity {
                         JSONArray friendArray = new JSONArray(jObj.getString("friends"));
 
                         Log.d("FRIENDSLIST", friendArray.toString());
+
+                        facebookPlayers.clear();
 
                         for (int i = 0; i < friendArray.length(); i++) {
 

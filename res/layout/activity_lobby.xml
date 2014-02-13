@@ -18,12 +18,16 @@
             android:layout_height="wrap_content"
             android:id="@+id/lobbyList"
             android:layout_marginRight="25dp"
+            android:divider="#22FFFFFF"
+            android:dividerHeight="1dp"
             android:layout_weight="1"/>
 
         <ListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/facebookList"
+            android:divider="#22FFFFFF"
+            android:dividerHeight="2dp"
             android:layout_weight="1"/>
 
 

@@ -273,10 +273,11 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
                 this.me.setPlayerTurnListener(new MyTurnListener());
                 this.partner.setPlayerTurnListener(new PartnerTurnListener());
 
-                resume();
                 turn();
+                fadeIn();
 
             }
+
             if (jObj.getInt("action") == Action.Server.EXISTING_GAME) {
 
                 Log.i(TAG, "enter existing game");
@@ -305,14 +306,12 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
                     partner.getCastle().setKeyframeData(lastFrame.getCastleKeyframeData());
                 }
 
-
-                resume();
-
                 int myTurns = meJson.getInt("turn");
                 int partnerTurns = partnerJson.getInt("turn");
                 if(myTurns <= partnerTurns){
                     turn();
                 }
+                fadeIn();
 
             }
         } catch (JSONException e) {
@@ -347,7 +346,6 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
         } else {
             enterGame();
         }
-
 
     }
 

@@ -102,7 +102,6 @@ public class ServerConnection {
             Log.i(TAG, "sent " + length + " bytes: " + payload.substring(0, 128) + " ...");
         else
             Log.i(TAG, "sent " + length + " bytes: " + payload);
-
 		this.connection.sendTextMessage(payload);
 
 	}

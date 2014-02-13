@@ -16,6 +16,7 @@ import com.angrykings.GameConfig;
 import com.angrykings.GameContext;
 import com.angrykings.GameHUD;
 import com.angrykings.GameStatus;
+import com.angrykings.PhysicalEntity;
 import com.angrykings.PhysicsManager;
 import com.angrykings.Player;
 import com.angrykings.R;
@@ -28,6 +29,7 @@ import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
+import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.ParallaxBackground;
@@ -39,6 +41,8 @@ import org.andengine.input.touch.detector.ScrollDetector;
 import org.andengine.input.touch.detector.SurfaceScrollDetector;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.debug.Debug;
+
+import java.util.ArrayList;
 
 public class GameActivity extends BaseGameActivity implements
         IOnSceneTouchListener, ScrollDetector.IScrollDetectorListener,
@@ -162,6 +166,44 @@ public class GameActivity extends BaseGameActivity implements
         scene.registerUpdateHandler(me);
         scene.registerUpdateHandler(partner);
 
+        hud.setOnWhiteFlagTouched(new Runnable() {
+            @Override
+            public void run() {
+                onResignDialog();
+            }
+        });
+
+        scene.setOnSceneTouchListener(this);
+        scene.setTouchAreaBindingOnActionDownEnabled(true);
+        scene.registerUpdateHandler(PhysicsManager.getInstance().getPhysicsWorld());
+
+        hud.setStatus(getString(R.string.yourTurn));
+
+        ArrayList<PhysicalEntity> myBlocks = me.getCastle().getBlocks();
+        for(PhysicalEntity e : myBlocks)
+            e.getAreaShape().setAlpha(0f);
+
+        ArrayList<PhysicalEntity> partnerBlocks = partner.getCastle().getBlocks();
+        for(PhysicalEntity e : partnerBlocks)
+            e.getAreaShape().setAlpha(0f);
+
+    }
+
+    protected void fadeIn() {
+        AlphaModifier fadeIn = new AlphaModifier(1, 0, 1);
+
+        ArrayList<PhysicalEntity> myBlocks = me.getCastle().getBlocks();
+        for(PhysicalEntity e : myBlocks)
+            e.getAreaShape().registerEntityModifier(fadeIn.deepCopy());
+
+        ArrayList<PhysicalEntity> partnerBlocks = partner.getCastle().getBlocks();
+        for(PhysicalEntity e : partnerBlocks)
+            e.getAreaShape().registerEntityModifier(fadeIn.deepCopy());
+
+        me.getCannon().registerEntityModifier(fadeIn.deepCopy());
+        partner.getCannon().registerEntityModifier(fadeIn.deepCopy());
+        me.getKing().registerEntityModifier(fadeIn.deepCopy());
+        partner.getKing().registerEntityModifier(fadeIn.deepCopy());
     }
 
     @Override
@@ -230,31 +272,6 @@ public class GameActivity extends BaseGameActivity implements
         hud.setStatus(getString(R.string.enteringGame));
 
         pOnCreateSceneCallback.onCreateSceneFinished(scene);
-
-    }
-
-    protected void resume() {
-
-        hud.setOnWhiteFlagTouched(new Runnable() {
-            @Override
-            public void run() {
-                onResignDialog();
-            }
-        });
-
-        scene.setOnSceneTouchListener(this);
-        scene.setTouchAreaBindingOnActionDownEnabled(true);
-        scene.registerUpdateHandler(PhysicsManager.getInstance().getPhysicsWorld());
-
-        hud.setStatus(getString(R.string.yourTurn));
-    }
-
-    protected void pause() {
-
-        hud.setOnWhiteFlagTouched(null);
-        scene.setOnSceneTouchListener(null);
-        scene.setOnAreaTouchListener(null);
-        scene.clearUpdateHandlers();
 
     }
 

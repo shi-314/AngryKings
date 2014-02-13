@@ -19,11 +19,13 @@
             android:key="notificationsSound"
             android:title="Play sound"
             android:summary="@string/sound_summary"
+            android:defaultValue="true"
             />
         <CheckBoxPreference
             android:key="notificationsVibration"
             android:title="@string/notificationsVibrate"
             android:summary="@string/notificationsVibrateDescription"
+            android:defaultValue="true"
             />
     </PreferenceCategory>
 

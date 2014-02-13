@@ -46,8 +46,10 @@ public class GcmIntentService extends IntentService {
 
             if(extras.getString("msg").equals("turn")){
                 sendNotification(this, "AngryKings", getString(R.string.notificationTextTurn), partnerIdStr, servermsg);
-            }else if(extras.getString("msg").equals("you_win")){
+            }else if(servermsg.equals("you_win")){
                 sendNotification(this, "AngryKings", getString(R.string.notificationTextWin), partnerIdStr, servermsg);
+            }else if(servermsg.equals("new_game")){
+                sendNotification(this, "AngryKings", getString(R.string.notificationTextNewGame), partnerIdStr, servermsg);
             }else{
                 sendNotification(this, "AngryKings", "such turn: " + extras.getString("msg"), partnerIdStr, servermsg);
             }

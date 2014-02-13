@@ -117,7 +117,6 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
         @Override
         public void onEndTurn() {
             this.keyframes = null;
-            me.getCastle().freeze();
 
             me.getKing().getSprite().setCurrentTileIndex(0);
             partner.getKing().getSprite().setCurrentTileIndex(1);

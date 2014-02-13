@@ -89,9 +89,7 @@ public class LobbyActivity extends Activity {
 
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this));
 
-        Button zufallButton = (Button) findViewById(R.id.bZufall);
         Typeface font = Typeface.createFromAsset(getAssets(), "font/Rom_Ftl_Srif.ttf");
-        zufallButton.setTypeface(font);
         lobbyList = (ListView) findViewById(R.id.lobbyList);
         facebookList = (ListView) findViewById(R.id.facebookList);
 
@@ -120,14 +118,6 @@ public class LobbyActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 challengePlayer(lobbyPlayers.get(position));
-            }
-        });
-
-        zufallButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final LobbyPlayer partner = lobbyPlayers.get((int) (Math.random() * lobbyPlayers.size()));
-                challengePlayer(partner);
             }
         });
 

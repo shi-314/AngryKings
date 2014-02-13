@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.angrykings.Action;
+import com.angrykings.gcm.GcmIntentService;
 import com.angrykings.pregame.FacebookPlayer;
 import com.angrykings.pregame.FacebookPlayerAdapter;
 import com.angrykings.pregame.LobbyPlayer;

@@ -72,7 +72,7 @@ public class LobbyPlayerAdapter extends BaseAdapter{
             }
         });
 
-        //vi.requestLayout();
+        vi.requestLayout();
 
         return vi;
     }

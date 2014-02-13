@@ -13,6 +13,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.angrykings.R;
+import com.angrykings.activities.EndGameActivity;
 import com.angrykings.activities.MainActivity;
 import com.angrykings.activities.OnlineGameActivity;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -39,20 +40,38 @@ public class GcmIntentService extends IntentService {
                 return;
 
             String partnerIdStr = extras.getString("id");
+            String servermsg = extras.getString("msg");
+
             Log.i("GCM", "extras="+extras.toString());
 
-            sendNotification(this, "AngryKings", "such turn: " + partnerIdStr, partnerIdStr);
+            if(extras.getString("msg").equals("turn")){
+                sendNotification(this, "AngryKings", getString(R.string.notificationTextTurn), partnerIdStr, servermsg);
+            }else if(servermsg.equals("you_win")){
+                sendNotification(this, "AngryKings", getString(R.string.notificationTextWin), partnerIdStr, servermsg);
+            }else if(servermsg.equals("new_game")){
+                sendNotification(this, "AngryKings", getString(R.string.notificationTextNewGame), partnerIdStr, servermsg);
+            }else{
+                sendNotification(this, "AngryKings", "such turn: " + extras.getString("msg"), partnerIdStr, servermsg);
+            }
+
         }
 
         GcmBroadcastReceiver.completeWakefulIntent(intent);
     }
 
-    public static void sendNotification(Context context, String title, String msg, String partnerId) {
+    public static void sendNotification(Context context, String title, String msg, String partnerId, String servermsg) {
         NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        Intent intent = new Intent(context, OnlineGameActivity.class);
+        Intent intent = null;
 
-        intent.putExtra("existingGame", true);
+        if(!servermsg.equals("you_win")){
+            intent = new Intent(context, OnlineGameActivity.class);
+            intent.putExtra("existingGame", true);
+        }else{
+            intent = new Intent(context, EndGameActivity.class);
+            intent.putExtra("hasWon", true);
+        }
+
         intent.putExtra("partnerId", partnerId);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);

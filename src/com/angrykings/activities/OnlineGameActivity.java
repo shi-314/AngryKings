@@ -307,7 +307,12 @@ public class OnlineGameActivity extends GameActivity implements ServerConnection
 
 
                 resume();
-                turn();
+
+                int myTurns = meJson.getInt("turn");
+                int partnerTurns = partnerJson.getInt("turn");
+                if(myTurns <= partnerTurns){
+                    turn();
+                }
 
             }
         } catch (JSONException e) {

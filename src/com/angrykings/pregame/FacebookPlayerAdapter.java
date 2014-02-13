@@ -62,24 +62,13 @@ public class FacebookPlayerAdapter extends BaseAdapter{
 
         ImageView fb = (ImageView)vi.findViewById(R.id.facebookpicture);
         TextView name = (TextView)vi.findViewById(R.id.spielername);
-        LinearLayout winlose = (LinearLayout)vi.findViewById(R.id.win_lose);
-        LinearLayout win = (LinearLayout)vi.findViewById(R.id.win);
-        LinearLayout lose = (LinearLayout)vi.findViewById(R.id.lose);
 
         FacebookPlayer player = data.get(position);
 
         Log.d("Lobbyplayer:    " , player.win);
 
         name.setText(player.name);
-        Integer summe = Integer.parseInt(player.win) + Integer.parseInt(player.lose);
-        Integer max = winlose.getLayoutParams().width;
 
-        // Log.d("WinLose Breite:    ", max.toString());
-
-        win.getLayoutParams().width = Integer.parseInt(player.win) * max / (summe + 1);
-        lose.getLayoutParams().width = Integer.parseInt(player.lose) * max / (summe + 1);
-        win.requestLayout();
-        lose.requestLayout();
         vi.requestLayout();
 
         fb.setImageBitmap(circularCrop(((BitmapDrawable)fb.getDrawable()).getBitmap()));

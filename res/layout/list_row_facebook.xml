@@ -25,34 +25,4 @@
         android:text="Ray the Dummy :D" android:layout_centerVertical="true"
         />
 
-    <LinearLayout
-        android:id="@+id/win_lose"
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true" android:layout_alignParentRight="false"
-        android:layout_alignParentEnd="false" android:gravity="right">
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:id="@+id/win"
-            android:layout_height="16dp"
-            android:layout_width="50dp"
-            android:background="#6600ff00"
-            android:padding="4dp">
-
-            </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:id="@+id/lose"
-            android:layout_height="16dp"
-            android:layout_width="50dp"
-            android:background="#66FF0000"
-            android:padding="4dp">
-
-            </LinearLayout>
-
-        </LinearLayout>
-
 </RelativeLayout>

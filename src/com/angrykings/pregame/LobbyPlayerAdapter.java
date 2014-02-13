@@ -50,27 +50,12 @@ public class LobbyPlayerAdapter extends BaseAdapter{
             vi = inflater.inflate(R.layout.list_row, null);
         }
         TextView name = (TextView)vi.findViewById(R.id.spielername);
-        final LinearLayout winlose = (LinearLayout)vi.findViewById(R.id.win_lose);
-        final LinearLayout win = (LinearLayout)vi.findViewById(R.id.win);
-        final LinearLayout lose = (LinearLayout)vi.findViewById(R.id.lose);
 
         final LobbyPlayer player = data.get(position);
 
         Log.d("Lobbyplayer:    " , "win: " + player.win + " lose: " + player.lose);
 
         name.setText(player.name);
-        final Integer summe = Integer.parseInt(player.win) + Integer.parseInt(player.lose);
-        winlose.post(new Runnable() {
-            @Override
-            public void run() {
-                Integer max = winlose.getWidth();
-                win.getLayoutParams().width = Integer.parseInt(player.win) * max / (summe + 1);
-                lose.getLayoutParams().width = Integer.parseInt(player.lose) * max / (summe + 1);
-                winlose.requestLayout();
-                win.requestLayout();
-                lose.requestLayout();
-            }
-        });
 
         vi.requestLayout();
 

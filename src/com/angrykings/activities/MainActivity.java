@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.angrykings.Action;
 import com.angrykings.GameConfig;
@@ -22,6 +23,12 @@ import com.angrykings.ServerConnection;
 import com.angrykings.ServerConnection.OnMessageHandler;
 import com.angrykings.ServerConnection.OnStartHandler;
 import com.angrykings.utils.ServerMessage;
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.model.GraphUser;
+import com.facebook.widget.ProfilePictureView;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.json.JSONException;
@@ -98,8 +105,24 @@ public class MainActivity extends Activity {
                     }
                 });
 
+                // look for facebook login
+
+                Session.openActiveSession(MainActivity.this, false, new Session.StatusCallback() {
+                    @Override
+                    public void call(Session session, SessionState state, Exception exception) {
+                        if (state == SessionState.OPENED) {
+                            Log.i(TAG, "Facebook: already logged in");
+                            onFacebookLogin(session);
+                        }
+                    }
+                });
+
             }
         });
+
+        //
+        // TODO: This should happen when the gcm registration went well
+        //
 
 		if(!ServerConnection.getInstance().isConnected()){
             final String id = Installation.id(this);
@@ -167,8 +190,25 @@ public class MainActivity extends Activity {
             }
         });
 
-
 	}
+
+    @Override
+    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        final Session session = Session.getActiveSession();
+        session.addCallback(
+                new Session.StatusCallback() {
+
+                    @Override
+                    public void call(Session session, SessionState state, Exception exception) {
+                        if (state == SessionState.OPENED) {
+                            Log.i(TAG, "Facebook: Logged in");
+                            onFacebookLogin(session);
+                        }
+                    }
+                });
+        session.onActivityResult(this, requestCode, resultCode, data);
+    }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -179,6 +219,31 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         username = settings.getString("username", "");
+    }
+
+    protected void onFacebookLogin(Session session) {
+        Log.i(TAG, "onFacebookLogin");
+        Request.newMeRequest(session, new Request.GraphUserCallback() {
+            // callback after Graph API response with user object
+            @Override
+            public void onCompleted(GraphUser user, Response response) {
+                if (user != null) {
+                    Log.i(TAG, "Facebook: Logged in with " + user.getFirstName());
+
+                    String profilePicture = "http://graph.facebook.com/" + user.getId() + "/picture";
+
+                    settings.edit()
+                            .putString("profilePicture", profilePicture)
+                            .putString("facebookId", user.getId())
+                            .commit();
+
+                } else {
+                    Log.w(TAG, "facebook login failed, response=" + response.toString());
+                }
+            }
+        }).executeAsync();
+
+
     }
 
     /**

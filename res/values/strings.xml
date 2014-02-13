@@ -32,4 +32,6 @@
     <string name="notificationsVibrate">Vibrate</string>
     <string name="notificationsVibrateDescription">Vibrate when new notification are received</string>
 
+    <string name="facebookAppID">551526468279970</string>
+
 </resources>

@@ -83,6 +83,10 @@ public class ServerMessage {
         return new ServerJSONBuilder().create(Action.Client.GET_RUNNING_GAMES).build();
     }
 
+    public static String findFacebookFriends(String friends) {
+        return new ServerJSONBuilder().create(Action.Client.FIND_FRIENDS).option("friends", friends).build();
+    }
+
     public static String facebookId(String id) {
         return new ServerJSONBuilder().create(Action.Client.FACEBOOK_ID).option("id", id).build();
     }

@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -32,7 +34,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class LobbyActivity extends Activity {
@@ -126,14 +130,10 @@ public class LobbyActivity extends Activity {
             }
         });
 
-        FacebookPlayer test1 = new FacebookPlayer("Michi", 123, "100", "50", "michi.wutte.1");
-        FacebookPlayer test2 = new FacebookPlayer("Dustin", 456, "50", "100", "ohyaweird");
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Set<String> friends = settings.getStringSet("facebookFriends", new HashSet<String>());
 
-        facebookPlayers.add(test1);
-        facebookPlayers.add(test2);
-        updateFacebookList(facebookPlayers);
-        updateLobby(lobbyPlayers);
-        lobbyList.setTextFilterEnabled(true);
+        Log.d("HASHSET", friends.toString());
 
         ServerConnection.getInstance().setHandler(new ServerConnection.OnMessageHandler() {
 
@@ -157,12 +157,32 @@ public class LobbyActivity extends Activity {
                         }
 
                         updateLobby(lobbyPlayers);
+                    }else if (jObj.getInt("action") == Action.Server.FRIENDS) {
+                        JSONArray friendArray = new JSONArray(jObj.getString("friends"));
+
+                        Log.d("FRIENDSLIST", friendArray.toString());
+
+                        // TODO SHIVAN HIER
+
+                        FacebookPlayer test1 = new FacebookPlayer("Michi", 123, "100", "50", "michi.wutte.1");
+                        FacebookPlayer test2 = new FacebookPlayer("Dustin", 456, "50", "100", "ohyaweird");
+
+                        facebookPlayers.add(test1);
+                        facebookPlayers.add(test2);
+                        updateFacebookList(facebookPlayers);
+                        updateLobby(lobbyPlayers);
+                        lobbyList.setTextFilterEnabled(true);
+
                     }
                 } catch (JSONException e) {
                     Log.e("JSON Parser", "Error parsing data " + e.toString());
                 }
             }
         });
+
+        ServerConnection
+                .getInstance()
+                .sendTextMessage(ServerMessage.findFacebookFriends(friends.toString()));
     }
 
     @Override

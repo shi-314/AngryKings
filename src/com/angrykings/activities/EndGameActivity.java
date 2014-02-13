@@ -137,17 +137,18 @@ public class EndGameActivity extends Activity {
 
 		});
 		
-		revengeButton = (Button) findViewById(R.id.revengeButton);
-		revengeButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				dialog.show();
-				ServerConnection
-				.getInstance()
-				.sendTextMessage(new ServerJSONBuilder().create(Action.Client.ENTER_GAME).build());
-			}
-
-		});
+//		revengeButton = (Button) findViewById(R.id.revengeButton);
+//
+//		revengeButton.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View arg0) {
+//				dialog.show();
+//				ServerConnection
+//				.getInstance()
+//				.sendTextMessage(new ServerJSONBuilder().create(Action.Client.ENTER_GAME).build());
+//			}
+//
+//		});
 	}
 }

@@ -33,12 +33,14 @@
             android:layout_marginRight="10dp"
             android:background="@drawable/lobby_button" />
 
+        <!--
         <Button
             android:id="@+id/revengeButton"
             android:layout_width="160dp"
             android:layout_height="50dp"
             android:layout_marginLeft="10dp"
             android:background="@drawable/revanche_button" />
+            -->
     </LinearLayout>
 
 </RelativeLayout>
